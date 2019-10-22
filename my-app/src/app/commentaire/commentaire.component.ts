@@ -4,7 +4,7 @@ import {Test} from '../testCom'
 @Component({
   selector: 'app-commentaire',
   templateUrl: './commentaire.component.html',
-  styleUrls: ['./commentaire.component.css']
+  styleUrls: ['./commentaire.component.scss']
 })
 export class CommentaireComponent implements OnInit {
   commentaires = Test;

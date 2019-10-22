@@ -1,10 +1,13 @@
-<p *ngIf="needToLog">
-    <app-login-page>  </app-login-page>
-</p>
-<p *ngIf="home" > 
-    <app-feed-actu>  </app-feed-actu>
-</p>
 
-<p *ngIf="edit" > 
-        <app-edit-page>  </app-edit-page>
-    </p>
+            <ul>
+                <li routerLinkActive="active"><a routerLink="comments">Commentaire</a></li>
+                <li routerLinkActive="active"><a routerLink="edition">EditPage</a></li>
+                <li routerLinkActive="active"><a routerLink="actu">FeedActu</a></li>
+                <li routerLinkActive="active"><a routerLink="login">LoginPage</a></li>
+                <li routerLinkActive="active"><a routerLink="messages">MessagePage</a></li>
+            </ul>
+<div class="container">
+    <div class="row">
+        <router-outlet></router-outlet>
+    </div>
+</div>
