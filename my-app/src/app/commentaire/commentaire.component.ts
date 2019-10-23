@@ -1,5 +1,5 @@
 import { Component, OnInit } from '@angular/core';
-import {Commentaire} from '../Commentaire'
+import {Commentaire , showComment} from '../Commentaire'
 import {Test} from '../testCom'
 @Component({
   selector: 'app-commentaire',
@@ -11,6 +11,10 @@ export class CommentaireComponent implements OnInit {
     constructor() { }
 
   ngOnInit() {
+  }
+
+  ShowMeComment(com:Commentaire){
+   com.showCom=!com.showCom;
   }
 
 }
