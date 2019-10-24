@@ -1,17 +1,71 @@
-div#colonne1 {
+*{
+	font-family: Avenir, sans-serif;
+	font-size: 1em;
+	margin: 0px;
+	padding: 0px;
+	box-sizing: border-box;
+  }
+
+  button {
+	border: none;
+	color: rgb(0, 0, 0);
+	padding: 3px 5px;
+	text-align: center;
+	text-decoration: none;
+	display: inline-block;
+	font-size: 14px;
+  }
+.File-menu, .links, .items {
+	width: 260px; /* Set a width if you like */
+  }
+  
+.File-menu a, .links a, .items a {
+	background-color: #eee; /* Grey background color */
+	color: black; /* Black text color */
+	display: block; /* Make the links appear below each other */
+	padding: 12px; /* Add some padding */
+	text-decoration: none; /* Remove underline from links */
+  }
+  
+.File-menu a:hover, .links a:hover, .items a:hover  {
+	background-color: #ccc; /* Dark grey background on mouse-over */
+	
+  }
+  
+.File-menu a.active{
+	background-color: rgb(116, 148, 255); /* Add a green color to the "active/current" link */
+	color: white;
+  }
+
+  .links a.active{
+	background-color: rgb(255, 238, 82); /* Add a green color to the "active/current" link */
+	color: white;
+  }
+
+  .items a.active {
+	background-color: rgb(245, 148, 148); /* Add a green color to the "active/current" link */
+	color: white;
+  }
+  
+
+  
+.container{
+	width: auto;
+}
+
+.container div.File-menu{
 	float: left;
-	width: 25%;
-	margin-right: 10px;
-	background: lightblue;
+
+	width: auto;
 }
-div#colonne2 {
+
+.container div.items{
 	float: right;
-	width: 40%;
-	margin-left: 10px;
-	background: burlywood;
+
+	width: auto;
 }
-div#centre {
-    width: 35%;
-	overflow: hidden;
-	background: khaki;
+
+.container div.links{
+	float: right;
+	width: auto;
 }
