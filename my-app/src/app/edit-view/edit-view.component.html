@@ -3,50 +3,20 @@
     <article> 
         <div class="container">
 
-            <div class="File-menu" > 
+            <div class="File-menu" >
                 
-                    <a class="active">File 1</a>
-                    <a >File 2</a>
-                    <a >File 3</a>
-                    <a >File 4</a>
-                    <a >File 5</a>
+                <app-edit *ngFor="let element of datas; let i = index "
+                        [id] = "element.id"
+                        [data] = "element.data"
+                        [index] = "i"
+                ></app-edit>
             </div>
 
-
-            <div class="items">
-                <a><button>+</button></a>
-                <a class="active">Items 1 <button></button></a>
-                <a >Items 2    
-                            <button>-</button>
-                </a>
-                <a >Items 3
-                        <button>-</button>
-                </a>
-                <a >Items 4
-                        <button>-</button>
-                </a>
-                <a >Items 5
-                        <button>-</button>
-                </a>
-                <a >Items 6
-                        <button>-</button>
-                </a>
-                <a >Items 7
-                        <button>-</button>
-                </a>
-            </div>
-
-            <div class="links">
-                <a><button>+</button></a>
-                <a class="active">Links 1<button>-</button></a>
-                <a >Links 2<button>-</button></a>
-                <a >Links 3<button>-</button></a>
-                <a >Links 4<button>-</button></a>
-                <a >Links 5<button>-</button></a>
-                <a >Links 6<button>-</button></a>
-                <a >Links 7<button>-</button></a>
-            </div>
-                
+            <div class="Links" >
+                    <app-edit *ngIf="isDataSelected === true">
+                    
+                    </app-edit>    
+                </div>
         </div>
     </article>
     <footer></footer>

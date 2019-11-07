@@ -1,4 +1,5 @@
 import { Component, OnInit } from '@angular/core';
+import { DataService} from '../services/data.service'
 
 @Component({
   selector: 'app-edit-view',
@@ -7,9 +8,14 @@ import { Component, OnInit } from '@angular/core';
 })
 export class EditViewComponent implements OnInit {
 
-  constructor() { }
+  datas :any[];
 
+  constructor(private dataService : DataService) { }
+
+
+  
   ngOnInit() {
+    this.datas = this.dataService.datas;
   }
 
 }

@@ -1,6 +1,6 @@
 import { async, ComponentFixture, TestBed } from '@angular/core/testing';
 
-import { EditPageComponent } from './edit-page.component';
+import { EditPageComponent } from './edit.component';
 
 describe('EditPageComponent', () => {
   let component: EditPageComponent;

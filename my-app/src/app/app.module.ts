@@ -10,9 +10,11 @@ import { CommentaireComponent } from './commentaire/commentaire.component';
 import { LoginPageComponent } from './login-page/login-page.component';
 import { FormsModule }    from '@angular/forms';
 import { EditViewComponent } from './edit-view/edit-view.component';
-import { EditPageComponent } from './edit-page/edit-page.component';
+import { EditPageComponent } from './edit/edit.component';
 import { MessagePageComponent } from './message-page/message-page.component';
-
+import { DataService } from './services/data.service';
+import { SingleDataComponent } from './single-data/single-data.component';
+import { EditDataComponent } from './edit-data/edit-data.component';
 
 
 const appRoutes: Routes =   [
@@ -21,6 +23,7 @@ const appRoutes: Routes =   [
   { path: 'actu', component: FeedActuComponent},
   { path: 'login', component: LoginPageComponent},
   { path: 'messages', component: MessagePageComponent },
+  { path: 'data/:id', component: EditDataComponent  },
   { path: '', component: FeedActuComponent },
   { path: 'not-found', component: FourOhFourComponent },
   { path: '**', redirectTo: 'not-found' }
@@ -35,7 +38,9 @@ const appRoutes: Routes =   [
     EditViewComponent,
     EditPageComponent,
     MessagePageComponent,
-    FourOhFourComponent
+    FourOhFourComponent,
+    SingleDataComponent,
+    EditDataComponent
   ],
   imports: [
     BrowserModule,
@@ -43,7 +48,9 @@ const appRoutes: Routes =   [
     FormsModule,
     RouterModule.forRoot(appRoutes)
   ],
-  providers: [],
+  providers: [
+    DataService
+  ],
   bootstrap: [AppComponent]
 })
 export class AppModule { }
