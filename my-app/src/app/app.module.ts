@@ -1,14 +1,14 @@
 import { BrowserModule } from '@angular/platform-browser';
 import { NgModule } from '@angular/core';
 import { Routes, RouterModule } from '@angular/router'
-
+import { HttpClientModule } from '@angular/common/http'; 
 import { FourOhFourComponent } from './four-oh-four/four-oh-four.component'
 import { AppRoutingModule } from './app-routing.module';
 import { AppComponent } from './app.component';
 import { FeedActuComponent } from './feed-actu/feed-actu.component';
 import { CommentaireComponent } from './commentaire/commentaire.component';
 import { LoginPageComponent } from './login-page/login-page.component';
-import { FormsModule }    from '@angular/forms';
+import { FormsModule, ReactiveFormsModule }    from '@angular/forms';
 import { EditViewComponent } from './edit-view/edit-view.component';
 import { EditPageComponent } from './edit/edit.component';
 import { MessagePageComponent } from './message-page/message-page.component';
@@ -17,7 +17,8 @@ import { SingleDataComponent } from './single-data/single-data.component';
 import { EditDataComponent } from './edit-data/edit-data.component';
 import { AuthService } from './services/auth.service';
 import { DataresquestService } from './services/dataresquest.service';
-import { AuthGuardService } from './services/auth-guard.service'
+import { AuthGuardService } from './services/auth-guard.service';
+import { SignupComponent } from './signup/signup.component';
 
 const appRoutes: Routes =   [
   { path: 'comments', component: CommentaireComponent},
@@ -26,9 +27,11 @@ const appRoutes: Routes =   [
   { path: 'login', component: LoginPageComponent},
   { path: 'messages', component: MessagePageComponent },
   { path: 'data/:id', component: EditDataComponent  },
+  { path: 'test', component : SignupComponent },
   { path: '', component: FeedActuComponent },
   { path: 'not-found', component: FourOhFourComponent },
   { path: '**', redirectTo: 'not-found' }
+  
 ];
 
 @NgModule({
@@ -42,14 +45,17 @@ const appRoutes: Routes =   [
     MessagePageComponent,
     FourOhFourComponent,
     SingleDataComponent,
-    EditDataComponent
+    EditDataComponent,
+    SignupComponent
   ],
   imports: [
     BrowserModule,
     AppRoutingModule,
     FormsModule,
-    RouterModule.forRoot(appRoutes)
-    
+    RouterModule.forRoot(appRoutes),
+    HttpClientModule,
+    ReactiveFormsModule
+
   ],
   providers: [
     DataService, DataresquestService, AuthGuardService, AuthService
