@@ -1,5 +1,9 @@
 import { Component } from '@angular/core';
 import * as firebase from 'firebase';
+import { AuthService } from './services/auth.service';
+import { Router } from '@angular/router';
+import { ResourceLoader } from '@angular/compiler';
+
 
 @Component({
   selector: 'app-root',
@@ -7,8 +11,12 @@ import * as firebase from 'firebase';
   styleUrls: ['./app.component.scss']
 })
 export class AppComponent {
-  constructor() {
+  isAuth: boolean;
+  constructor(private authService: AuthService,
+    private router: Router) {
+  
     const config = {
+      
       apiKey: "AIzaSyAVHzC98f2ffiAsrt9LrKKNBXWupQaUAqs",
     authDomain: "pinist-6d1a2.firebaseapp.com",
     databaseURL: "https://pinist-6d1a2.firebaseio.com",
@@ -21,6 +29,24 @@ export class AppComponent {
     };
     firebase.initializeApp(config);
   }
+  ngOnInit() {
+    firebase.auth().onAuthStateChanged(
+      (user) => {
+        if(user) {
+          this.isAuth = true;
+        } else {
+          this.isAuth = false;
+        }
+      }
+    );
+  }
+
+  onSignOut() {
+    this.authService.signOutUser();
+    this.isAuth=false;
+    ResourceLoader
+  }
+
 }
 
 

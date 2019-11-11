@@ -22,14 +22,14 @@ import { SignupComponent } from './signup/signup.component';
 
 
 const appRoutes: Routes =   [
-  { path: 'comments', /*canActivate: [AuthGuardService] , */ component: CommentaireComponent},
-  { path: 'edition',/*canActivate: [AuthGuardService] , */ component: EditViewComponent },
-  { path: 'actu', /*canActivate: [AuthGuardService] , */ component: FeedActuComponent},
+  { path: 'comments', canActivate: [AuthGuardService] , component: CommentaireComponent},
+  { path: 'edition',canActivate: [AuthGuardService] ,  component: EditViewComponent },
+  { path: 'actu', canActivate: [AuthGuardService] ,  component: FeedActuComponent},
   { path: 'login', component: LoginPageComponent},
-  { path: 'messages', /*canActivate: [AuthGuardService] , */ component: MessagePageComponent },
-  { path: 'data/:id', /*canActivate: [AuthGuardService] , */ component: EditDataComponent  },
+  { path: 'messages', canActivate: [AuthGuardService] ,  component: MessagePageComponent },
+  { path: 'data/:id', canActivate: [AuthGuardService] , component: EditDataComponent  },
   { path: 'signup', component : SignupComponent },
-  { path: '', component: FeedActuComponent },
+  { path: '', component:  LoginPageComponent},
   { path: 'not-found', component: FourOhFourComponent },
   { path: '**', redirectTo: 'not-found' }
   
