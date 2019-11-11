@@ -55,10 +55,7 @@ const appRoutes: Routes =   [
     FormsModule,
     RouterModule.forRoot(appRoutes),
     HttpClientModule,
-    ReactiveFormsModule,
-  
-
-  ],
+    ReactiveFormsModule,  ],
   providers: [
     DataService, DataresquestService, AuthGuardService, AuthService
   ],
