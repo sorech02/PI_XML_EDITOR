@@ -15,7 +15,9 @@ import { MessagePageComponent } from './message-page/message-page.component';
 import { DataService } from './services/data.service';
 import { SingleDataComponent } from './single-data/single-data.component';
 import { EditDataComponent } from './edit-data/edit-data.component';
-
+import { AuthService } from './services/auth.service';
+import { DataresquestService } from './services/dataresquest.service';
+import { AuthGuardService } from './services/auth-guard.service'
 
 const appRoutes: Routes =   [
   { path: 'comments', component: CommentaireComponent},
@@ -47,9 +49,10 @@ const appRoutes: Routes =   [
     AppRoutingModule,
     FormsModule,
     RouterModule.forRoot(appRoutes)
+    
   ],
   providers: [
-    DataService
+    DataService, DataresquestService, AuthGuardService, AuthService
   ],
   bootstrap: [AppComponent]
 })
