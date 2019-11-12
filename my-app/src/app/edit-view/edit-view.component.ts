@@ -1,6 +1,5 @@
 import { Component, OnInit } from '@angular/core';
 import { NgForm } from '@angular/forms';
-import { Codeset, loadAndParseFromUrl} from '../edit-data/parser'
 
 @Component({
   selector: 'app-edit-view',
@@ -11,7 +10,7 @@ export class EditViewComponent implements OnInit {
 
   
 
-  constructor(private codeset : Codeset) { }
+  constructor() { }
 
 
   
@@ -19,9 +18,9 @@ export class EditViewComponent implements OnInit {
   }
 
   onSubmit(form: NgForm) {
-    console.log(form.value['url']);
-    var str: string = form.value['url'];
-    this.codeset = loadAndParseFromUrl(str);
+    //console.log(form.value['url']);
+   /* var str: string = form.value['url'];
+    this.codeset = loadAndParseFromUrl(str);*/
   }
 
 }
