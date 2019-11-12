@@ -16,7 +16,6 @@ export class AppComponent {
     private router: Router) {
   
     const config = {
-      
       apiKey: "AIzaSyAVHzC98f2ffiAsrt9LrKKNBXWupQaUAqs",
     authDomain: "pinist-6d1a2.firebaseapp.com",
     databaseURL: "https://pinist-6d1a2.firebaseio.com",

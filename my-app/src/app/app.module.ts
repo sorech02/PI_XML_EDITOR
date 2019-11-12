@@ -22,7 +22,7 @@ import { SignupComponent } from './signup/signup.component';
 
 
 const appRoutes: Routes =   [
-  { path: 'comments', canActivate: [AuthGuardService] , component: CommentaireComponent},
+//  { path: 'comments', canActivate: [AuthGuardService] , component: CommentaireComponent},
   { path: 'edition',canActivate: [AuthGuardService] ,  component: EditViewComponent },
   { path: 'actu', canActivate: [AuthGuardService] ,  component: FeedActuComponent},
   { path: 'login', component: LoginPageComponent},

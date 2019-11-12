@@ -6,6 +6,7 @@ class Codeset {
     this.codes = [];
   }
 
+
   addCode(code) {
     this.codes.push(code);
   }
