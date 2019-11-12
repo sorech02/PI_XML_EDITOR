@@ -1,23 +1,21 @@
-<body>
-    <header></header>
-    <article> 
-        <div class="container">
-
-            <div class="File-menu" >
-                
-                <app-edit *ngFor="let element of datas; let i = index "
-                        [id] = "element.id"
-                        [data] = "element.data"
-                        [index] = "i"
-                ></app-edit>
-            </div>
-
-            <div class="Links" >
-                    <app-edit *ngIf="isDataSelected === true">
-                    
-                    </app-edit>    
+<div class="container">
+        <form (ngSubmit)="onSubmit(f)" #f="ngForm">
+                <div class="form-group">
+                  <label for="name">
+                    Search XML URL
+                  </label>
+                  <input type="text" id="url_search" class="form-control" name="url" ngModel required>
                 </div>
-        </div>
-    </article>
-    <footer></footer>
-</body>
+                <button class="btn btn-primary" type="submit" [disabled]="f.invalid">Search</button>
+              </form>
+    <div class="File-menu" >
+        
+      <!--  <app-edit *ngFor="let element of datas; let i = index "
+                [id] = "element.id"
+                [data] = "element.data"
+                [index] = "i"
+        ></app-edit>-->
+    </div>
+</div>
+    
+    

@@ -1,13 +1,18 @@
-
-            <ul>
-                <li routerLinkActive="active"><a routerLink="comments">Commentaire</a></li>
-                <li routerLinkActive="active"><a routerLink="edition">EditPage</a></li>
-                <li routerLinkActive="active"><a routerLink="actu">FeedActu</a></li>
-                <li routerLinkActive="active"><a routerLink="login">LoginPage</a></li>
-                <li routerLinkActive="active"><a routerLink="messages">MessagePage</a></li>
-            </ul>
-<div class="container">
-    <div class="row">
-        <router-outlet></router-outlet>
+<body> 
+    <header></header>
+    <article>
+        <ul>
+            <li routerLinkActive="active"><a routerLink="comments">Commentaire</a></li>
+            <li routerLinkActive="active"><a routerLink="edition">EditPage</a></li>
+            <li routerLinkActive="active"><a routerLink="actu">FeedActu</a></li>
+            <li routerLinkActive="active"><a routerLink="login">LoginPage</a></li>
+            <li routerLinkActive="active"><a routerLink="messages">MessagePage</a></li>
+        </ul>
+    <div class="container">
+        <div class="row">
+            <router-outlet></router-outlet>
+        </div>
     </div>
-</div>
+</article>
+<footer></footer>
+</body>

@@ -12,10 +12,8 @@ import { FormsModule }    from '@angular/forms';
 import { EditViewComponent } from './edit-view/edit-view.component';
 import { EditPageComponent } from './edit/edit.component';
 import { MessagePageComponent } from './message-page/message-page.component';
-import { DataService } from './services/data.service';
-import { SingleDataComponent } from './single-data/single-data.component';
 import { EditDataComponent } from './edit-data/edit-data.component';
-
+import { Codeset } from './edit-data/parser.js'; 
 
 const appRoutes: Routes =   [
   { path: 'comments', component: CommentaireComponent},
@@ -23,7 +21,7 @@ const appRoutes: Routes =   [
   { path: 'actu', component: FeedActuComponent},
   { path: 'login', component: LoginPageComponent},
   { path: 'messages', component: MessagePageComponent },
-  { path: 'data/:id', component: EditDataComponent  },
+  { path: 'data/', component: EditDataComponent  },
   { path: '', component: FeedActuComponent },
   { path: 'not-found', component: FourOhFourComponent },
   { path: '**', redirectTo: 'not-found' }
@@ -39,7 +37,6 @@ const appRoutes: Routes =   [
     EditPageComponent,
     MessagePageComponent,
     FourOhFourComponent,
-    SingleDataComponent,
     EditDataComponent
   ],
   imports: [
@@ -49,8 +46,8 @@ const appRoutes: Routes =   [
     RouterModule.forRoot(appRoutes)
   ],
   providers: [
-    DataService
-  ],
+      Codeset 
+    ],
   bootstrap: [AppComponent]
 })
 export class AppModule { }
