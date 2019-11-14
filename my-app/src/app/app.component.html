@@ -1,17 +1,20 @@
-
+<body> 
+    <header></header>
+    <article>
             <ul>
-                <li routerLinkActive="active" *ngIf="isAuth"><a routerLink="comments">Commentaire</a></li>
-                <li routerLinkActive="active"*ngIf="isAuth"><a routerLink="edition">EditPage</a></li>
-                <li routerLinkActive="active" *ngIf="isAuth"><a routerLink="actu">FeedActu</a></li>
-                <li routerLinkActive="active" *ngIf="!isAuth"><a routerLink="login">LoginPage</a></li>
-                <li routerLinkActive="active" *ngIf="isAuth"><a routerLink="messages">MessagePage</a></li>
-                <li routerLinkActive="active" *ngIf="!isAuth"><a routerLink="signup">Register</a></li>
-                <button class="glyphicon glyphicon-off" onclick="onSignOut()" routerLinkActive="active"><a routerLink="login">clique</a></button>
-            </ul>
-<div class="container">
-    <div class="row">
-          
-        <router-outlet></router-outlet>
-       
+                    <li routerLinkActive="active" *ngIf="isAuth"><a routerLink="comments">Commentaire</a></li>
+                    <li routerLinkActive="active"*ngIf="isAuth"><a routerLink="edition">EditPage</a></li>
+                    <li routerLinkActive="active" *ngIf="isAuth"><a routerLink="actu">FeedActu</a></li>
+                    <li routerLinkActive="active" *ngIf="!isAuth"><a routerLink="login">LoginPage</a></li>
+                    <li routerLinkActive="active" *ngIf="isAuth"><a routerLink="messages">MessagePage</a></li>
+                    <li routerLinkActive="active" *ngIf="!isAuth"><a routerLink="signup">Register</a></li>
+                    <button class="glyphicon glyphicon-off" onclick="onSignOut()" routerLinkActive="active"><a routerLink="login">clique</a></button>
+                </ul>
+    <div class="container">
+        <div class="row">
+            <router-outlet></router-outlet>
+        </div>
     </div>
-</div>
+</article>
+<footer></footer>
+</body>

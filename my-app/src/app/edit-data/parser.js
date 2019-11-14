@@ -137,13 +137,26 @@ function createReferenceFromTree(xmlTree) {
   return reference;
 }
 
-//we load the xml file and parse it, we get a tree representing the xml
+export function loadAndParseFromUrl(url){
   var xmlDoc = httpGet("https://raw.githubusercontent.com/immregistries/codebase/master/base/sets/Vaccination%20CVX%20Code.xml");
+  var parser = new DOMParser();
+  var xmlDoc = parser.parseFromString(xmlDoc, "application/xml");
+
+  var xmlCodeset = xmlDoc.getElementsByTagName("codeset")[0];
+  var codeset = createCodesetFromTree(xmlCodeset);
+return codeset;
+}
+
+ 
+
+//we load the xml file and parse it, we get a tree representing the xml
+/* 
+var xmlDoc = httpGet("https://raw.githubusercontent.com/immregistries/codebase/master/base/sets/Vaccination%20CVX%20Code.xml");
   var parser = new DOMParser();
   var xmlDoc = parser.parseFromString(xmlDoc, "application/xml");
 
 var xmlCodeset = xmlDoc.getElementsByTagName("codeset")[0];
 
 codeset = createCodesetFromTree(xmlCodeset);
-
+*/
 //document.write(codeset.toString());

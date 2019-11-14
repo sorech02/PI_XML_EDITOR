@@ -1,5 +1,5 @@
 import { Component, OnInit } from '@angular/core';
-import { DataService} from '../services/data.service'
+import { NgForm } from '@angular/forms';
 
 @Component({
   selector: 'app-edit-view',
@@ -8,14 +8,19 @@ import { DataService} from '../services/data.service'
 })
 export class EditViewComponent implements OnInit {
 
-  datas :any[];
+  
 
-  constructor(private dataService : DataService) { }
+  constructor() { }
 
 
   
   ngOnInit() {
-    this.datas = this.dataService.datas;
+  }
+
+  onSubmit(form: NgForm) {
+    //console.log(form.value['url']);
+   /* var str: string = form.value['url'];
+    this.codeset = loadAndParseFromUrl(str);*/
   }
 
 }

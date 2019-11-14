@@ -1,5 +1,4 @@
 import { Component, Input, OnInit } from '@angular/core';
-import { DataService } from '../services/data.service';
 import { Router } from '@angular/router';
 
 @Component({
@@ -9,14 +8,11 @@ import { Router } from '@angular/router';
 })
 export class EditPageComponent implements OnInit {
 
-  @Input() id: number; 
-  @Input() data;
-  @Input() index;
+  @Input() label: string; 
+  @Input() type: string;
+  @Input() codeset: any[];
 
-  isDataSelected = false;
-  links: any[];
-
-  constructor(private dataService : DataService, private router: Router){
+  constructor(private router: Router){
     
    }
   
@@ -24,11 +20,7 @@ export class EditPageComponent implements OnInit {
   }
 
   onLinksOfSelectedData(){
-    console.log("index:" + this.index);
-    this.links = this.dataService.getLinksByIndex(this.index+1);
-    this.isDataSelected = true;
-    this.router.navigate(['/data/'+(this.index+1)]);
-    console.log(this.links)
+    
   }
 
 }

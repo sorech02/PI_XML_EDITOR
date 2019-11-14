@@ -12,14 +12,11 @@ import { FormsModule, ReactiveFormsModule }    from '@angular/forms';
 import { EditViewComponent } from './edit-view/edit-view.component';
 import { EditPageComponent } from './edit/edit.component';
 import { MessagePageComponent } from './message-page/message-page.component';
-import { DataService } from './services/data.service';
-import { SingleDataComponent } from './single-data/single-data.component';
 import { EditDataComponent } from './edit-data/edit-data.component';
 import { AuthService } from './services/auth.service';
-import { DataresquestService } from './services/dataresquest.service';
 import { AuthGuardService } from './services/auth-guard.service';
 import { SignupComponent } from './signup/signup.component';
-
+//import { Codeset } from './edit-data/parser';
 
 const appRoutes: Routes =   [
 //  { path: 'comments', canActivate: [AuthGuardService] , component: CommentaireComponent},
@@ -34,6 +31,7 @@ const appRoutes: Routes =   [
   { path: '**', redirectTo: 'not-found' }
   
 ];
+
 /*canActivate: [AuthGuardService] ,  is for lock a page if not logged ! Enable it and the page is protected*/ 
 @NgModule({
   declarations: [
@@ -45,7 +43,6 @@ const appRoutes: Routes =   [
     EditPageComponent,
     MessagePageComponent,
     FourOhFourComponent,
-    SingleDataComponent,
     EditDataComponent,
     SignupComponent
   ],
@@ -57,7 +54,7 @@ const appRoutes: Routes =   [
     HttpClientModule,
     ReactiveFormsModule,  ],
   providers: [
-    DataService, DataresquestService, AuthGuardService, AuthService
+  AuthGuardService, AuthService
   ],
   bootstrap: [AppComponent]
 })
