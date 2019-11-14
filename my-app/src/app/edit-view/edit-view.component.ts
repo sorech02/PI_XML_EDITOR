@@ -1,5 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 import { NgForm } from '@angular/forms';
+import { xmlParser } from './edit-view.xmlParser'; 
 
 @Component({
   selector: 'app-edit-view',
@@ -7,20 +8,17 @@ import { NgForm } from '@angular/forms';
   styleUrls: ['./edit-view.component.scss']
 })
 export class EditViewComponent implements OnInit {
-
+  codeset;
   
-
   constructor() { }
-
-
   
   ngOnInit() {
   }
 
   onSubmit(form: NgForm) {
-    //console.log(form.value['url']);
-   /* var str: string = form.value['url'];
-    this.codeset = loadAndParseFromUrl(str);*/
+    var str: string = form.value['url'];
+    var xmlParserObj = new xmlParser(str);
+    this.codeset = xmlParserObj.getCodeset();
+    //console.log(this.codeset.toString());
   }
-
 }
