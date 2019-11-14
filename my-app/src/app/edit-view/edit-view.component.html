@@ -1,21 +1,53 @@
+
 <div class="container">
-        <form (ngSubmit)="onSubmit(f)" #f="ngForm">
+        <form id="searchForm" (ngSubmit)="onSubmit(f)" #f="ngForm">
                 <div class="form-group">
                   <label for="name">
                     XML URL to load (ex: https://raw.githubusercontent.com/immregistries/codebase/master/base/sets/Vaccination%20CVX%20Code.xml)
+                    <!-- Search For Codesets -->
                   </label>
                   <input type="text" id="url_search" class="form-control" name="url" ngModel required>
                 </div>
-                <button class="btn btn-primary" type="submit" [disabled]="f.invalid">Search</button>
-              </form>
+                
+                <button class="btn btn-primary" type="submit" [disabled]="f.invalid">Search</button>       
+        </form>
+</div>
+<div class="container">
+<form id="selection" (ngSubmit)="onClicked(g)" #g="ngForm">
+            <div class="form-group">
+              <label>
+                Show Data: 
+              </label>
+                <select name="docSelection" id="docSelection" class="form-control" ngModel>
+             
+                  <option *ngFor="let xmlFile of xmlFile$ | async" value="{{ xmlFile.label }}" >{{ xmlFile.label }}</option>
+                    <!--<pre>{{xmlFile.code | json}}</pre>-->
+
+                </select></div>  
+                <button class="btn btn-primary" type="submit" >Show</button>
+      </form>
+
     <div class="File-menu" >
+
+      <div *ngIf="isDocumentDefined===true ">
+          <label> Showing Data for:  {{document_name}} </label>
+    <!--
+         <ul>
+        <li *ngFor="let doc of document$ | async">
+            {{doc | json }
+        </li>
+      </ul>-->
+      </div>
         
       <!--  <app-edit *ngFor="let element of datas; let i = index "
                 [id] = "element.id"
                 [data] = "element.data"
                 [index] = "i"
         ></app-edit>-->
-    </div>
-</div>
+        
+
+
+
+
     
     
