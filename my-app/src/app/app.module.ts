@@ -12,12 +12,15 @@ import { FormsModule, ReactiveFormsModule }    from '@angular/forms';
 import { EditViewComponent } from './edit-view/edit-view.component';
 import { EditPageComponent } from './edit/edit.component';
 import { MessagePageComponent } from './message-page/message-page.component';
-import { EditDataComponent } from './edit-data/edit-data.component';
 import { AuthService } from './services/auth.service';
 import { DataresquestService } from './services/dataresquest.service';
 import { AuthGuardService } from './services/auth-guard.service';
 import { SignupComponent } from './signup/signup.component';
-//import { Codeset } from './edit-data/parser';
+
+//Firebase imports
+import { environment } from '../environments/environment';
+import {AngularFireModule} from '@angular/fire';
+import { AngularFirestoreModule } from '@angular/fire/firestore';
 
 const appRoutes: Routes =   [
   { path: 'comments', /*canActivate: [AuthGuardService] , */ component: CommentaireComponent},
@@ -26,7 +29,6 @@ const appRoutes: Routes =   [
   { path: 'login', component: LoginPageComponent},
 
   { path: 'messages', /*canActivate: [AuthGuardService] , */ component: MessagePageComponent },
-  { path: 'data/:id', /*canActivate: [AuthGuardService] , */ component: EditDataComponent  },
   { path: 'signup', component : SignupComponent },
   { path: '', component: FeedActuComponent },
   { path: 'not-found', component: FourOhFourComponent },
@@ -45,7 +47,6 @@ const appRoutes: Routes =   [
     EditPageComponent,
     MessagePageComponent,
     FourOhFourComponent,
-    EditDataComponent,
     SignupComponent
   ],
   imports: [
@@ -54,7 +55,11 @@ const appRoutes: Routes =   [
     FormsModule,
     RouterModule.forRoot(appRoutes),
     HttpClientModule,
-    ReactiveFormsModule,  ],
+    ReactiveFormsModule,
+    AngularFireModule.initializeApp(environment.firebase),
+    AngularFirestoreModule
+    
+  ],
   providers: [
 
   DataresquestService, AuthGuardService, AuthService
