@@ -54,7 +54,7 @@ function createCodeFromTree(xmlTree) {
   if(xmlTree.getElementsByTagName("status").length > 0)
     codeStatus = xmlTree.getElementsByTagName("status")[0].textContent.toString();
 
-  var code = new Code(codeValue, codeLabel, codeDescription, codeStatus);
+    var code = new Code( codeValue, codeLabel, codeDescription, codeStatus);
   
   if(xmlTree.getElementsByTagName("reference").length > 0)
   {

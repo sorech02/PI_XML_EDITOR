@@ -7,18 +7,19 @@ import { Observable } from 'rxjs';
   providedIn: 'root'
 })
 
-export class AuthGuardService implements CanActivate {
-  
+export class SecureSignPage implements CanActivate {
+
   constructor(
     public authenticationService: AuthenticationService,
     public router: Router
-  ){ }
+  ) { }
 
   canActivate(
     next: ActivatedRouteSnapshot,
     state: RouterStateSnapshot): Observable<boolean> | Promise<boolean> | boolean {
-    if(this.authenticationService.isLoggedIn !== true) {
-      this.router.navigate(['sign-in'])
+    if(this.authenticationService.isLoggedIn) {
+      window.alert("You are not allowed to access this URL!");
+       this.router.navigate(['dashboard'])
     }
     return true;
   }

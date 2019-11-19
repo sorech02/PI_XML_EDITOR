@@ -7,28 +7,37 @@ import { AppRoutingModule } from './app-routing.module';
 import { AppComponent } from './app.component';
 import { FeedActuComponent } from './feed-actu/feed-actu.component';
 import { CommentaireComponent } from './commentaire/commentaire.component';
-import { LoginPageComponent } from './login-page/login-page.component';
 import { FormsModule, ReactiveFormsModule }    from '@angular/forms';
 import { EditViewComponent } from './edit-view/edit-view.component';
 import { EditPageComponent } from './edit/edit.component';
 import { MessagePageComponent } from './message-page/message-page.component';
-import { AuthService } from './services/auth.service';
 import { AuthGuardService } from './services/auth-guard.service';
-import { SignupComponent } from './signup/signup.component';
+import { SecureSignPage } from './services/secure-sign-page';
+import { AuthenticationService } from './services/authentication.service';
+
 
 //Firebase imports
 import { environment } from '../environments/environment';
-import {AngularFireModule} from '@angular/fire';
-import { AngularFirestoreModule } from '@angular/fire/firestore';
+import { AngularFireModule } from '@angular/fire';
+import { AngularFirestore } from '@angular/fire/firestore'; 
+import { AngularFireAuth } from '@angular/fire/auth';
+import { SignUpComponent } from './sign-up/sign-up.component';
+import { SignInComponent } from './sign-in/sign-in.component';
+import { SignOutComponent } from './sign-out/sign-out.component';
+import { ForgotPasswordComponent } from './forgot-password/forgot-password.component';
+import { VerifyEmailComponent } from './verify-email/verify-email.component';
 
 const appRoutes: Routes =   [
-//  { path: 'comments', canActivate: [AuthGuardService] , component: CommentaireComponent},
+  { path: 'sign-up', component: SignUpComponent, canActivate: [SecureSignPage]},
+  { path: 'sign-in', component: SignInComponent , canActivate: [SecureSignPage]},
+  { path: 'sign-out', component: SignOutComponent , canActivate: [AuthGuardService]},
+  { path: 'forgot-password', component: ForgotPasswordComponent , canActivate: [SecureSignPage]},
+  { path: 'verify-email-address', component: VerifyEmailComponent , canActivate: [SecureSignPage]},
+  { path: 'comments', canActivate: [AuthGuardService] , component: CommentaireComponent},
   { path: 'edition',canActivate: [AuthGuardService] ,  component: EditViewComponent },
-  { path: 'actu', canActivate: [AuthGuardService] ,  component: FeedActuComponent},
-  { path: 'login', component: LoginPageComponent},
-  { path: 'messages', /*canActivate: [AuthGuardService] , */ component: MessagePageComponent },
-  { path: 'signup', component : SignupComponent },
-  { path: '', component:  LoginPageComponent},
+  { path: 'actu', canActivate: [AuthGuardService] , component: FeedActuComponent},
+  { path: 'messages', canActivate: [AuthGuardService] ,  component: MessagePageComponent },
+  { path: '', component: FeedActuComponent },
   { path: 'not-found', component: FourOhFourComponent },
   { path: '**', redirectTo: 'not-found' }
   
@@ -40,12 +49,15 @@ const appRoutes: Routes =   [
     AppComponent,
     FeedActuComponent,
     CommentaireComponent,
-    LoginPageComponent,
     EditViewComponent,
     EditPageComponent,
     MessagePageComponent,
     FourOhFourComponent,
-    SignupComponent
+    SignUpComponent,
+    SignInComponent,
+    SignOutComponent,
+    ForgotPasswordComponent,
+    VerifyEmailComponent
   ],
   imports: [
     BrowserModule,
@@ -54,12 +66,12 @@ const appRoutes: Routes =   [
     RouterModule.forRoot(appRoutes),
     HttpClientModule,
     ReactiveFormsModule,
-    AngularFireModule.initializeApp(environment.firebase),
-    AngularFirestoreModule
-    
+    AngularFireModule.initializeApp(environment.firebase)
+
   ],
   providers: [
-  AuthGuardService, AuthService
+
+    AuthenticationService, AngularFirestore, AngularFireAuth
   ],
   bootstrap: [AppComponent]
 })

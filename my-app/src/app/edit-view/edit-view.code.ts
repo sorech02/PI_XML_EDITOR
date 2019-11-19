@@ -1,12 +1,15 @@
+import { Reference } from './edit-view.reference';
+import { Codeset } from './edit-view.codeset';
+
 //code class, has a value, a label, a description, a status and a list of references
 export class Code {
-  
-    label;
-    value;
-    description;
+
+    
+    label:string;
+    value:string;
+    description: [];
     status;
-    references;
-  
+    references : Reference[];
     constructor(value, label, description, status) {
       this.label = label;
       this.value = value;
@@ -14,7 +17,6 @@ export class Code {
       this.status = status;
       this.references = [];
     }
-  
     addReference(reference) {
       this.references.push(reference);
     }

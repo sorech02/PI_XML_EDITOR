@@ -1,10 +1,9 @@
 import { Component } from '@angular/core';
-import * as firebase from 'firebase';
-import { AuthService } from './services/auth.service';
+//import * as firebase from 'firebase';
+import { AuthenticationService } from './services/authentication.service';
 import { Router } from '@angular/router';
 import { ResourceLoader } from '@angular/compiler';
 import {environment} from '../environments/environment'
-
 
 @Component({
   selector: 'app-root',
@@ -16,17 +15,14 @@ import {environment} from '../environments/environment'
 
 export class AppComponent {
   isAuth: boolean;
-  constructor(private authService: AuthService,
+  constructor(private authenticationService: AuthenticationService,
     private router: Router) { 
-      
-  
-    firebase.initializeApp(environment.firebase);
-    
-
+   // firebase.initializeApp(environment.firebase);
     }
 
   ngOnInit() {
-    firebase.auth().onAuthStateChanged(
+
+    /*firebase.auth().onAuthStateChanged(
       (user) => {
         if(user) {
           this.isAuth = true;
@@ -34,13 +30,13 @@ export class AppComponent {
           this.isAuth = false;
         }
       }
-    );
+    );*/
   }
 
-  onSignOut() {
+  onSignOut() {/*
     this.authService.signOutUser();
     this.isAuth=false;
-    ResourceLoader
+    ResourceLoader*/
   }
 
 }

@@ -1,17 +1,24 @@
-//codeset class, has a type, a label, and a list of codes
+import { Code } from './edit-view.code'//codeset class, has a type, a label, and a list of codes
+import { Identifiers } from '@angular/compiler';
 export class Codeset {
     label;
     type;
-    codes;
+    codes: Code[];
+
   
     constructor(label, type) {
       this.label = label;
       this.type = type;
       this.codes = [];
+    
     }
-  
+    
+    setLabel(str){
+      this.label = str;
+    }
+
     addCode(code) {
-      this.codes.push(code);
+      this.codes.push(code)
     }
   
     toString() {
