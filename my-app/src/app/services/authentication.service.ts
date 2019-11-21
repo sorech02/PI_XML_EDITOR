@@ -39,7 +39,7 @@ SignIn(email, password) {
   return this.afAuth.auth.signInWithEmailAndPassword(email, password)
     .then((result) => {
       this.ngZone.run(() => {
-        this.router.navigate(['dashboard']);
+        this.router.navigate(['actu']);
       });
       this.SetUserData(result.user);
     }).catch((error) => {
@@ -90,7 +90,7 @@ AuthLogin(provider) {
   return this.afAuth.auth.signInWithPopup(provider)
   .then((result) => {
      this.ngZone.run(() => {
-        this.router.navigate(['dashboard']);
+        this.router.navigate(['actu']);
       })
     this.SetUserData(result.user);
   }).catch((error) => {
