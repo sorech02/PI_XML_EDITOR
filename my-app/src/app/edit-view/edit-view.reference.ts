@@ -9,6 +9,6 @@ export class Reference {
     }
   
     toString() {
-      return "- Type: " + this.type + " - Code: " + this.codeValue + "<br>";
+      return "- Type: " + this.type + " - Code: " + this.codeValue ;
     }
   }

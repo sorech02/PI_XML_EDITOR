@@ -3,13 +3,13 @@ import { Identifiers } from '@angular/compiler';
 export class Codeset {
     label;
     type;
-    codes: Code[];
+    code: Code[];
 
   
     constructor(label, type) {
       this.label = label;
       this.type = type;
-      this.codes = [];
+      this.code = [];
     
     }
     
@@ -18,16 +18,14 @@ export class Codeset {
     }
 
     addCode(code) {
-      this.codes.push(code)
+      this.code.push(code)
     }
   
     toString() {
-      var result = "Label: " + this.label + "<br>" + "Type: " + this.type + "<br>" + "Codes:" + "<br>";
+      var result = "Label: " + this.label + "Type: " + this.type  + "Codes:" ;
   
-      this.codes.forEach(function(element){
+      this.code.forEach(function(element){
         result += element.toString();
-        result += "<br>";
-        result += "<br>";
       });
       return result;
     }
