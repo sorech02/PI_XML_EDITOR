@@ -50,6 +50,7 @@ export class EditViewComponent implements OnInit {
       this.codeset.subscribe(value => { this.myCodeset = value;
                                   //console.log("value" ,value.label, value.type, value.code);
                                 });
+
       this.isDocumentDefined = true;
     }
     console.log(this.myCodeset)

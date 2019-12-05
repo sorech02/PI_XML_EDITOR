@@ -22,7 +22,7 @@ export class Code {
     }
   
     toString() {
-      var result = "Label: " + this.label + "<br>" + "Value: " + this.value + "<br>" + "Description: " + this.description + "<br>" + "Status: " + this.status + "<br>" + "References:" + "<br>";
+      var result = "Label: " + this.label  + "Value: " + this.value  + "Description: " + this.description  + "Status: " + this.status  + "References:" ;
   
       this.references.forEach(function(element){
         result += element.toString();
