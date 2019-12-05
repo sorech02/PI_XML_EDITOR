@@ -1,36 +1,67 @@
 <div class="container" fxLayout="row" fxLayoutAlign="stretch">
 
-  <div class="column" fxFlexFill style="background-color:#aaa;">
-    Archives
+  <div class="column" >
+    Archives:
   </div>
 
-  <div class="column" fxFlexFill style="background-color:rgb(255, 255, 255);">
+  <div class="column"  style="background-color:#f1f1f1;">
     Codesets: 
-    <div>
-        <option *ngFor="let docu of document$ | async" value="{{ docu.label }}" >{{ docu.label }}</option>
+    <div fxLayout="column">
+        <button class="button" *ngFor="let docu of document$ | async" value="{{ docu.label }}" (click)="openDocu(event, docu.label)">{{ docu.label }}</button>
     </div>
   </div>
 
-  <div class="column" fxFlexFill style="background-color:#aaa;">
-    Codes
+  <div class="column" >
+    Codes:
+    <div *ngIf="isDocumentDefined===true ">
+      <ul>
+        <li *ngFor="let code of myCodeset.code">
+
+            <div ng-init="collapsed=false">
+              <a href="#" ng-model="collapsed" ng-click="collapsed=!collapsed" onclick="return false;"> {{code.label}} </a>
+              <!-- <div ng-show="collapsed" class="ng-hide">TEST</div> -->
+            </div>
+
+        </li>
+      </ul>
+    </div>
   </div>
 
 </div>
 
-
-  <div class="container">
-    <form id="searchForm" (ngSubmit)="onSubmit(f)" #f="ngForm">
-            <div class="form-group">
-              <label for="name">
-                Search For Codesets
-              </label>
-              <input type="text" id="url_search" class="form-control" name="url" ngModel required>
-            </div>
-            
-            <button class="btn btn-primary" type="submit" [disabled]="f.invalid">Search</button>       
-    </form>
-</div>
+<!--
 <div class="container">
+  <form id="searchForm" (ngSubmit)="onSubmit(f)" #f="ngForm">
+          <div class="form-group">
+            <label for="name">
+              Search For Codesets
+            </label>
+            <input type="text" id="url_search" class="form-control" name="url" ngModel required>
+          </div>
+          
+          <button class="btn btn-primary" type="submit" [disabled]="f.invalid">Search</button>       
+  </form>
+</div>
+-->
+
+<!--
+<div class="container">
+  <div class="tab">
+    <button class="tablinks" *ngFor="let docu of document$ | async" value="{{ docu.label }}" (click)="openDocu(event, docu.label)">{{ docu.label }}</button>
+  </div>
+</div>
+-->
+
+<!--
+<ul *ngFor="let docu of document$ | async" >
+  <div id="{{docu.label}}" class="tabcontent">
+    <h3>{{docu.label}}</h3>
+    <h4>Type: {{docu.type}} </h4>
+  </div>
+</ul>
+-->
+
+<!--<div class="container">
 <form id="selection" (ngSubmit)="onClicked(g)" #g="ngForm">
         <div class="form-group">
           <label>
@@ -39,8 +70,7 @@
             <select name="docSelection" id="docSelection" class="form-control" ngModel>
         
               <option *ngFor="let docu of document$ | async" value="{{ docu.label }}" >{{ docu.label }}</option>
-                <!--<pre>{{xmlFile.code | json}}</pre>-->
-
+              
             </select></div>  
             <button class="btn btn-primary" type="submit" >Show</button>
   </form>
@@ -48,24 +78,14 @@
 <div class="File-menu" >
 
   <div *ngIf="isDocumentDefined===true ">
-    
-      <label> Showing Data for:  {{codesetLabel}} </label>  
-<!--
-    <ul>
-    <li *ngFor="let c of codeset | async" >
-        {{c | json }
-    </li>
-  </ul>-->
+      <label> Showing Data for:  {{ myCodeset.label }} </label>
+      <h1>Description: </h1>
+      <p>{{ myCodeset.code[0].label }} </p>
+
   </div>
-    
-  <!--  <app-edit *ngFor="let element of datas; let i = index "
-            [id] = "element.id"
-            [data] = "element.data"
-            [index] = "i"
-    ></app-edit>-->
-    
+</div>
 
-
+-->
 
 
 

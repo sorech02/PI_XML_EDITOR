@@ -1,48 +1,34 @@
-.flex {
-    -webkit-flex: 1 1 0%;
-        -ms-flex: 1 1 0%;
-            flex: 1 1 0%;
-    box-sizing: border-box;
-  }
-  .flex-20 {
-    -webkit-flex: 1 1 20%;
-        -ms-flex: 1 1 20%;
-            flex: 1 1 20%;
-    max-width: 20%;
-    max-height: 100%;
-    box-sizing: border-box;
-  }
+* {box-sizing: border-box}
 
-  .layout-row .flex-33 {
-    -webkit-flex: 1 1 calc(100% / 3);
-        -ms-flex: 1 1 calc(100% / 3);
-            flex: 1 1 calc(100% / 3);
-    box-sizing: border-box;
-  }
+/* Style the tab */
+.tab {
+  float: left;
+  border: 1px solid #ccc;
+  background-color: #f1f1f1;
+  width: 30%;
+  height: 300px;
+}
 
-  .layout-row  .flex-66 {
-    -webkit-flex: 1 1 calc(200% / 3);
-        -ms-flex: 1 1 calc(200% / 3);
-            flex: 1 1 calc(200% / 3);
-    box-sizing: border-box;
-  }
+/* Style the buttons that are used to open the tab content */
+.tab button {
+  display: block;
+  background-color: inherit;
+  color: black;
+  padding: 22px 16px;
+  width: 100%;
+  border: none;
+  outline: none;
+  text-align: left;
+  cursor: pointer;
+  transition: 0.3s;
+}
 
-  .layout-row .flex-33 {
-    max-width: calc(100% / 3);
-    max-height: 100%;
-  }
+/* Change background color of buttons on hover */
+.tab button:hover {
+  background-color: #ddd;
+}
 
-  .layout-row  .flex-66 {
-    max-width: calc(200% / 3);
-    max-height: 100%;
-  }
-
-  .layout-column .flex-33 {
-    max-width: 100%;
-    max-height: calc(100% / 3);
-  }
-
-  .layout-column  .flex-66 {
-    max-width: 100%;
-    max-height: calc(200% / 3);
-  }
+/* Create an active/current "tab button" class */
+.tab button.active {
+  background-color: #ddd;
+}

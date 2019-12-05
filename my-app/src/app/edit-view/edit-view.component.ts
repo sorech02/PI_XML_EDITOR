@@ -20,8 +20,10 @@ export class EditViewComponent implements OnInit {
   protected db;
   protected codeset:   Observable<Codeset>;
   protected isDocumentDefined: boolean; 
-
+  protected myCodeset;  
   codesetLabel;
+  codesetType;
+  code;
 
   constructor(db: AngularFirestore) {
     this.db = db
@@ -33,29 +35,65 @@ export class EditViewComponent implements OnInit {
     this.document$ = this.xmlCollection.valueChanges();
   }
 
-  onSubmit(form: NgForm) {
-    this.xmlCollection = this.db.collection(form.value['url']);
-    this.document$ = this.xmlCollection.valueChanges();
-  }
+  // onSubmit(form: NgForm) {
+  //   this.xmlCollection = this.db.collection(form.value['url']);
+  //   this.document$ = this.xmlCollection.valueChanges();
+  // }
 
-  onClicked(form: NgForm){
+  // onClicked(form: NgForm){
     
-    console.log('fonction', form.value['docSelection']);
-    if (form.value['docSelection'] != ""){
-      this.codesetDocument = this.xmlCollection.doc(form.value['docSelection']);
-      this.codeset = this.codesetDocument.valueChanges();
-      this.codeset.subscribe(value => console.log(value));
-      this.codesetLabel ="";
-      this.codeset.subscribe(value => {this.codesetLabel = value.label; 
-                                  console.log("value" ,value.label, value.type, value.code);});
-      console.log("Codeset Label", this.codesetLabel);
-      this.isDocumentDefined = true;
-    }
-   
-    
-  }
+  //   console.log('fonction', form.value['docSelection']);
+  //   if (form.value['docSelection'] != ""){
+  //     this.codesetDocument = this.xmlCollection.doc(form.value['docSelection']);
+  //     this.codeset = this.codesetDocument.valueChanges();
+  //     this.codeset.subscribe(value => console.log(value));
+  //     this.codeset.subscribe(value => { this.myCodeset = value;
+  //                                 //console.log("value" ,value.label, value.type, value.code);
+  //                               });
+
+  //     this.isDocumentDefined = true;
+  //   }
+  //   console.log(this.myCodeset)
+  // }
 
   addDocumentIntoCollection(collection, documentName:string, data){
     collection.doc(documentName).set(data);
   }
+
+  openDocu(evt, codeName) {
+    // // Declare all variables
+    // var i, tabcontent, tablinks;
+  
+    // // Get all elements with class="tabcontent" and hide them
+    // tabcontent = document.getElementsByClassName("tabcontent");
+    // for (i = 0; i < tabcontent.length; i++) {
+    //   console.log(tabcontent);
+    //   tabcontent[i].style.display = "none";
+    // }
+
+    // // Get all elements with class="tablinks" and remove the class "active"
+    // tablinks = document.getElementsByClassName("tablinks");
+    // for (i = 0; i < tablinks.length; i++) {
+    //   tablinks[i].className = tablinks[i].className.replace(" active", "");
+    // }
+  
+    // // Show the current tab, and add an "active" class to the link that opened the tab
+
+    // var newElement = document.getElementById(codeName);
+    // newElement.style.display = "block";
+    // newElement.classList.add("active");
+
+    if (codeName != ""){
+      this.codesetDocument = this.xmlCollection.doc(codeName);
+      this.codeset = this.codesetDocument.valueChanges();
+      //this.codeset.subscribe(value => console.log(value));
+      this.codeset.subscribe(value => { this.myCodeset = value;
+        // console.log("value" ,value.label, value.type, value.code);
+      });
+
+      this.isDocumentDefined = true;
+    }
+  } 
+
 }
+

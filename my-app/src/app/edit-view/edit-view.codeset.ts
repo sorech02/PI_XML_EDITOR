@@ -22,7 +22,8 @@ export class Codeset {
     }
   
     toString() {
-      var result = "Label: " + this.label + "Type: " + this.type  + "Codes:" ;
+      var result = "Label: " + this.label + "<br>" + "Type: " + this.type + "<br>" + "Code:" + "<br>";
+
   
       this.code.forEach(function(element){
         result += element.toString();
