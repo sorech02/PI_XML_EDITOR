@@ -3,13 +3,12 @@
     <article>
             <ul>
                     <li routerLinkActive="active" ><a routerLink="comments">Commentaire</a></li>
-                    <li routerLinkActive="active" ><a routerLink="edition">EditPage</a></li>
+                    <li *ngIf="isAuth" routerLinkActive="active" ><a routerLink="edition">EditPage</a></li>
                     <li routerLinkActive="active" ><a routerLink="actu">FeedActu</a></li>
-                    <li routerLinkActive="active" ><a routerLink="messages">MessagePage</a></li>
-                    <li routerLinkActive="active" ><a routerLink="sign-up">Register</a></li>
-                    <li routerLinkActive="active" ><a routerLink="sign-in">Log In</a></li>
-                    <li ><a routerLink="sign-out">Log Out</a></li>
-
+                    <li *ngIf="isAuth" routerLinkActive="active" ><a routerLink="messages">MessagePage</a></li>
+                    <li *ngIf="!isAuth" routerLinkActive="active" ><a routerLink="sign-up">Register</a></li>
+                    <li *ngIf="!isAuth" routerLinkActive="active" ><a routerLink="sign-in">Log In</a></li>
+                    <li *ngIf="isAuth" routerLinkActive="active" ><a routerLink="sign-out">Log Out</a></li>
                    <!-- <button class="glyphicon glyphicon-off" onclick="onSignOut()" routerLinkActive="active"><a routerLink="login">clique</a></button>-->
                 </ul>
     <div class="container">
