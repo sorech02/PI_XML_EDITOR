@@ -1,3 +1,22 @@
+<div class="container" fxLayout="row" fxLayoutAlign="stretch">
+
+  <div class="column" fxFlexFill style="background-color:#aaa;">
+    Archives
+  </div>
+
+  <div class="column" fxFlexFill style="background-color:rgb(255, 255, 255);">
+    Codesets: 
+    <div>
+        <option *ngFor="let docu of document$ | async" value="{{ docu.label }}" >{{ docu.label }}</option>
+    </div>
+  </div>
+
+  <div class="column" fxFlexFill style="background-color:#aaa;">
+    Codes
+  </div>
+
+</div>
+
 
   <div class="container">
     <form id="searchForm" (ngSubmit)="onSubmit(f)" #f="ngForm">

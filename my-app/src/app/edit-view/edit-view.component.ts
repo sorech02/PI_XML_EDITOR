@@ -1,6 +1,5 @@
 import { Component, OnInit } from '@angular/core';
 import { NgForm } from '@angular/forms';
-import { BrowserModule } from '@angular/platform-browser';
 import { Observable } from 'rxjs';
 import { AngularFirestore, AngularFirestoreCollection, AngularFirestoreDocument } from '@angular/fire/firestore';
 import  { Code } from './edit-view.code'; 
@@ -30,7 +29,8 @@ export class EditViewComponent implements OnInit {
   }
   
   ngOnInit() {
-      
+    this.xmlCollection = this.db.collection("XmlFile");
+    this.document$ = this.xmlCollection.valueChanges();
   }
 
   onSubmit(form: NgForm) {

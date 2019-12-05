@@ -14,6 +14,7 @@ import { MessagePageComponent } from './message-page/message-page.component';
 import { AuthGuardService } from './services/auth-guard.service';
 import { SecureSignPage } from './services/secure-sign-page';
 import { AuthenticationService } from './services/authentication.service';
+import { FlexLayoutModule } from '@angular/flex-layout';
 
 
 //Firebase imports
@@ -61,6 +62,7 @@ const appRoutes: Routes =   [
   ],
   imports: [
     BrowserModule,
+    FlexLayoutModule,
     AppRoutingModule,
     FormsModule,
     RouterModule.forRoot(appRoutes),
