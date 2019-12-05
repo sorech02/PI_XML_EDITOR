@@ -56,6 +56,7 @@ export class EditViewComponent implements OnInit {
   //   console.log(this.myCodeset)
   // }
 
+
   addDocumentIntoCollection(collection, documentName:string, data){
     collection.doc(documentName).set(data);
   }
@@ -90,10 +91,30 @@ export class EditViewComponent implements OnInit {
       this.codeset.subscribe(value => { this.myCodeset = value;
         // console.log("value" ,value.label, value.type, value.code);
       });
-
       this.isDocumentDefined = true;
     }
+    
   } 
 
+  archive(){
+    this.xmlCollection = this.db.collection('/XmlFile');
+    this.document$ = this.xmlCollection.valueChanges();
+    var i=0;
+    this.document$.forEach(doc => {
+      console.log(doc);
+      doc.forEach(file => {
+        var today = new Date();
+        var dd = String(today.getDate()).padStart(2, '0');
+        var mm = String(today.getMonth() + 1).padStart(2, '0'); //January is 0!
+        var yyyy = String(today.getFullYear());
+        var madate = mm + '-' + dd + '-' + yyyy;       
+        console.log(madate)
+        this.db.collection(`Archive/Archive${madate}/Archive`).doc(file.label).set(file);
+        i += 1;
+      });
+      
+    });
+  }
 }
+
 
