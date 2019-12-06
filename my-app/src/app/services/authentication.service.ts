@@ -3,6 +3,7 @@ import { AngularFireAuth } from "@angular/fire/auth";
 import { Router } from '@angular/router';
 import { User } from "../services/user";
 import { AngularFirestore, AngularFirestoreDocument } from '@angular/fire/firestore';
+import { Observable } from 'rxjs';
 
 @Injectable({
   providedIn: 'root'
@@ -11,6 +12,7 @@ import { AngularFirestore, AngularFirestoreDocument } from '@angular/fire/firest
 export class AuthenticationService {
 
   userData: any; // Save logged in user data
+  user$:Observable<any>;
 
   constructor(
     public afAuth: AngularFireAuth, // Inject Firebase auth service
@@ -18,8 +20,6 @@ export class AuthenticationService {
     public afs: AngularFirestore,   // Inject Firestore service
     public ngZone: NgZone // NgZone service to remove outside scope warning
     ) { 
-       /* Saving user data in localstorage when 
-    logged in and setting up null when logged out */
     this.afAuth.authState.subscribe(user => {
       if (user) {
         this.userData = user;
@@ -84,6 +84,9 @@ get isLoggedIn(): boolean {
   return (user !== null && user.emailVerified !== false) ? true : false;
 }
 
+getUser(){
+  return(JSON.parse(localStorage.getItem('user')).uid)
+}
 
 // Auth logic to run auth providers
 AuthLogin(provider) {
@@ -122,5 +125,6 @@ SignOut() {
     this.router.navigate(['sign-in']);
   })
 }
+
 
 }

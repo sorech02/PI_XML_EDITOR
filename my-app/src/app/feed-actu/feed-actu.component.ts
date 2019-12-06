@@ -10,6 +10,9 @@ export class FeedActuComponent implements OnInit {
   constructor() { }
 
   ngOnInit() {
+  
   }
+  
+
 
 }
