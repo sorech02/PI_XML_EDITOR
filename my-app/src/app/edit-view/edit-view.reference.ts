@@ -1,9 +1,9 @@
 export class Reference {
   
-    type; 
-    codeValue;
+    type: string; 
+    codeValue: string;
   
-    constructor(type, codeValue) {
+    constructor(type: string, codeValue: string) {
       this.type = type;
       this.codeValue = codeValue;
     }

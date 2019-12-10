@@ -1,34 +1,69 @@
 
 
-<div class="container" fxLayout="row" fxLayoutAlign="stretch">
+<div class="container" fxLayout="row" fxLayoutAlign="start stretch">
   <div class="column">
       <button (click)="archive()">Archive moi</button>
   </div>
-  
-  <div class="column" >
-    Archives:
-  </div>
 
   <div class="column"  style="background-color:#f1f1f1;">
-    Codesets: 
+    <h3>Codesets</h3>
     <div fxLayout="column">
         <button class="button" *ngFor="let docu of document$ | async" value="{{ docu.label }}" (click)="openDocu(event, docu.label)">{{ docu.label }}</button>
     </div>
   </div>
 
-  <div class="column" >
-    Codes:
-    <div *ngIf="isDocumentDefined===true ">
-      <ul>
-        <li *ngFor="let code of myCodeset.code">
+  <div *ngIf="isDocumentDefined===true ">
+    <div>
+      <h3>Codes</h3>
+      <div *ngFor="let code of myCodeset.code">
+            <button class="button" value="{{ code.label }}" (click)="openCodeset(event, code)">{{ code.label }}</button>
+      </div>
+    </div>
+  </div>
 
-            <div ng-init="collapsed=false">
-              <a href="#" ng-model="collapsed" ng-click="collapsed=!collapsed" onclick="return false;"> {{code.label}} </a>
-              <!-- <div ng-show="collapsed" class="ng-hide">TEST</div> -->
-            </div>
+  <div *ngIf="isCodeSelected===true ">
+    <div class="column" style="background-color:#f1f1f1;">
+      <h3>Details</h3>
+      <h5>Codeset label: {{myCodeset.label}}</h5>
+      <h5>Codeset type: {{myCodeset.type}}</h5>
+      
+      <p>Code label: {{myCode.label}}</p>
+      <p>Code value: {{myCode.value}}</p>
+      <p>Description: {{myCode.description}}</p>
+      
+      <div *ngIf="myCode.status==true; else elseBlock">
+        <p>
+          Status: Valid
+        </p>
+      </div>
+      <ng-template #elseBlock>
+        <p>
+          Status: Invalid
+        </p>
+      </ng-template>
 
-        </li>
-      </ul>
+      <p>
+        Use age:
+        <br>
+        <span>Not before month: {{myCode.use_age.not_before_month}}</span>
+        <br>
+        <span>Not after month: {{myCode.use_age.not_after_month}}</span>
+      </p>
+
+      <p>
+        Use date:
+        <br>
+        <span>Not before: {{myCode.use_date.not_before}}</span>
+        <br>
+        <span>Not expected before: {{myCode.use_date.not_expected_before}}</span>
+        <br>
+        <span>Not after: {{myCode.use_date.not_after}}</span>
+        <br>
+        <span>Not expected after: {{myCode.use_date.not_expected_after}}</span>
+      </p>
+
+      <p>Test age: {{myCode.test_age}}</p>
+      <p>Concept type: {{myCode.concept_type}}</p>
     </div>
   </div>
 
@@ -92,7 +127,3 @@
 </div>
 
 -->
-
-
-
-

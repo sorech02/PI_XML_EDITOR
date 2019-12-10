@@ -1,5 +1,5 @@
 import { Codeset } from './edit-view.codeset'; 
-import { Code } from './edit-view.code'; 
+import { Code, UseAge, UseDate } from './edit-view.code'; 
 import { Reference } from './edit-view.reference'; 
 
 export class xmlParser {
@@ -40,7 +40,11 @@ function createCodeFromTree(xmlTree) {
   var codeValue = "";
   var codeLabel = "";
   var codeDescription = "";
-  var codeStatus = "";
+  var codeStatus = null;
+  var codeUse_age = new UseAge();
+  var codeUse_date = new UseDate();
+  var codeTest_age = "";
+  var codeConcept_type = "";
 
   if(xmlTree.getElementsByTagName("label").length > 0)
     codeLabel = xmlTree.getElementsByTagName("label")[0].textContent.toString();
@@ -52,9 +56,33 @@ function createCodeFromTree(xmlTree) {
     codeDescription = xmlTree.getElementsByTagName("description")[0].textContent.toString();
 
   if(xmlTree.getElementsByTagName("status").length > 0)
-    codeStatus = xmlTree.getElementsByTagName("status")[0].textContent.toString();
+    codeStatus = xmlTree.getElementsByTagName("status")[0].textContent.toString()=="Valid";
 
-    var code = new Code( codeValue, codeLabel, codeDescription, codeStatus);
+  if(xmlTree.getElementsByTagName("test-age").length > 0)
+    codeTest_age = xmlTree.getElementsByTagName("test-age")[0].textContent.toString();
+
+  if(xmlTree.getElementsByTagName("concept-type").length > 0)
+    codeConcept_type = xmlTree.getElementsByTagName("concept-type")[0].textContent.toString();
+
+  if(xmlTree.getElementsByTagName("not-before").length > 0)
+    codeUse_date.setNotBefore(xmlTree.getElementsByTagName("not-before")[0].nodeValue);
+
+  if(xmlTree.getElementsByTagName("not-after").length > 0)
+    codeUse_date.setNotAfter(xmlTree.getElementsByTagName("not-after")[0].nodeValue);
+
+  if(xmlTree.getElementsByTagName("not-expected-before").length > 0)
+    codeUse_date.setNotExpectedBefore(xmlTree.getElementsByTagName("not-expected-before")[0].nodeValue);
+
+  if(xmlTree.getElementsByTagName("not-expected-after").length > 0)
+    codeUse_date.setNotExpectedAfter(xmlTree.getElementsByTagName("not-expected-after")[0].nodeValue);
+
+  if(xmlTree.getElementsByTagName("not-before-month").length > 0)
+    codeUse_age.setNotBeforeMonth(xmlTree.getElementsByTagName("not-before-month")[0].nodeValue);
+
+  if(xmlTree.getElementsByTagName("not-after-month").length > 0)
+    codeUse_age.setNotBeforeMonth(xmlTree.getElementsByTagName("not-after-month")[0].nodeValue);
+
+  var code = new Code( codeValue, codeLabel, codeDescription, codeStatus, codeUse_age, codeUse_date, codeTest_age, codeConcept_type);
   
   if(xmlTree.getElementsByTagName("reference").length > 0)
   {
