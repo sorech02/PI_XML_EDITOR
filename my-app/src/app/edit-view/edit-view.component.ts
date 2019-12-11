@@ -16,7 +16,7 @@ export class EditViewComponent implements OnInit {
   protected xmlCollection: AngularFirestoreCollection ;
   protected codesetDocument: AngularFirestoreDocument<Codeset>;
   protected document$: Observable<any[]>;
-  protected db;
+  protected db: AngularFirestore;
   protected codeset:   Observable<Codeset>;
   protected isDocumentDefined: boolean; 
   protected myCodeset;  
@@ -44,9 +44,8 @@ export class EditViewComponent implements OnInit {
       this.codesetDocument = this.xmlCollection.doc(codeName);
       this.codeset = this.codesetDocument.valueChanges();
       this.myCodeset = new Codeset("", "");
-      //this.codeset.subscribe(value => console.log(value));
       this.codeset.subscribe(value => { this.myCodeset = value;
-        // console.log("value" ,value.label, value.type, value.code);
+        //console.log("value" ,value.label, value.type, value.code);
       });
       this.isDocumentDefined = true;
       this.isCodeSelected = false;
@@ -57,6 +56,38 @@ export class EditViewComponent implements OnInit {
   openCodeset(evt, objCode) {
     this.myCode = objCode;
     this.isCodeSelected = true;
+  }
+
+  goToReference(codesetType, codeValue) {
+    this.isDocumentDefined = false;
+    this.isCodeSelected = false;
+
+    var codesetLabel:string = "";
+    this.db.collection<Codeset>('XmlFile', ref => ref.where('type', '==', codesetType).limit(1))
+      .valueChanges()
+      .subscribe( value => 
+        {
+          if(value.length>0){
+
+            this.codesetDocument = this.xmlCollection.doc(value[0].label);
+            this.codeset = this.codesetDocument.valueChanges();
+            this.myCodeset = new Codeset("", "");
+
+            this.codeset.subscribe(value => { 
+              this.myCodeset = value;
+
+              for(let code of this.myCodeset.code) {
+                if(code.value == codeValue) {
+                  this.myCode = code;
+                  this.isCodeSelected = true;
+                }
+              }
+            });
+            
+            this.isDocumentDefined = true;
+          }
+        }
+      );
   }
 
   archive(){
