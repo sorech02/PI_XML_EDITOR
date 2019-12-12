@@ -37,7 +37,6 @@ const appRoutes: Routes =   [
   { path: 'comments', component: CommentaireComponent},
   { path: 'edition',canActivate: [AuthGuardService] ,  component: EditViewComponent },
   { path: 'actu', component: FeedActuComponent},
-  { path: 'messages', canActivate: [AuthGuardService] ,  component: MessagePageComponent },
   { path: '', component: FeedActuComponent },
   { path: 'not-found', component: FourOhFourComponent },
   { path: '**', redirectTo: 'not-found' }
