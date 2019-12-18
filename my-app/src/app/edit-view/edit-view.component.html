@@ -6,7 +6,13 @@
   <div class="column"  style="background-color:#f1f1f1;">
     <h3>Codesets</h3>
     <div fxLayout="column">
-        <button class="button" *ngFor="let docu of document$ | async" value="{{ docu.label }}" (click)="openDocu(event, docu.label)">{{ docu.label }}</button>
+        <div *ngIf="isDocumentDefined===true; then thenBlock else elseBlock"></div>
+        <ng-template #thenBlock>
+          <button class="button" [ngClass]="{'selected': docu.label===myCodeset.label}" *ngFor="let docu of document$ | async" value="{{ docu.label }}" (click)="openDocu(event, docu.label)">{{ docu.label }}</button>
+        </ng-template>
+        <ng-template #elseBlock>
+          <button class="button" *ngFor="let docu of document$ | async" value="{{ docu.label }}" (click)="openDocu(event, docu.label)">{{ docu.label }}</button>
+        </ng-template>
     </div>
   </div>
 
@@ -14,23 +20,23 @@
     <div>
       <h3>Codes</h3>
       <table>
-        <td>Label</td>
         <td>Value</td>
+        <td>Label</td>
 
         <tr *ngFor="let code of myCodeset.code">
           <div *ngIf="isCodeSelected===true; then thenBlock else elseBlock"></div>
           <ng-template #thenBlock>
-            <td [ngClass]="{'row-selected': code.value===myCode.value}">{{ code.label }}</td>
-            <td [ngClass]="{'row-selected': code.value===myCode.value}">{{ code.value }}</td>
-            <td [ngClass]="{'row-selected': code.value===myCode.value}">
-              <button class="button" value="{{ code.label }}" (click)="openCodeset(event, code)">></button>
+            <td [ngClass]="{'selected': code.value===myCode.value}">{{ code.value }}</td>
+            <td [ngClass]="{'selected': code.value===myCode.value}">{{ code.label }}</td>
+            <td [ngClass]="{'selected': code.value===myCode.value}">
+              <button title="Show details" class="button" value="{{ code.label }}" (click)="openCodeset(event, code)">></button>
             </td>
           </ng-template>
           <ng-template #elseBlock>
-              <td>{{ code.label }}</td>
               <td>{{ code.value }}</td>
+              <td>{{ code.label }}</td>
               <td>
-                <button class="button" value="{{ code.label }}" (click)="openCodeset(event, code)">></button>
+                <button title="Show details" class="button" value="{{ code.label }}" (click)="openCodeset(event, code)">></button>
               </td>
           </ng-template>
         </tr>
