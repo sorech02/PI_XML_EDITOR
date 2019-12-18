@@ -95,17 +95,13 @@
             <input [(ngModel)]="myCode.description"/>
           </p>
           
-          <!-- TODO make a choiceBox to choose Valid(=true) or Invalid(=false) -->
-          <div *ngIf="myCode.status==true; else elseBlock">
-            <p>
-              Status: Valid
-            </p>
-          </div>
-          <ng-template #elseBlock>
-            <p>
-              Status: Invalid
-            </p>
-          </ng-template>
+          <form class="form-inline">
+            <label class="control-label">Status: </label>
+            <select class="form-control" id="exampleFormControlSelect1" [(ngModel)]="myCode.status" [ngModelOptions]="{standalone: true}">
+              <option [ngValue]="true">Valid</option>
+              <option [ngValue]="false">Invalid</option>
+            </select>
+          </form>
 
           <p>
             Use age:
