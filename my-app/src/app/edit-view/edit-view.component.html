@@ -1,5 +1,3 @@
-
-
 <div class="container" fxLayout="row" fxLayoutAlign="start stretch">
   <div class="column">
       <button (click)="archive()">Archive moi</button>
@@ -15,9 +13,28 @@
   <div *ngIf="isDocumentDefined===true ">
     <div>
       <h3>Codes</h3>
-      <div *ngFor="let code of myCodeset.code">
-            <button class="button" value="{{ code.label }}" (click)="openCodeset(event, code)">{{ code.label }}</button>
-      </div>
+      <table>
+        <td>Label</td>
+        <td>Value</td>
+
+        <tr *ngFor="let code of myCodeset.code">
+          <div *ngIf="isCodeSelected===true; then thenBlock else elseBlock"></div>
+          <ng-template #thenBlock>
+            <td [ngClass]="{'row-selected': code.value===myCode.value}">{{ code.label }}</td>
+            <td [ngClass]="{'row-selected': code.value===myCode.value}">{{ code.value }}</td>
+            <td [ngClass]="{'row-selected': code.value===myCode.value}">
+              <button class="button" value="{{ code.label }}" (click)="openCodeset(event, code)">></button>
+            </td>
+          </ng-template>
+          <ng-template #elseBlock>
+              <td>{{ code.label }}</td>
+              <td>{{ code.value }}</td>
+              <td>
+                <button class="button" value="{{ code.label }}" (click)="openCodeset(event, code)">></button>
+              </td>
+          </ng-template>
+        </tr>
+      </table>
     </div>
   </div>
 
