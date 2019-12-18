@@ -20,7 +20,6 @@
       </div>
     </div>
   </div>
-
   <div *ngIf="isDocumentDefined===true ">
     <div class="column" style="background-color:#f1f1f1;">
       <h3>Details</h3>
@@ -28,9 +27,14 @@
       <h5>Codeset type: {{myCodeset.type}}</h5>
       
       <div *ngIf="isCodeSelected===true ">
-        <p>Code label: {{myCode.label}}</p>
-        <p>Code value: {{myCode.value}}</p>
-        <p>Description: {{myCode.description}}</p>
+    
+        <p>Code label:
+         <input [(ngModel)]="myCode.label"/>
+        </p>
+        
+        <p>Code value:  <input [(ngModel)]="myCode.value"/>  </p>
+        <p>Description: <input [(ngModel)]="myCode.description"/></p>
+        
         
         <div *ngIf="myCode.status==true; else elseBlock">
           <p>
@@ -42,29 +46,39 @@
             Status: Invalid
           </p>
         </ng-template>
-
         <p>
           Use age:
           <br>
-          <span>Not before month: {{myCode.use_age.not_before_month}}</span>
+          <span>Not before month:  <input [(ngModel)]="myCode.use_age.not_before_month"/>
+          </span>
           <br>
-          <span>Not after month: {{myCode.use_age.not_after_month}}</span>
+          <span>Not after month: 
+          <input [(ngModel)]="myCode.use_age.not_after_month"/>          
+      </span>
         </p>
 
         <p>
           Use date:
           <br>
-          <span>Not before: {{myCode.use_date.not_before}}</span>
+          <span>Not before: 
+          <input [(ngModel)]="myCode.use_date.not_before"/> </span>
           <br>
-          <span>Not expected before: {{myCode.use_date.not_expected_before}}</span>
+          <span>Not expected before: 
+                    <input [(ngModel)]="myCode.use_date.not_before"/> 
+          </span>
           <br>
-          <span>Not after: {{myCode.use_date.not_after}}</span>
+          <span>Not after: 
+                    <input [(ngModel)]="myCode.use_date.not_after"/> 
+          </span>
           <br>
-          <span>Not expected after: {{myCode.use_date.not_expected_after}}</span>
+          <span>Not expected after:
+              <input [(ngModel)]="myCode.use_date.not_expected_after"/>
+          </span>
         </p>
 
-        <p>Test age: {{myCode.test_age}}</p>
-        <p>Concept type: {{myCode.concept_type}}</p>
+        <p>Test age:              <input [(ngModel)]="myCode.test_age"/>
+ </p>
+        <p>Concept type:  <input [(ngModel)]="myCode.concept_type"/> </p>
 
         <p>References:</p>
         <ul class="superList">
@@ -72,7 +86,8 @@
             <a href="#" (click)="goToReference(ref.type, ref.codeValue)" onclick="return false;"> {{ref.type}} - {{ref.codeValue}} </a>
           </li>
         </ul>
-        
+      <button (click)="goBack()">go back</button>
+      <button (click)="save()">save</button>
       </div>
     </div>
   </div>

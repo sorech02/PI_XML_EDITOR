@@ -20,7 +20,16 @@ export class Codeset {
     addCode(code) {
       this.code.push(code)
     }
-  
+    
+    update(str,code){
+      var n=0
+      for (let mycode of this.code){
+          if(str==mycode.label){
+            this.code[n]=code}
+          n++;
+      }
+    }
+
     toString() {
       var result = "Label: " + this.label + "<br>" + "Type: " + this.type + "<br>" + "Code:" + "<br>";
 
