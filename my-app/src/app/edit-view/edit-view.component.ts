@@ -23,11 +23,13 @@ export class EditViewComponent implements OnInit {
   protected myCode;
   protected isCodeSelected: boolean;
   protected labelNow : String;
+  protected isEditing: boolean;
 
   constructor(db: AngularFirestore) {
     this.db = db
     this.isDocumentDefined = false;
     this.isCodeSelected = false;
+    this.isEditing = false;
   }
   
   ngOnInit() {
@@ -91,14 +93,13 @@ export class EditViewComponent implements OnInit {
   }
 
   save(){
-    this.codeset.subscribe(value => {value.update(this.labelNow,this.myCode)
-      let doc = this.db.collection('XmlFile').doc(value.label);
-      let updateSingle = doc.update({code});
+    // this.codeset.subscribe(value => {value.update(this.labelNow,this.myCode)
+    //   let doc = this.db.collection('XmlFile').doc(value.label);
+    //   let updateSingle = doc.update({code});
     
-    })
-  
-  
+    // })
   }
+
   archive(){
     this.xmlCollection = this.db.collection('/XmlFile');
     this.document$ = this.xmlCollection.valueChanges();
