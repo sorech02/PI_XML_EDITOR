@@ -3,43 +3,47 @@
       <button (click)="archive()">Archive moi</button>
   </div>
 
-  <div class="column"  style="background-color:#f1f1f1;">
+  <div class="column"  style="background-color:#fafafa;">
     <h3>Codesets</h3>
-    <div fxLayout="column">
-        <div *ngIf="isDocumentDefined===true; then thenBlock else elseBlock"></div>
-        <ng-template #thenBlock>
-          <button class="button" [ngClass]="{'selected': docu.label===myCodeset.label}" *ngFor="let docu of document$ | async" value="{{ docu.label }}" (click)="openDocu(event, docu.label)">{{ docu.label }}</button>
-        </ng-template>
-        <ng-template #elseBlock>
-          <button class="button" *ngFor="let docu of document$ | async" value="{{ docu.label }}" (click)="openDocu(event, docu.label)">{{ docu.label }}</button>
-        </ng-template>
-    </div>
+    <table class="table table-striped table-hover">
+      <tbody>
+        <tr title="Show codes" *ngFor="let docu of document$ | async" (click)="openDocu(event, docu.label)">
+          <div *ngIf="isDocumentDefined===true; then thenBlock else elseBlock"></div>
+          <ng-template #thenBlock>
+            <td [ngClass]="{'row-selected': docu.label===myCodeset.label}">{{ docu.label }}</td>
+          </ng-template>
+          <ng-template #elseBlock>
+              <td>{{ docu.label }}</td>
+          </ng-template>
+        </tr>
+      </tbody>
+    </table>
   </div>
 
   <div *ngIf="isDocumentDefined===true ">
     <div>
       <h3>Codes</h3>
-      <table>
-        <td>Value</td>
-        <td>Label</td>
 
-        <tr *ngFor="let code of myCodeset.code">
-          <div *ngIf="isCodeSelected===true; then thenBlock else elseBlock"></div>
-          <ng-template #thenBlock>
-            <td [ngClass]="{'selected': code.value===myCode.value}">{{ code.value }}</td>
-            <td [ngClass]="{'selected': code.value===myCode.value}">{{ code.label }}</td>
-            <td [ngClass]="{'selected': code.value===myCode.value}">
-              <button title="Show details" class="button" value="{{ code.label }}" (click)="openCodeset(event, code)">></button>
-            </td>
-          </ng-template>
-          <ng-template #elseBlock>
-              <td>{{ code.value }}</td>
-              <td>{{ code.label }}</td>
-              <td>
-                <button title="Show details" class="button" value="{{ code.label }}" (click)="openCodeset(event, code)">></button>
-              </td>
-          </ng-template>
-        </tr>
+      <table class="table table-striped table-hover">
+        <thead>
+          <tr>
+            <th scope="col">Value</th>
+            <th scope="col">Label</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr title="Show details" *ngFor="let code of myCodeset.code" (click)="openCodeset(event, code)">
+            <div *ngIf="isCodeSelected===true; then thenBlock else elseBlock"></div>
+            <ng-template #thenBlock>
+              <td [ngClass]="{'row-selected': code.value===myCode.value}">{{ code.value }}</td>
+              <td [ngClass]="{'row-selected': code.value===myCode.value}">{{ code.label }}</td>
+            </ng-template>
+            <ng-template #elseBlock>
+                <td>{{ code.value }}</td>
+                <td>{{ code.label }}</td>
+            </ng-template>
+          </tr>
+        </tbody>
       </table>
     </div>
   </div>
@@ -92,7 +96,7 @@
         <p>References:</p>
         <ul class="superList">
           <li *ngFor="let ref of myCode.references">
-            <a href="#" (click)="goToReference(ref.type, ref.codeValue)" onclick="return false;"> {{ref.type}} - {{ref.codeValue}} </a>
+            <button type="button" class="btn btn-link btn-sm" (click)="goToReference(ref.type, ref.codeValue)">{{ref.type}} - {{ref.codeValue}}</button>
           </li>
         </ul>
         
@@ -101,62 +105,3 @@
   </div>
 
 </div>
-
-<!--
-<div class="container">
-  <form id="searchForm" (ngSubmit)="onSubmit(f)" #f="ngForm">
-          <div class="form-group">
-            <label for="name">
-              Search For Codesets
-            </label>
-            <input type="text" id="url_search" class="form-control" name="url" ngModel required>
-          </div>
-          
-          <button class="btn btn-primary" type="submit" [disabled]="f.invalid">Search</button>       
-  </form>
-</div>
--->
-
-<!--
-<div class="container">
-  <div class="tab">
-    <button class="tablinks" *ngFor="let docu of document$ | async" value="{{ docu.label }}" (click)="openDocu(event, docu.label)">{{ docu.label }}</button>
-  </div>
-</div>
--->
-
-<!--
-<ul *ngFor="let docu of document$ | async" >
-  <div id="{{docu.label}}" class="tabcontent">
-    <h3>{{docu.label}}</h3>
-    <h4>Type: {{docu.type}} </h4>
-  </div>
-
-</ul>
--->
-
-<!--<div class="container">
-<form id="selection" (ngSubmit)="onClicked(g)" #g="ngForm">
-        <div class="form-group">
-          <label>
-            Show Data: 
-          </label>
-            <select name="docSelection" id="docSelection" class="form-control" ngModel>
-        
-              <option *ngFor="let docu of document$ | async" value="{{ docu.label }}" >{{ docu.label }}</option>
-              
-            </select></div>  
-            <button class="btn btn-primary" type="submit" >Show</button>
-  </form>
-
-<div class="File-menu" >
-
-  <div *ngIf="isDocumentDefined===true ">
-      <label> Showing Data for:  {{ myCodeset.label }} </label>
-      <h1>Description: </h1>
-      <p>{{ myCodeset.code[0].label }} </p>
-
-  </div>
-</div>
-
--->

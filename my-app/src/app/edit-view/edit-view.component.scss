@@ -2,18 +2,16 @@
   list-style-type: none; 
 }
 
-table, th , td  {
-  border: 1px solid grey;
-  border-collapse: collapse;
-  padding: 5px;
-}
-table tr:nth-child(odd) {
-  background-color: #f1f1f1;
-}
-table tr:nth-child(even) {
-  background-color: #ffffff;
+.row-selected {
+  background-color: #5facff;
 }
 
-.selected {
+.button-selected {
   background-color: #5facff;;
+  border-color: #5facff;
+}
+
+.table-hover tbody tr:hover td {
+  background: #adbed1;
+  cursor: pointer;
 }
