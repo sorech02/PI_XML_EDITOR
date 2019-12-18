@@ -22,6 +22,7 @@ export class EditViewComponent implements OnInit {
   protected myCodeset;  
   protected myCode;
   protected isCodeSelected: boolean;
+  protected labelNow : String;
 
   constructor(db: AngularFirestore) {
     this.db = db
@@ -39,7 +40,6 @@ export class EditViewComponent implements OnInit {
   }
 
   openDocu(evt, codeName) {
-
     if (codeName != ""){
       this.codesetDocument = this.xmlCollection.doc(codeName);
       this.codeset = this.codesetDocument.valueChanges();
@@ -51,31 +51,31 @@ export class EditViewComponent implements OnInit {
       this.isCodeSelected = false;
     }
     
+
   } 
 
   openCodeset(evt, objCode) {
     this.myCode = objCode;
     this.isCodeSelected = true;
+    this.labelNow=objCode.label;
+    console.log(this.labelNow)
   }
 
   goToReference(codesetType, codeValue) {
     this.isDocumentDefined = false;
     this.isCodeSelected = false;
-
     var codesetLabel:string = "";
     this.db.collection<Codeset>('XmlFile', ref => ref.where('type', '==', codesetType).limit(1))
       .valueChanges()
       .subscribe( value => 
+
         {
           if(value.length>0){
-
             this.codesetDocument = this.xmlCollection.doc(value[0].label);
             this.codeset = this.codesetDocument.valueChanges();
             this.myCodeset = new Codeset("", "");
-
             this.codeset.subscribe(value => { 
               this.myCodeset = value;
-
               for(let code of this.myCodeset.code) {
                 if(code.value == codeValue) {
                   this.myCode = code;
@@ -90,6 +90,15 @@ export class EditViewComponent implements OnInit {
       );
   }
 
+  save(){
+    this.codeset.subscribe(value => {value.update(this.labelNow,this.myCode)
+      let doc = this.db.collection('XmlFile').doc(value.label);
+      let updateSingle = doc.update({code});
+    
+    })
+  
+  
+  }
   archive(){
     this.xmlCollection = this.db.collection('/XmlFile');
     this.document$ = this.xmlCollection.valueChanges();
