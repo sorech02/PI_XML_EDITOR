@@ -117,8 +117,8 @@ function createCodesetFromTree(xmlTree) {
 }
 
 //load a XML from an URL
-function httpGet(theUrl)
-{
+function httpGet(theUrl){
+
   var xmlHttp = null;
 
   xmlHttp = new XMLHttpRequest();

@@ -101,7 +101,7 @@ export class EditViewComponent implements OnInit {
         var dd = String(today.getDate()).padStart(2, '0');
         var mm = String(today.getMonth() + 1).padStart(2, '0'); //January is 0!
         var yyyy = String(today.getFullYear());
-        var madate = mm + '-' + dd + '-' + yyyy;       
+        var madate = mm + '-' + dd + '-' + yyyy;        
         this.db.collection(`Archive/Archive${madate}/Archive`).doc(file.label).set(file);
         i += 1;
       });
