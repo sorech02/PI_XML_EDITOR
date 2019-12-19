@@ -1,6 +1,6 @@
-import { Codeset } from './edit-view.codeset'; 
-import { Code, UseAge, UseDate } from './edit-view.code'; 
-import { Reference } from './edit-view.reference'; 
+import { Codeset } from '../edit-view/edit-view.codeset'; 
+import { Code, UseAge, UseDate } from '../edit-view/edit-view.code'; 
+import { Reference } from '../edit-view/edit-view.reference'; 
 
 export class xmlParser {
   url;
