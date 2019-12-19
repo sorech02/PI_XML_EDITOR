@@ -107,12 +107,12 @@
             Use age:
             <br>
             <span>Not before month:  
-              <input [(ngModel)]="myCode.use_age.not_before_month"/>
+              <input type="number" min="0" max="{{myCode.use_age.not_after_month}}" [(ngModel)]="myCode.use_age.not_before_month"/>
             </span>
 
             <br>
             <span>Not after month: 
-              <input [(ngModel)]="myCode.use_age.not_after_month"/>          
+              <input type="number" min="{{myCode.use_age.not_before_month}}" [(ngModel)]="myCode.use_age.not_after_month"/>          
             </span>
           </p>
 
@@ -120,22 +120,22 @@
             Use date:
             <br>
             <span>Not before: 
-              <input [(ngModel)]="myCode.use_date.not_before"/> 
+              <input type="number" min="10000000" max="99999999" [(ngModel)]="myCode.use_date.not_before"/> 
             </span>
 
             <br>
             <span>Not expected before: 
-              <input [(ngModel)]="myCode.use_date.not_before"/> 
+              <input type="number" min="10000000" max="99999999" [(ngModel)]="myCode.use_date.not_expected_before"/> 
             </span>
 
             <br>
             <span>Not after: 
-              <input [(ngModel)]="myCode.use_date.not_after"/> 
+              <input type="number" min="10000000" max="99999999" [(ngModel)]="myCode.use_date.not_after"/> 
             </span>
 
             <br>
             <span>Not expected after:
-              <input [(ngModel)]="myCode.use_date.not_expected_after"/>
+              <input type="number" min="10000000" max="99999999" [(ngModel)]="myCode.use_date.not_expected_after"/>
             </span>
           </p>
 
