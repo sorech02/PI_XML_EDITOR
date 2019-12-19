@@ -24,8 +24,54 @@ export class Code {
 
     this.references = [];
   }
+
   addReference(reference: Reference) {
     this.references.push(reference);
+  }
+
+  copy(): Code {
+    var use_age = new UseAge();
+    use_age.setNotBeforeMonth(this.use_age.not_before_month);
+    use_age.setNotAfterMonth(this.use_age.not_after_month);
+
+    var use_date = new UseDate();
+    use_date.setNotAfter(this.use_date.not_after);
+    use_date.setNotBefore(this.use_date.not_before);
+    use_date.setNotExpectedAfter(this.use_date.not_expected_after);
+    use_date.setNotExpectedBefore(this.use_date.not_expected_before);
+
+    var code:Code = new Code(this.value, this.label, this.description, this.status, use_age, use_date, this.test_age, this.concept_type);
+    this.references.forEach(reference => {
+      code.addReference(reference);
+    });
+
+    return code;
+  }
+
+  removeUndifinedAttributes() {
+    if(!this.label) {
+      this.label = null;
+    }
+    if(!this.value) {
+      this.value = null;
+    }
+    if(!this.description) {
+      this.description = null;
+    }
+    if(!this.status) {
+      this.status = null;
+    }
+    if(!this.test_age) {
+      this.test_age = null;
+    }
+    if(!this.concept_type) {
+      this.concept_type = null;
+    }
+
+    this.use_age.removeUndifinedAttributes();
+    this.use_date.removeUndifinedAttributes();
+    this.use_age = Object.assign({}, this.use_age);
+    this.use_date = Object.assign({}, this.use_date);
   }
 
   toString() {
@@ -53,6 +99,15 @@ export class UseAge {
 
   setNotAfterMonth(n:number) {
     this.not_after_month = n;
+  }
+
+  removeUndifinedAttributes() {
+    if(!this.not_after_month) {
+      this.not_after_month = null;
+    }
+    if(!this.not_before_month) {
+      this.not_before_month = null;
+    }
   }
 }
 
@@ -82,5 +137,18 @@ export class UseDate {
     this.not_after = n;
   }
 
-  
+  removeUndifinedAttributes() {
+    if(!this.not_after) {
+      this.not_after = null;
+    }
+    if(!this.not_before) {
+      this.not_before = null;
+    }
+    if(!this.not_expected_after) {
+      this.not_expected_after = null;
+    }
+    if(!this.not_expected_before) {
+      this.not_expected_before = null;
+    }
+  }
 }
