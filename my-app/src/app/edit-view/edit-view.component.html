@@ -12,7 +12,9 @@
       </div>
 
       <ng-template #elseBlock>
-        <button (click)="this.isEditing=false;"> Save changes </button>
+        <button (click)="goToReference(myCodeset.type,myCode.value);"> Go Back </button>
+        <br>
+        <button (click)="save()"> Save changes </button>
       </ng-template>
     </div>
 
@@ -26,7 +28,7 @@
     <!-- Display all the codesets available -->
     <table class="table table-striped table-hover">
       <tbody>
-        <tr title="Show codes" *ngFor="let docu of document$ | async" (click)="openDocu(event, docu.label)">
+        <tr title="Show codes" *ngFor="let docu of documents" (click)="openDocu(event, docu.label)">
           <div *ngIf="isDocumentDefined===true; then thenBlock else elseBlock"></div>
           <ng-template #thenBlock>
             <td [ngClass]="{'row-selected': docu.label===myCodeset.label}">{{ docu.label }}</td>
@@ -84,39 +86,35 @@
         <!-- display inputs IF the user wants to edit -->
         <div *ngIf="isEditing===true; else elseBlock">
           <p>Code label:
-            <input [(ngModel)]="myCode.label"/>
+            <input [(ngModel)]="codeToBeEdited.label"/>
           </p>
           
           <p>Code value:  
-            <input [(ngModel)]="myCode.value"/>  
+            <input [(ngModel)]="codeToBeEdited.value"/>  
           </p>
 
           <p>Description: 
-            <input [(ngModel)]="myCode.description"/>
+            <input [(ngModel)]="codeToBeEdited.description"/>
           </p>
           
-          <!-- TODO make a choiceBox to choose Valid(=true) or Invalid(=false) -->
-          <div *ngIf="myCode.status==true; else elseBlock">
-            <p>
-              Status: Valid
-            </p>
-          </div>
-          <ng-template #elseBlock>
-            <p>
-              Status: Invalid
-            </p>
-          </ng-template>
+          <form class="form-inline">
+            <label class="control-label">Status: </label>
+            <select class="form-control" id="exampleFormControlSelect1" [(ngModel)]="codeToBeEdited.status" [ngModelOptions]="{standalone: true}">
+              <option [ngValue]="true">Valid</option>
+              <option [ngValue]="false">Invalid</option>
+            </select>
+          </form>
 
           <p>
             Use age:
             <br>
             <span>Not before month:  
-              <input [(ngModel)]="myCode.use_age.not_before_month"/>
+              <input type="number" min="0" max="{{codeToBeEdited.use_age.not_after_month}}" [(ngModel)]="codeToBeEdited.use_age.not_before_month"/>
             </span>
 
             <br>
             <span>Not after month: 
-              <input [(ngModel)]="myCode.use_age.not_after_month"/>          
+              <input type="number" min="{{codeToBeEdited.use_age.not_before_month}}" [(ngModel)]="codeToBeEdited.use_age.not_after_month"/>          
             </span>
           </p>
 
@@ -124,38 +122,51 @@
             Use date:
             <br>
             <span>Not before: 
-              <input [(ngModel)]="myCode.use_date.not_before"/> 
+              <input type="number" min="10000000" max="99999999" [(ngModel)]="codeToBeEdited.use_date.not_before"/> 
             </span>
 
             <br>
             <span>Not expected before: 
-              <input [(ngModel)]="myCode.use_date.not_before"/> 
+              <input type="number" min="10000000" max="99999999" [(ngModel)]="codeToBeEdited.use_date.not_expected_before"/> 
             </span>
 
             <br>
             <span>Not after: 
-              <input [(ngModel)]="myCode.use_date.not_after"/> 
+              <input type="number" min="10000000" max="99999999" [(ngModel)]="codeToBeEdited.use_date.not_after"/> 
             </span>
 
             <br>
             <span>Not expected after:
-              <input [(ngModel)]="myCode.use_date.not_expected_after"/>
+              <input type="number" min="10000000" max="99999999" [(ngModel)]="codeToBeEdited.use_date.not_expected_after"/>
             </span>
           </p>
 
           <p>Test age:              
-            <input [(ngModel)]="myCode.test_age"/>
+            <input [(ngModel)]="codeToBeEdited.test_age"/>
           </p>
 
           <p>Concept type:  
-            <input [(ngModel)]="myCode.concept_type"/> 
+            <input [(ngModel)]="codeToBeEdited.concept_type"/> 
           </p>
 
           <!-- TODO references editing : add a new one, delete an existing one -->
           <p>References:</p>
+          
           <ul class="superList">
-            <li *ngFor="let ref of myCode.references">
-              <button type="button" class="btn btn-link btn-sm" (click)="goToReference(ref.type, ref.codeValue)">{{ref.type}} - {{ref.codeValue}}</button>
+            <li>
+                <select class="custom-select">
+                  <option *ngFor="let docu of documents" value="docu.type">{{docu.label}}</option>
+                </select>
+
+              <button title="add a new reference">add</button>
+            </li>
+            <li *ngFor="let ref of codeToBeEdited.references">
+
+              <button title="remove refenrece" type="button" class="close" style="color:red">
+                <span aria-hidden="true">&times;</span>
+              </button>
+
+              <label>{{ref.type}} - {{ref.codeValue}}</label>
             </li>
           </ul>
         </div>
