@@ -26,6 +26,7 @@ import { SignInComponent } from './sign-in/sign-in.component';
 import { SignOutComponent } from './sign-out/sign-out.component';
 import { ForgotPasswordComponent } from './forgot-password/forgot-password.component';
 import { VerifyEmailComponent } from './verify-email/verify-email.component';
+import { AddFileComponent } from './add-file/add-file.component';
 
 const appRoutes: Routes =   [
   { path: 'sign-up', component: SignUpComponent, canActivate: [SecureSignPage]},
@@ -36,6 +37,7 @@ const appRoutes: Routes =   [
   { path: 'comments', component: CommentaireComponent},
   { path: 'edition',canActivate: [AuthGuardService] ,  component: EditViewComponent },
   { path: 'actu', component: FeedActuComponent},
+  { path: 'addFile', component: AddFileComponent, canActivate: [AuthGuardService] },
   { path: '', component: FeedActuComponent },
   { path: 'not-found', component: FourOhFourComponent },
   { path: '**', redirectTo: 'not-found' }
@@ -55,7 +57,8 @@ const appRoutes: Routes =   [
     SignInComponent,
     SignOutComponent,
     ForgotPasswordComponent,
-    VerifyEmailComponent
+    VerifyEmailComponent,
+    AddFileComponent
   ],
   imports: [
     BrowserModule,

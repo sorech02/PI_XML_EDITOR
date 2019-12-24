@@ -1,9 +1,11 @@
 import { Component, OnInit } from '@angular/core';
 import { NgForm } from '@angular/forms';
 import { Observable } from 'rxjs';
+import {firestore} from 'firebase/app';
 import { AngularFirestore, AngularFirestoreCollection, AngularFirestoreDocument } from '@angular/fire/firestore';
 import  { Code } from './edit-view.code'; 
 import { Codeset } from './edit-view.codeset';
+import {CodesetUpdate} from './edit-view.codesetUpdate';
 
 
 @Component({
@@ -13,17 +15,18 @@ import { Codeset } from './edit-view.codeset';
 })
 
 export class EditViewComponent implements OnInit {
-  protected xmlCollection: AngularFirestoreCollection ;
-  protected codesetDocument: AngularFirestoreDocument<Codeset>;
-  protected document$: Observable<any[]>;
-  protected db: AngularFirestore;
-  protected codeset:   Observable<Codeset>;
-  protected isDocumentDefined: boolean; 
-  protected myCodeset;  
-  protected myCode;
-  protected isCodeSelected: boolean;
-  protected labelNow : String;
-  protected isEditing: boolean;
+  protected xmlCollection:      AngularFirestoreCollection ;
+  protected codesetDocument:    AngularFirestoreDocument<Codeset>;
+  protected document$:          Observable<any[]>;
+  protected documents:          any[];
+  protected db:                 AngularFirestore;
+  protected codeset:            Observable<Codeset>;
+  protected isDocumentDefined:  boolean; 
+  protected myCodeset:          Codeset;  
+  protected myCode:             Code;
+  protected isCodeSelected:     boolean;
+  protected codeToBeEdited:     Code;
+  protected isEditing:          boolean;
 
   constructor(db: AngularFirestore) {
     this.db = db
@@ -35,6 +38,7 @@ export class EditViewComponent implements OnInit {
   ngOnInit() {
     this.xmlCollection = this.db.collection("XmlFile");
     this.document$ = this.xmlCollection.valueChanges();
+    this.document$.subscribe(list => this.documents = list);
   }
 
   addDocumentIntoCollection(collection, documentName:string, data){
@@ -51,22 +55,32 @@ export class EditViewComponent implements OnInit {
       });
       this.isDocumentDefined = true;
       this.isCodeSelected = false;
+      this.isEditing = false;
     }
-    
-
   } 
 
   openCodeset(evt, objCode) {
+    this.isEditing = false;
+
     this.myCode = objCode;
+
+    //copy the code into a new var which can be edited
+    this.codeToBeEdited = new Code(objCode.value, objCode.label, objCode.description, objCode.status, objCode.use_age, objCode.use_date, objCode.test_age, objCode.concept_type);
+    objCode.references.forEach(reference => {
+      this.codeToBeEdited.addReference(reference);
+    });
+    this.codeToBeEdited = this.codeToBeEdited.copy();
+
     this.isCodeSelected = true;
-    this.labelNow=objCode.label;
-    console.log(this.labelNow)
   }
 
   goToReference(codesetType, codeValue) {
+    this.isEditing = false;
     this.isDocumentDefined = false;
     this.isCodeSelected = false;
+
     var codesetLabel:string = "";
+
     this.db.collection<Codeset>('XmlFile', ref => ref.where('type', '==', codesetType).limit(1))
       .valueChanges()
       .subscribe( value => 
@@ -81,6 +95,14 @@ export class EditViewComponent implements OnInit {
               for(let code of this.myCodeset.code) {
                 if(code.value == codeValue) {
                   this.myCode = code;
+
+                  //copy the code into a new var which can be edited
+                  this.codeToBeEdited = new Code(code.value, code.label, code.description, code.status, code.use_age, code.use_date, code.test_age, code.concept_type);
+                  code.references.forEach(reference => {
+                    this.codeToBeEdited.addReference(reference);
+                  });
+                  this.codeToBeEdited = this.codeToBeEdited.copy();
+
                   this.isCodeSelected = true;
                 }
               }
@@ -93,11 +115,38 @@ export class EditViewComponent implements OnInit {
   }
 
   save(){
-    // this.codeset.subscribe(value => {value.update(this.labelNow,this.myCode)
-    //   let doc = this.db.collection('XmlFile').doc(value.label);
-    //   let updateSingle = doc.update({code});
-    
-    // })
+    // TODO check if the values are correct
+    this.isEditing = false;
+    this.codeToBeEdited.removeUndifinedAttributes();
+    // console.log(this.codeToBeEdited);
+    // console.log(this.myCode);
+
+    var codesetDoc: AngularFirestoreDocument<CodesetUpdate>;
+    codesetDoc = this.xmlCollection.doc(this.myCodeset.label);
+    var thisComponent = this;
+
+    //We remove the old version of the edited Code
+    codesetDoc.update({
+      code: firestore.FieldValue.arrayRemove(this.myCode)
+
+    }).then(function() {
+      //if it has been removed, we add the new version of the edited Code
+      codesetDoc.update({
+        code: firestore.FieldValue.arrayUnion(Object.assign({}, thisComponent.codeToBeEdited))
+
+      }).then(function() {
+        console.log("Document successfully updated");
+        thisComponent.goToReference(thisComponent.myCodeset.type,thisComponent.codeToBeEdited.value);
+        
+        //TODO inform that the code has been updated
+        
+      }).catch(function(error) {
+        console.error("Error updating document (Code removed but not edited): ", error)
+      });
+    })
+    .catch(function(error) {
+        console.error("Error updating document: ", error);
+    });
   }
 
   archive(){
@@ -111,12 +160,10 @@ export class EditViewComponent implements OnInit {
         var dd = String(today.getDate()).padStart(2, '0');
         var mm = String(today.getMonth() + 1).padStart(2, '0'); //January is 0!
         var yyyy = String(today.getFullYear());
-        var madate = mm + '-' + dd + '-' + yyyy;       
+        var madate = mm + '-' + dd + '-' + yyyy;        
         this.db.collection(`Archive/Archive${madate}/Archive`).doc(file.label).set(file);
         i += 1;
       });
     });
   }
 }
-
-

@@ -1,8 +1,8 @@
 import { Code } from './edit-view.code'//codeset class, has a type, a label, and a list of codes
-import { Identifiers } from '@angular/compiler';
+
 export class Codeset {
-    label;
-    type;
+    label: string;
+    type: string;
     code: Code[];
 
   
