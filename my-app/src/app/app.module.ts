@@ -10,7 +10,6 @@ import { CommentaireComponent } from './commentaire/commentaire.component';
 import { FormsModule, ReactiveFormsModule }    from '@angular/forms';
 import { EditViewComponent } from './edit-view/edit-view.component';
 import { EditPageComponent } from './edit/edit.component';
-import { MessagePageComponent } from './message-page/message-page.component';
 import { AuthGuardService } from './services/auth-guard.service';
 import { SecureSignPage } from './services/secure-sign-page';
 import { AuthenticationService } from './services/authentication.service';
@@ -51,7 +50,6 @@ const appRoutes: Routes =   [
     CommentaireComponent,
     EditViewComponent,
     EditPageComponent,
-    MessagePageComponent,
     FourOhFourComponent,
     SignUpComponent,
     SignInComponent,
