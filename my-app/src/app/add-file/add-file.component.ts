@@ -19,7 +19,6 @@ export class AddFileComponent implements OnInit {
   constructor(db: AngularFirestore) { 
     this.xmlCollection = db.collection("XmlFile");
     var json = this.xmlCollection.doc("Injection Guidance").valueChanges();
-
     json.subscribe(value => {
       var docJson = JSON.stringify(value);// create a json string from object codeset
       docJson = JSON.parse(docJson); // create json object
@@ -28,7 +27,6 @@ export class AddFileComponent implements OnInit {
       saveAs(file);
     });
     /*
-    
     
     console.log("docJson", docJson);*/
   }

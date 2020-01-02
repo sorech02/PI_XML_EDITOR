@@ -5,7 +5,7 @@ export class Code {
   label:string;
   value:string;
   description: string;
-  status: boolean;
+  status: boolean;openCodeset
   use_age: UseAge;
   use_date: UseDate;
   test_age: string;
@@ -21,7 +21,6 @@ export class Code {
     this.use_date = use_date;
     this.test_age = test_age;
     this.concept_type = concept_type;
-
     this.references = [];
   }
 
@@ -76,11 +75,9 @@ export class Code {
 
   toString() {
     var result = "Label: " + this.label  + "Value: " + this.value  + "Description: " + this.description  + "Status: " + this.status  + "References:" ;
-
     this.references.forEach(function(element){
       result += element.toString();
     });
-
     return result;
   }
 }
@@ -108,6 +105,10 @@ export class UseAge {
     if(!this.not_before_month) {
       this.not_before_month = null;
     }
+  }
+
+  toString():string{
+    return(" not_after_month : " + this.not_after_month + " not_before_month : "+this.not_before_month)
   }
 }
 
@@ -150,5 +151,9 @@ export class UseDate {
     if(!this.not_expected_before) {
       this.not_expected_before = null;
     }
+  }
+  
+  toString():string{
+    return( "not_after :" + this.not_after + " not_before: " + this.not_before +" not_expected_after: " + this.not_expected_after  + " not_expected_before : " + this.not_expected_before);
   }
 }
