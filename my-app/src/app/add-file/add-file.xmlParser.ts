@@ -64,23 +64,23 @@ function createCodeFromTree(xmlTree) {
   if(xmlTree.getElementsByTagName("concept-type").length > 0)
     codeConcept_type = xmlTree.getElementsByTagName("concept-type")[0].textContent.toString();
 
-  if(xmlTree.getElementsByTagName("not-before").length > 0)
-    codeUse_date.setNotBefore(xmlTree.getElementsByTagName("not-before")[0].nodeValue);
-
+  if(xmlTree.getElementsByTagName("not-before").length > 0){
+    codeUse_date.setNotBefore(+xmlTree.getElementsByTagName("not-before")[0].textContent.toString());
+  }
   if(xmlTree.getElementsByTagName("not-after").length > 0)
-    codeUse_date.setNotAfter(xmlTree.getElementsByTagName("not-after")[0].nodeValue);
+    codeUse_date.setNotAfter(+xmlTree.getElementsByTagName("not-after")[0].textContent.toString());
 
   if(xmlTree.getElementsByTagName("not-expected-before").length > 0)
-    codeUse_date.setNotExpectedBefore(xmlTree.getElementsByTagName("not-expected-before")[0].nodeValue);
+    codeUse_date.setNotExpectedBefore(+xmlTree.getElementsByTagName("not-expected-before")[0].textContent.toString());
 
   if(xmlTree.getElementsByTagName("not-expected-after").length > 0)
-    codeUse_date.setNotExpectedAfter(xmlTree.getElementsByTagName("not-expected-after")[0].nodeValue);
+    codeUse_date.setNotExpectedAfter(+xmlTree.getElementsByTagName("not-expected-after")[0].textContent.toString());
 
   if(xmlTree.getElementsByTagName("not-before-month").length > 0)
-    codeUse_age.setNotBeforeMonth(xmlTree.getElementsByTagName("not-before-month")[0].nodeValue);
+    codeUse_age.setNotBeforeMonth(+xmlTree.getElementsByTagName("not-before-month")[0].textContent.toString());
 
   if(xmlTree.getElementsByTagName("not-after-month").length > 0)
-    codeUse_age.setNotBeforeMonth(xmlTree.getElementsByTagName("not-after-month")[0].nodeValue);
+    codeUse_age.setNotAfterMonth(+xmlTree.getElementsByTagName("not-after-month")[0].textContent.toString());
 
   var code = new Code( codeValue, codeLabel, codeDescription, codeStatus, codeUse_age, codeUse_date, codeTest_age, codeConcept_type);
   
