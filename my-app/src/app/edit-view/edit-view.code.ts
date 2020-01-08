@@ -90,7 +90,6 @@ export class UseAge {
   not_after_month: number;
 
   constructor() {
-
   }
 
   setNotBeforeMonth(n:number) {
