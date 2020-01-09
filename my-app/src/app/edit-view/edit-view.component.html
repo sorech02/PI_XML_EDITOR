@@ -149,20 +149,25 @@
             <input [(ngModel)]="codeToBeEdited.concept_type"/> 
           </p>
 
-          <!-- TODO references editing : add a new one, delete an existing one -->
           <p>References:</p>
           
           <ul class="superList">
             <li>
-                <select class="custom-select">
-                  <option *ngFor="let docu of documents" value="docu.type">{{docu.label}}</option>
+                <select class="custom-select" #selectCodeset (change)="selectedCodesetUpdate($event, selectCodeset.value)">
+                  <option value="" selected></option>
+                  <option *ngFor="let docu of documents" value={{docu.label}}>{{docu.label}}</option>
                 </select>
 
-              <button title="add a new reference">add</button>
+                <select class="custom-select" [(ngModel)]="editReferenceCodeValue">
+                  <option value="" selected></option>
+                  <option *ngFor="let codes of editReferenceCodeset.code" value={{codes.value}}>{{codes.value}}</option>
+                </select>
+
+                <button title="add a new reference" (click)="addReference($event)">add</button>
             </li>
             <li *ngFor="let ref of codeToBeEdited.references">
 
-              <button title="remove refenrece" type="button" class="close" style="color:red">
+              <button title="remove refenrece" type="button" class="close" style="color:red" (click)="removeReference($event, ref)">
                 <span aria-hidden="true">&times;</span>
               </button>
 
