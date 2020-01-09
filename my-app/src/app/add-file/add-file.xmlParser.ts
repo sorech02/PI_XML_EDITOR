@@ -3,19 +3,32 @@ import { Code, UseAge, UseDate } from '../edit-view/edit-view.code';
 import { Reference } from '../edit-view/edit-view.reference'; 
 
 export class xmlParser {
-  url;
-
-  constructor(url) {
-    this.url = url;
+  constructor() {
+    
   }
 
-  getCodeset() {
-    return loadAndParseFromUrl(this.url);
+  getCodesetWithUrl(url) {
+    return loadAndParseFromUrl(url);
   }
+
+  getCodesetWithFile(file){
+    return loadAndParseFromFile(file)
+  }
+}
+
+function loadAndParseFromFile(file){
+  console.log("file" + file);
+  var parser = new DOMParser();
+  var xmlDoc1 = parser.parseFromString(file, "application/xml");
+
+  var xmlCodeset = xmlDoc1.getElementsByTagName("codeset")[0];
+  var codeset = createCodesetFromTree(xmlCodeset);
+  return codeset;
 }
 
 function loadAndParseFromUrl(url){
   var xmlDoc = httpGet(url);
+  console.log("url" + xmlDoc);
   var parser = new DOMParser();
   var xmlDoc1 = parser.parseFromString(xmlDoc, "application/xml");
 
