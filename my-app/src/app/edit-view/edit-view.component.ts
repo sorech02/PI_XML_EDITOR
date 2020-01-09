@@ -7,6 +7,7 @@ import  { Code } from './edit-view.code';
 import { Codeset } from './edit-view.codeset';
 import {CodesetUpdate} from './edit-view.codesetUpdate';
 import {commentaryWorker} from'../services/commentaryWorkerEdit'
+import { Reference } from './edit-view.reference';
 
 
 @Component({
@@ -16,18 +17,20 @@ import {commentaryWorker} from'../services/commentaryWorkerEdit'
 })
 
 export class EditViewComponent implements OnInit {
-  protected xmlCollection:      AngularFirestoreCollection ;
-  protected codesetDocument:    AngularFirestoreDocument<Codeset>;
-  protected document$:          Observable<any[]>;
-  protected documents:          any[];
-  protected db:                 AngularFirestore;
-  protected codeset:            Observable<Codeset>;
-  protected isDocumentDefined:  boolean; 
-  protected myCodeset:          Codeset;  
-  protected myCode:             Code;
-  protected isCodeSelected:     boolean;
-  protected codeToBeEdited:     Code;
-  protected isEditing:          boolean;
+  protected xmlCollection:          AngularFirestoreCollection ;
+  protected codesetDocument:        AngularFirestoreDocument<Codeset>;
+  protected document$:              Observable<any[]>;
+  protected documents:              any[];
+  protected db:                     AngularFirestore;
+  protected codeset:                Observable<Codeset>;
+  protected isDocumentDefined:      boolean; 
+  protected myCodeset:              Codeset;  
+  protected myCode:                 Code;
+  protected isCodeSelected:         boolean;
+  protected codeToBeEdited:         Code;
+  protected isEditing:              boolean;
+  protected editReferenceCodeset:   Codeset;
+  protected editReferenceCodeValue: string;
 
   constructor(db: AngularFirestore) {
     this.db = db
@@ -40,6 +43,8 @@ export class EditViewComponent implements OnInit {
     this.xmlCollection = this.db.collection("XmlFile");
     this.document$ = this.xmlCollection.valueChanges();
     this.document$.subscribe(list => this.documents = list);
+    this.editReferenceCodeset = new Codeset("", "");
+    this.editReferenceCodeValue = "";
   }
 
   addDocumentIntoCollection(collection, documentName:string, data){
@@ -75,10 +80,43 @@ export class EditViewComponent implements OnInit {
     this.isCodeSelected = true;
   }
 
+  //For the reference select form
+  selectedCodesetUpdate(evt, codesetLabel) {
+    this.editReferenceCodeset = new Codeset("", "");
+    this.editReferenceCodeValue = "";
+
+    this.editReferenceCodeValue = "";
+    if (codesetLabel != ""){
+      var codesetDocument: AngularFirestoreDocument<Codeset>;
+      var codeset: Observable<Codeset>;
+
+      codesetDocument = this.xmlCollection.doc(codesetLabel);
+      codeset = codesetDocument.valueChanges();
+      this.editReferenceCodeset = new Codeset("", "");
+      codeset.subscribe(value => { this.editReferenceCodeset = value; });
+    }
+  }
+
+  addReference(evt) {
+    if(this.editReferenceCodeset.label != "" && this.editReferenceCodeValue != "") {
+      var reference = new Reference(this.editReferenceCodeset.type, this.editReferenceCodeValue);
+      this.codeToBeEdited.addReference(Object.assign({}, reference));
+    }
+  }
+
+  removeReference(evt, ref) {
+    const index = this.codeToBeEdited.references.indexOf(ref, 0);
+    if (index > -1) {
+      this.codeToBeEdited.references.splice(index, 1);
+    }
+  }
+
   goToReference(codesetType, codeValue) {
     this.isEditing = false;
     this.isDocumentDefined = false;
     this.isCodeSelected = false;
+    this.editReferenceCodeset = new Codeset("", "");
+    this.editReferenceCodeValue = "";
 
     var codesetLabel:string = "";
 
@@ -140,8 +178,6 @@ export class EditViewComponent implements OnInit {
       }).then(function() {
         console.log("Document successfully updated");
         thisComponent.goToReference(thisComponent.myCodeset.type,thisComponent.codeToBeEdited.value);
-        
-        //TODO inform that the code has been updated
         
       }).catch(function(error) {
         console.error("Error updating document (Code removed but not edited): ", error)
