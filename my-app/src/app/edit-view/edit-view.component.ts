@@ -6,6 +6,7 @@ import { AngularFirestore, AngularFirestoreCollection, AngularFirestoreDocument 
 import  { Code } from './edit-view.code'; 
 import { Codeset } from './edit-view.codeset';
 import {CodesetUpdate} from './edit-view.codesetUpdate';
+import {commentaryWorker} from'../services/commentaryWorkerEdit'
 
 
 @Component({
@@ -63,7 +64,7 @@ export class EditViewComponent implements OnInit {
     this.isEditing = false;
 
     this.myCode = objCode;
-
+    
     //copy the code into a new var which can be edited
     this.codeToBeEdited = new Code(objCode.value, objCode.label, objCode.description, objCode.status, objCode.use_age, objCode.use_date, objCode.test_age, objCode.concept_type);
     objCode.references.forEach(reference => {
@@ -95,7 +96,6 @@ export class EditViewComponent implements OnInit {
               for(let code of this.myCodeset.code) {
                 if(code.value == codeValue) {
                   this.myCode = code;
-
                   //copy the code into a new var which can be edited
                   this.codeToBeEdited = new Code(code.value, code.label, code.description, code.status, code.use_age, code.use_date, code.test_age, code.concept_type);
                   code.references.forEach(reference => {
@@ -117,14 +117,17 @@ export class EditViewComponent implements OnInit {
   save(){
     // TODO check if the values are correct
     this.isEditing = false;
+    console.log(this.codeToBeEdited);
+    console.log(this.myCode);
+    let commentaire = new commentaryWorker(this.myCode,this.myCodeset.label,this.codeToBeEdited,this.db);
+    console.log(commentaire)
+    commentaire.addData()
     this.codeToBeEdited.removeUndifinedAttributes();
-    // console.log(this.codeToBeEdited);
-    // console.log(this.myCode);
-
+    
+    
     var codesetDoc: AngularFirestoreDocument<CodesetUpdate>;
     codesetDoc = this.xmlCollection.doc(this.myCodeset.label);
     var thisComponent = this;
-
     //We remove the old version of the edited Code
     codesetDoc.update({
       code: firestore.FieldValue.arrayRemove(this.myCode)
