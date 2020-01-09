@@ -1,12 +1,12 @@
 import { Component, OnInit } from '@angular/core';
 import { NgForm } from '@angular/forms';
 import { Observable } from 'rxjs';
-import {firestore} from 'firebase/app';
+import { firestore} from 'firebase/app';
 import { AngularFirestore, AngularFirestoreCollection, AngularFirestoreDocument } from '@angular/fire/firestore';
-import  { Code } from './edit-view.code'; 
+import { Code } from './edit-view.code'; 
 import { Codeset } from './edit-view.codeset';
-import {CodesetUpdate} from './edit-view.codesetUpdate';
-import {commentaryWorker} from'../services/commentaryWorkerEdit'
+import { CodesetUpdate} from './edit-view.codesetUpdate';
+import { commentaryWorker} from'../services/commentaryWorkerEdit'
 import { Reference } from './edit-view.reference';
 
 
@@ -31,12 +31,16 @@ export class EditViewComponent implements OnInit {
   protected isEditing:              boolean;
   protected editReferenceCodeset:   Codeset;
   protected editReferenceCodeValue: string;
+  protected codeToBeAdded:          Code;
+  protected isEditingCodeList:      boolean;
+  protected codesetToBeEdited:      Codeset;
 
   constructor(db: AngularFirestore) {
     this.db = db
     this.isDocumentDefined = false;
     this.isCodeSelected = false;
     this.isEditing = false;
+    this.isEditingCodeList = false;
   }
   
   ngOnInit() {
@@ -62,22 +66,59 @@ export class EditViewComponent implements OnInit {
       this.isDocumentDefined = true;
       this.isCodeSelected = false;
       this.isEditing = false;
+      this.isEditingCodeList = false;
     }
   } 
 
-  openCodeset(evt, objCode) {
-    this.isEditing = false;
+  onEditDetailsClick(evt) {
+    this.isEditing = true;
 
-    this.myCode = objCode;
-    
     //copy the code into a new var which can be edited
-    this.codeToBeEdited = new Code(objCode.value, objCode.label, objCode.description, objCode.status, objCode.use_age, objCode.use_date, objCode.test_age, objCode.concept_type);
-    objCode.references.forEach(reference => {
+    this.codeToBeEdited = new Code(this.myCode.value, this.myCode.label, this.myCode.description, 
+      this.myCode.status, this.myCode.use_age, this.myCode.use_date, this.myCode.test_age, this.myCode.concept_type);
+
+    this.myCode.references.forEach(reference => {
       this.codeToBeEdited.addReference(reference);
     });
     this.codeToBeEdited = this.codeToBeEdited.copy();
+  }
 
+  onEditCodeListClick(evt) {
+    this.isEditingCodeList = true;
+
+    this.codeToBeAdded = new Code("","",null,null,null,null,null,null);
+    
+    //copy the codeset into a new var which can be edited
+    this.codesetToBeEdited = new Codeset(this.myCodeset.label, this.myCodeset.type);
+    this.myCodeset.code.forEach(c => {
+      this.codesetToBeEdited.addCode(c);
+    });
+  }
+
+  onCodeClick(evt, code) {
+    if(this.isEditingCodeList==false) {
+      this.openCodeset(evt, code);
+    }
+  }
+
+  openCodeset(evt, objCode) {
+    this.isEditing = false;
+    this.myCode = objCode;
     this.isCodeSelected = true;
+  }
+
+  removeCode(evt, objCode) {
+    const index = this.codesetToBeEdited.code.indexOf(objCode, 0);
+    if (index > -1) {
+      this.codesetToBeEdited.code.splice(index, 1);
+    }
+  }
+
+  addNewCode(evt) {
+    if(this.codeToBeAdded.label != "" && this.codeToBeAdded.value != "") {
+      this.codesetToBeEdited.code.push(this.codeToBeAdded);
+      this.codeToBeAdded = new Code("","",null,null,null,null,null,null);
+    }    
   }
 
   //For the reference select form
@@ -152,7 +193,7 @@ export class EditViewComponent implements OnInit {
       );
   }
 
-  save(){
+  saveCode(){
     // TODO check if the values are correct
     this.isEditing = false;
     console.log(this.codeToBeEdited);
