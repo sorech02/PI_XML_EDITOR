@@ -50,7 +50,6 @@ export class AddFileComponent implements OnInit {
 
   //Add document from File
   readFile = (e) => {
-    console.log('incoming file');
     const file = e.target.files[0];
     if (!file) {
         return;
@@ -58,7 +57,6 @@ export class AddFileComponent implements OnInit {
     const reader = new FileReader();
     reader.onload = (evt) => {
         const xmlData: string = (evt as any).target.result;
-        console.log("xml data" + xmlData);
         this.convertXmlIntoJsonAndSendItToCollection(this.xmlParser.getCodesetWithFile(xmlData));
     };
     reader.readAsText(file);
