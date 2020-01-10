@@ -215,16 +215,17 @@
             <p>Code value: {{myCode.value}}</p>
             <p>Description: {{myCode.description}}</p>
             
-            <div *ngIf="myCode.status==true; else elseBlock">
-              <p>
-                Status: Valid
-              </p>
-            </div>
-            <ng-template #elseBlock>
-              <p>
-                Status: Invalid
-              </p>
-            </ng-template>
+            <p>
+              Status: 
+              <ng-container *ngIf="myCode.status==true; else elseBlock">
+                Valid
+              </ng-container>
+              <ng-template #elseBlock>
+                <ng-container *ngIf="myCode.status==false">
+                  Invalid
+                </ng-container>
+              </ng-template>
+            </p>
     
             <p>
               Use age:
