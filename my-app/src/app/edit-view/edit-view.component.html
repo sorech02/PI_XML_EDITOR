@@ -7,9 +7,8 @@
 
     <!-- Button 2: edit the code/save the changes -->
     <div *ngIf="isDocumentDefined===true">
-      <div *ngIf="isEditingCodeList===false && isEditing===false; else elseBlock">
-        <button (click)="onEditCodeListClick($event);"> Add/Remove codes </button>
-        <button *ngIf="isCodeSelected" (click)="onEditDetailsClick($event);"> Edit code details </button>
+      <div *ngIf="isEditing===false; else elseBlock">
+        <button (click)="onEditClick($event);"> Edit </button>
       </div>
 
       <ng-template #elseBlock>
@@ -17,15 +16,13 @@
         <div *ngIf="isCodeSelected===true; else codeNotSelectedBlock">
           <button (click)="goToReference(myCodeset.type,myCode.value);"> Go Back </button>
           <br>
-          <button (click)="saveCode()"> Save changes </button>
         </div>
         <!-- If we only edit a codeset -->
         <ng-template #codeNotSelectedBlock>
           <button (click)="openDocu(event, myCodeset.label);"> Go Back </button>
           <br>
-          <button (click)="saveCodeset()"> Save changes </button>
         </ng-template>
-
+        <button (click)="save()"> Save changes </button>
         
       </ng-template>
     </div>
@@ -63,14 +60,14 @@
       <table class="table table-striped table-hover">
         <thead>
           <tr>
-            <th *ngIf="isEditingCodeList===true;" scope="col"> </th>
+            <th *ngIf="isEditing===true;" scope="col"> </th>
             <th scope="col">Value</th>
             <th scope="col">Label</th>
           </tr>
         </thead>
         <tbody>
           <!-- If we're editing, we add a row to be able to add a new code -->
-          <tr *ngIf="isEditingCodeList===true;">
+          <tr *ngIf="isEditing===true;">
             <td>
               <button title="add a new code" (click)="addNewCode($event)">add</button>
             </td>
@@ -82,39 +79,27 @@
             </td>
           </tr>
 
-          <ng-container *ngIf="isEditingCodeList===false;">
-            <tr title="Show details" *ngFor="let code of myCodeset.code" (click)="onCodeClick($event, code)">            
-              <div *ngIf="isCodeSelected===true; then thenBlock else elseBlock"></div>
-              <ng-template #thenBlock>
-                <td [ngClass]="{'row-selected': code.value===myCode.value}">{{ code.value }}</td>
-                <td [ngClass]="{'row-selected': code.value===myCode.value}">{{ code.label }}</td>
-              </ng-template>
-              <ng-template #elseBlock>
-                  <td>{{ code.value }}</td>
-                  <td>{{ code.label }}</td>
-              </ng-template>
+          <ng-container *ngIf="isEditing===true;">
+            <tr title="Added code" *ngFor="let code of addedCodes">
+              <td> </td>
+              <td>{{ code.value }}</td>
+              <td>{{ code.label }}</td>
             </tr>
           </ng-container>
 
-          <ng-container *ngIf="isEditingCodeList===true;">
-            <tr title="Show details" *ngFor="let code of codesetToBeEdited.code" (click)="onCodeClick($event, code)">
-              <td>
-                <button title="remove code" type="button" class="close" style="color:red" (click)="removeCode($event, code)">
-                  <span aria-hidden="true">&times;</span>
-                </button>
-              </td>
-              
-              <div *ngIf="isCodeSelected===true; then thenBlock else elseBlock"></div>
-              <ng-template #thenBlock>
-                <td [ngClass]="{'row-selected': code.value===myCode.value}">{{ code.value }}</td>
-                <td [ngClass]="{'row-selected': code.value===myCode.value}">{{ code.label }}</td>
-              </ng-template>
-              <ng-template #elseBlock>
-                  <td>{{ code.value }}</td>
-                  <td>{{ code.label }}</td>
-              </ng-template>
-            </tr>
-          </ng-container>
+          <tr title="Show details" *ngFor="let code of myCodeset.code" (click)="onCodeClick($event, code)">            
+            <div *ngIf="isCodeSelected===true; then thenBlock else elseBlock"></div>
+            <ng-template #thenBlock>
+              <td *ngIf="isEditing===true;" [ngClass]="{'row-selected': code.value===myCode.value}"> </td>
+              <td [ngClass]="{'row-selected': code.value===myCode.value}">{{ code.value }}</td>
+              <td [ngClass]="{'row-selected': code.value===myCode.value}">{{ code.label }}</td>
+            </ng-template>
+            <ng-template #elseBlock>
+                <td *ngIf="isEditing===true;"> </td>
+                <td>{{ code.value }}</td>
+                <td>{{ code.label }}</td>
+            </ng-template>
+          </tr>
 
         </tbody>
       </table>
@@ -138,9 +123,7 @@
             <input [(ngModel)]="codeToBeEdited.label"/>
           </p>
           
-          <p>Code value:  
-            <input [(ngModel)]="codeToBeEdited.value"/>  
-          </p>
+          <p>Code value: {{codeToBeEdited.value}}</p>
 
           <p>Description: 
             <input [(ngModel)]="codeToBeEdited.description"/>

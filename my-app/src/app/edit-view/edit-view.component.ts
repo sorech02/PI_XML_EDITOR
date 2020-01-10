@@ -32,15 +32,13 @@ export class EditViewComponent implements OnInit {
   protected editReferenceCodeset:   Codeset;
   protected editReferenceCodeValue: string;
   protected codeToBeAdded:          Code;
-  protected isEditingCodeList:      boolean;
-  protected codesetToBeEdited:      Codeset;
+  protected addedCodes:             Code[];
 
   constructor(db: AngularFirestore) {
     this.db = db
     this.isDocumentDefined = false;
     this.isCodeSelected = false;
     this.isEditing = false;
-    this.isEditingCodeList = false;
   }
   
   ngOnInit() {
@@ -66,39 +64,28 @@ export class EditViewComponent implements OnInit {
       this.isDocumentDefined = true;
       this.isCodeSelected = false;
       this.isEditing = false;
-      this.isEditingCodeList = false;
     }
   } 
 
-  onEditDetailsClick(evt) {
+  onEditClick(evt) {
     this.isEditing = true;
-
-    //copy the code into a new var which can be edited
-    this.codeToBeEdited = new Code(this.myCode.value, this.myCode.label, this.myCode.description, 
-      this.myCode.status, this.myCode.use_age, this.myCode.use_date, this.myCode.test_age, this.myCode.concept_type);
-
-    this.myCode.references.forEach(reference => {
-      this.codeToBeEdited.addReference(reference);
-    });
-    this.codeToBeEdited = this.codeToBeEdited.copy();
-  }
-
-  onEditCodeListClick(evt) {
-    this.isEditingCodeList = true;
-
+    this.addedCodes = [];
     this.codeToBeAdded = new Code("","",null,null,null,null,null,null);
-    
-    //copy the codeset into a new var which can be edited
-    this.codesetToBeEdited = new Codeset(this.myCodeset.label, this.myCodeset.type);
-    this.myCodeset.code.forEach(c => {
-      this.codesetToBeEdited.addCode(c);
-    });
+
+    if(this.isCodeSelected) {
+      //copy the code into a new var which can be edited
+      this.codeToBeEdited = new Code(this.myCode.value, this.myCode.label, this.myCode.description, 
+        this.myCode.status, this.myCode.use_age, this.myCode.use_date, this.myCode.test_age, this.myCode.concept_type);
+
+      this.myCode.references.forEach(reference => {
+        this.codeToBeEdited.addReference(reference);
+      });
+      this.codeToBeEdited = this.codeToBeEdited.copy();
+    }
   }
 
   onCodeClick(evt, code) {
-    if(this.isEditingCodeList==false) {
-      this.openCodeset(evt, code);
-    }
+    this.openCodeset(evt, code);
   }
 
   openCodeset(evt, objCode) {
@@ -107,16 +94,10 @@ export class EditViewComponent implements OnInit {
     this.isCodeSelected = true;
   }
 
-  removeCode(evt, objCode) {
-    const index = this.codesetToBeEdited.code.indexOf(objCode, 0);
-    if (index > -1) {
-      this.codesetToBeEdited.code.splice(index, 1);
-    }
-  }
-
   addNewCode(evt) {
     if(this.codeToBeAdded.label != "" && this.codeToBeAdded.value != "") {
-      this.codesetToBeEdited.code.push(this.codeToBeAdded);
+      this.codeToBeAdded.removeUndifinedAttributes();
+      this.addedCodes.push(this.codeToBeAdded);
       this.codeToBeAdded = new Code("","",null,null,null,null,null,null);
     }    
   }
@@ -167,21 +148,16 @@ export class EditViewComponent implements OnInit {
 
         {
           if(value.length>0){
+
             this.codesetDocument = this.xmlCollection.doc(value[0].label);
             this.codeset = this.codesetDocument.valueChanges();
             this.myCodeset = new Codeset("", "");
+            
             this.codeset.subscribe(value => { 
               this.myCodeset = value;
               for(let code of this.myCodeset.code) {
                 if(code.value == codeValue) {
                   this.myCode = code;
-                  //copy the code into a new var which can be edited
-                  this.codeToBeEdited = new Code(code.value, code.label, code.description, code.status, code.use_age, code.use_date, code.test_age, code.concept_type);
-                  code.references.forEach(reference => {
-                    this.codeToBeEdited.addReference(reference);
-                  });
-                  this.codeToBeEdited = this.codeToBeEdited.copy();
-
                   this.isCodeSelected = true;
                 }
               }
@@ -193,40 +169,73 @@ export class EditViewComponent implements OnInit {
       );
   }
 
-  saveCode(){
-    // TODO check if the values are correct
+  save(){
     this.isEditing = false;
-    console.log(this.codeToBeEdited);
-    console.log(this.myCode);
-    let commentaire = new commentaryWorker(this.myCode,this.myCodeset.label,this.codeToBeEdited,this.db);
-    console.log(commentaire)
-    commentaire.addData()
-    this.codeToBeEdited.removeUndifinedAttributes();
-    
-    
-    var codesetDoc: AngularFirestoreDocument<CodesetUpdate>;
-    codesetDoc = this.xmlCollection.doc(this.myCodeset.label);
-    var thisComponent = this;
-    //We remove the old version of the edited Code
-    codesetDoc.update({
-      code: firestore.FieldValue.arrayRemove(this.myCode)
+    if(this.isCodeSelected && this.codeToBeEdited.equals(this.myCode)==false) {
+      // TODO check if the values are correct
+      let commentaire = new commentaryWorker(this.myCode,this.myCodeset.label,this.codeToBeEdited,this.db);
+      console.log(commentaire)
+      commentaire.addData()
 
-    }).then(function() {
-      //if it has been removed, we add the new version of the edited Code
+      this.codeToBeEdited.removeUndifinedAttributes();
+           
+      var codesetDoc: AngularFirestoreDocument<CodesetUpdate>;
+      codesetDoc = this.xmlCollection.doc(this.myCodeset.label);
+      var thisComponent = this;
+      //We remove the old version of the edited Code
       codesetDoc.update({
-        code: firestore.FieldValue.arrayUnion(Object.assign({}, thisComponent.codeToBeEdited))
+        code: firestore.FieldValue.arrayRemove(this.myCode)
 
       }).then(function() {
-        console.log("Document successfully updated");
-        thisComponent.goToReference(thisComponent.myCodeset.type,thisComponent.codeToBeEdited.value);
-        
-      }).catch(function(error) {
-        console.error("Error updating document (Code removed but not edited): ", error)
+        //if it has been removed, we add the new version of the edited Code
+        codesetDoc.update({
+          code: firestore.FieldValue.arrayUnion(Object.assign({}, thisComponent.codeToBeEdited))
+
+        }).then(function() {
+          console.log("Document successfully updated");
+          thisComponent.saveAddedCodes();
+          thisComponent.goToReference(thisComponent.myCodeset.type,thisComponent.codeToBeEdited.value);
+          
+        }).catch(function(error) {
+          console.error("Error updating document (Code removed but not edited): ", error)
+        });
+      })
+      .catch(function(error) {
+          console.error("Error updating document: ", error);
       });
-    })
-    .catch(function(error) {
-        console.error("Error updating document: ", error);
-    });
+    }
+    else {
+      this.saveAddedCodes();
+    }
+  }
+
+  saveAddedCodes() {
+    if(this.addedCodes.length>0) {
+      //save the codeset code list into the db
+      //open the codeset
+      var codesetDoc: AngularFirestoreDocument<CodesetUpdate>;
+      codesetDoc = this.xmlCollection.doc(this.myCodeset.label);
+      var thisComponent = this;
+
+      //add the codes into the db
+      this.addedCodes.forEach(code => {
+        codesetDoc.update({
+          code: firestore.FieldValue.arrayUnion(Object.assign({}, code))
+
+        }).then(function() {
+          console.log("Code successfully added");
+  
+          if(thisComponent.isCodeSelected)
+            thisComponent.goToReference(thisComponent.myCodeset.type,thisComponent.codeToBeEdited.value);
+          else
+            thisComponent.openDocu(null, thisComponent.myCodeset.label);
+          
+        }).catch(function(error) {
+          thisComponent.addedCodes = [];
+          console.error("Error adding new code into the db: ", error)
+        });
+      });
+    }
   }
 
   archive(){
