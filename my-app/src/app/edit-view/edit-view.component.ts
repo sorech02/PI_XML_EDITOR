@@ -13,7 +13,7 @@ import { Reference } from './edit-view.reference';
 @Component({
   selector: 'app-edit-view',
   templateUrl: './edit-view.component.html',
-  styleUrls: ['./edit-view.component.scss']
+  styleUrls: ['./edit-view.component.css']
 })
 
 export class EditViewComponent implements OnInit {
