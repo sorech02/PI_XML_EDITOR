@@ -96,9 +96,26 @@ export class EditViewComponent implements OnInit {
 
   addNewCode(evt) {
     if(this.codeToBeAdded.label != "" && this.codeToBeAdded.value != "") {
-      this.codeToBeAdded.removeUndifinedAttributes();
-      this.addedCodes.push(this.codeToBeAdded);
-      this.codeToBeAdded = new Code("","",null,null,null,null,null,null);
+      var uniqueValue: boolean = 
+        !(this.myCodeset.code.some(c => {
+          return c.value==this.codeToBeAdded.value;
+        }));
+
+      if(uniqueValue) {
+        uniqueValue = 
+          !(this.addedCodes.some(c => {
+            return c.value==this.codeToBeAdded.value;
+          }));
+      }
+
+      if(uniqueValue) {
+        this.codeToBeAdded.removeUndifinedAttributes();
+        this.addedCodes.push(this.codeToBeAdded);
+        this.codeToBeAdded = new Code("","",null,null,null,null,null,null);
+
+      } else {
+        alert("The value is already used by an other code.");
+      }
     }    
   }
 
