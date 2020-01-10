@@ -8,7 +8,7 @@ import {User} from '../services/user'
 @Component({
   selector: 'app-commentaire',
   templateUrl: './commentaire.component.html',
-  styleUrls: ['./commentaire.component.scss']
+  styleUrls: ['./commentaire.component.css']
 })
 export class CommentaireComponent implements OnInit {
   protected CommentaireCollection:      AngularFirestoreCollection ;

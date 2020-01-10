@@ -8,7 +8,7 @@ import * as saveAs from 'file-saver';
 @Component({
   selector: 'app-add-file',
   templateUrl: './add-file.component.html',
-  styleUrls: ['./add-file.component.scss']
+  styleUrls: ['./add-file.component.css']
 })
 export class AddFileComponent implements OnInit {
   xmlCollection;
@@ -19,9 +19,11 @@ export class AddFileComponent implements OnInit {
   constructor(db: AngularFirestore) { 
     this.xmlCollection = db.collection("XmlFile");
     this.xmlParser = new xmlParser();
+    this.downloadFile();
   }
  
   ngOnInit() {
+    
   }
 
 
@@ -37,7 +39,7 @@ export class AddFileComponent implements OnInit {
       var file = new File([xml  ], value.label + ".xml", {type: "text/plain;charset=utf-8"} );
       saveAs(file);
     });
-    this.json.unsubscribe();
+    
 
   }
 
