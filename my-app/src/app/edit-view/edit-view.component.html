@@ -6,12 +6,12 @@
     <button (click)="archive()">Create archive</button>
 
     <!-- Button 2: edit the code/save the changes -->
-    <div *ngIf="isDocumentDefined===true">
-      <div *ngIf="isEditing===false; else elseBlock">
-        <button (click)="onEditClick($event);"> Edit </button>
-      </div>
-
-      <ng-template #elseBlock>
+    <div *ngIf="isEditing===false; else elseBlock">
+      <button (click)="onEditClick($event);"> Edit </button>
+    </div>
+    
+    <ng-template #elseBlock>
+      <div *ngIf="isDocumentDefined===true; else noDocumentSelected">
         <!-- If we edit a code -->
         <div *ngIf="isCodeSelected===true; else codeNotSelectedBlock">
           <button (click)="goToReference(myCodeset.type,myCode.value);"> Go Back </button>
@@ -22,10 +22,16 @@
           <button (click)="openDocu(event, myCodeset.label);"> Go Back </button>
           <br>
         </ng-template>
-        <button (click)="save()"> Save changes </button>
-        
+      </div>
+
+      <!-- If we only add a codeset -->
+      <ng-template #noDocumentSelected>
+          <button (click)="ngOnInit();"> Go Back </button>
+          <br>
       </ng-template>
-    </div>
+
+      <button (click)="save()"> Save changes </button>
+    </ng-template>
 
   </div>
 
@@ -37,6 +43,34 @@
     <!-- Display all the codesets available -->
     <table class="table table-striped table-hover">
       <tbody>
+
+        <!-- If we're editing, we add rows to be able to add a new codeset -->
+        <tr *ngIf="isEditing===true;">
+          <td>
+            Label : 
+            <input [(ngModel)]="codesetToBeAdded.label"/>
+          </td>
+        </tr>
+
+        <tr *ngIf="isEditing===true;">
+          <td>
+            Type : 
+            <input [(ngModel)]="codesetToBeAdded.type"/>
+          </td>
+        </tr>
+
+        <tr *ngIf="isEditing===true;">
+          <td>
+            <button title="add a new codeset" (click)="addNewCodeset($event)">add</button>
+          </td>
+        </tr>
+
+        <ng-container *ngIf="isEditing===true;">
+          <tr title="Added codeset" *ngFor="let codeset of addedCodesets">
+            <td>{{ codeset.label }}</td>
+          </tr>
+        </ng-container>
+
         <tr title="Show codes" *ngFor="let docu of documents" (click)="openDocu(event, docu.label)">
           <div *ngIf="isDocumentDefined===true; then thenBlock else elseBlock"></div>
           <ng-template #thenBlock>

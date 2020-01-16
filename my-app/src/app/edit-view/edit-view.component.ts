@@ -33,6 +33,8 @@ export class EditViewComponent implements OnInit {
   protected editReferenceCodeValue: string;
   protected codeToBeAdded:          Code;
   protected addedCodes:             Code[];
+  protected codesetToBeAdded:       Codeset;
+  protected addedCodesets:          Codeset[];
 
   constructor(db: AngularFirestore) {
     this.db = db
@@ -47,6 +49,7 @@ export class EditViewComponent implements OnInit {
     this.document$.subscribe(list => this.documents = list);
     this.editReferenceCodeset = new Codeset("", "");
     this.editReferenceCodeValue = "";
+    this.isEditing = false;
   }
 
   addDocumentIntoCollection(collection, documentName:string, data){
@@ -70,7 +73,9 @@ export class EditViewComponent implements OnInit {
   onEditClick(evt) {
     this.isEditing = true;
     this.addedCodes = [];
+    this.addedCodesets = [];
     this.codeToBeAdded = new Code("","",null,null,null,null,null,null);
+    this.codesetToBeAdded = new Codeset("", "");
 
     if(this.isCodeSelected) {
       //copy the code into a new var which can be edited
@@ -117,6 +122,44 @@ export class EditViewComponent implements OnInit {
         alert("The value is already used by an other code.");
       }
     }    
+  }
+
+  addNewCodeset(evt) {
+    if(this.codesetToBeAdded.label != "" && this.codesetToBeAdded.type != "") {
+      var uniqueValue: boolean = 
+        !(this.documents.some(docu => {
+          return docu.type==this.codesetToBeAdded.type;
+        }));
+
+      if(uniqueValue) {
+        uniqueValue = 
+          !(this.addedCodesets.some(docu => {
+            return docu.type==this.codesetToBeAdded.type;
+          }));
+      }
+
+      if(uniqueValue) {
+        uniqueValue = 
+          !(this.addedCodesets.some(docu => {
+            return docu.label==this.codesetToBeAdded.label;
+          }));
+      }
+
+      if(uniqueValue) {
+        uniqueValue = 
+          !(this.addedCodesets.some(docu => {
+            return docu.label==this.codesetToBeAdded.label;
+          }));
+      }
+
+      if(uniqueValue) {
+        this.addedCodesets.push(this.codesetToBeAdded);
+        this.codesetToBeAdded = new Codeset("","");
+
+      } else {
+        alert("The codeset already exists.");
+      }
+    }
   }
 
   //For the reference select form
@@ -188,6 +231,25 @@ export class EditViewComponent implements OnInit {
 
   save(){
     this.isEditing = false;
+    // If we added a new codeset
+    if(this.addedCodesets.length>0) {
+      this.addedCodesets.forEach(codeset => {
+        var jsonDoc;
+
+        jsonDoc = JSON.stringify(codeset); // Create a json string from the codeset
+        jsonDoc = JSON.parse(jsonDoc); // Convert Json String into Json Object
+
+        this.xmlCollection.doc(codeset.label).set(jsonDoc) // Add a document to a collection
+        .then(function() {
+          console.log("Document successfully added");
+          
+        }).catch(function(error) {
+          console.log("Error while adding new codeset : ", error);
+        });
+      });
+    }
+
+    // If we edited the code details
     if(this.isCodeSelected && this.codeToBeEdited.equals(this.myCode)==false) {
       // TODO check if the values are correct
       let commentaire = new commentaryWorker(this.myCode,this.myCodeset.label,this.codeToBeEdited,this.db);
@@ -227,6 +289,7 @@ export class EditViewComponent implements OnInit {
   }
 
   saveAddedCodes() {
+    // if we added a new code to the codeset
     if(this.addedCodes.length>0) {
       //save the codeset code list into the db
       //open the codeset
