@@ -5,7 +5,7 @@ export class Code {
   label:string;
   value:string;
   description: string;
-  status: boolean;openCodeset
+  status: boolean;
   use_age: UseAge;
   use_date: UseDate;
   test_age: string;
@@ -47,6 +47,47 @@ export class Code {
     return code;
   }
 
+  equals(code: Code): boolean {
+    var isEqual: boolean = this.value==code.value && this.label==code.label && this.description==code.description 
+      && this.status==code.status && this.test_age==code.test_age && this.concept_type==code.concept_type;
+
+    if(isEqual) {
+      if(!this.use_age || !code.use_age) {
+        isEqual = this.use_age==code.use_age;
+
+      } else {
+        isEqual = this.use_age.equals(code.use_age);
+      }
+    }
+
+    if(isEqual) {
+      if(!this.use_date || !code.use_date) {
+        isEqual = this.use_date==code.use_date;
+
+      } else {
+        isEqual = this.use_date.equals(code.use_date);
+      }
+    }
+
+    if(isEqual) {
+      for (let i = 0; i < this.references.length; i++) {
+        var refA: Reference = this.references[i];
+        var sameRef: boolean = false;
+
+        sameRef = code.references.some(refB => {
+          return refA.equals(refB);
+        });
+
+        if(sameRef == false) {
+          isEqual = false;
+          break;
+        }
+      }
+    }
+    
+    return isEqual;
+  }
+
   removeUndifinedAttributes() {
     if(!this.label) {
       this.label = null;
@@ -58,13 +99,20 @@ export class Code {
       this.description = null;
     }
     if(!this.status) {
-      this.status = null;
+      if(this.status!=false)
+        this.status = null;
     }
     if(!this.test_age) {
       this.test_age = null;
     }
     if(!this.concept_type) {
       this.concept_type = null;
+    }
+    if(!this.use_age || this.use_age==null) {
+      this.use_age = new UseAge();
+    }
+    if(!this.use_date || this.use_date==null) {
+      this.use_date = new UseDate();
     }
 
     this.use_age.removeUndifinedAttributes();
@@ -106,6 +154,11 @@ export class UseAge {
     }
   }
 
+  equals(use_age: UseAge): boolean {
+    return this.not_after_month==use_age.not_after_month 
+      && this.not_before_month==use_age.not_before_month;
+  }
+
   toString():string{
     return(" not_after_month : " + this.not_after_month + " not_before_month : "+this.not_before_month)
   }
@@ -135,6 +188,11 @@ export class UseDate {
 
   setNotAfter(n: number) {
     this.not_after = n;
+  }
+
+  equals(use_date: UseDate): boolean {
+    return this.not_after==use_date.not_after && this.not_before==use_date.not_before
+      && this.not_expected_after==use_date.not_expected_after && this.not_expected_before==use_date.not_expected_before;
   }
 
   removeUndifinedAttributes() {

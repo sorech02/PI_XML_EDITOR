@@ -1,12 +1,12 @@
 import { Component, OnInit } from '@angular/core';
 import { NgForm } from '@angular/forms';
 import { Observable } from 'rxjs';
-import {firestore} from 'firebase/app';
+import { firestore} from 'firebase/app';
 import { AngularFirestore, AngularFirestoreCollection, AngularFirestoreDocument } from '@angular/fire/firestore';
-import  { Code } from './edit-view.code'; 
+import { Code } from './edit-view.code'; 
 import { Codeset } from './edit-view.codeset';
-import {CodesetUpdate} from './edit-view.codesetUpdate';
-import {commentaryWorker} from'../services/commentaryWorkerEdit'
+import { CodesetUpdate} from './edit-view.codesetUpdate';
+import { commentaryWorker} from'../services/commentaryWorkerEdit'
 import { Reference } from './edit-view.reference';
 
 
@@ -31,6 +31,10 @@ export class EditViewComponent implements OnInit {
   protected isEditing:              boolean;
   protected editReferenceCodeset:   Codeset;
   protected editReferenceCodeValue: string;
+  protected codeToBeAdded:          Code;
+  protected addedCodes:             Code[];
+  protected codesetToBeAdded:       Codeset;
+  protected addedCodesets:          Codeset[];
 
   constructor(db: AngularFirestore) {
     this.db = db
@@ -45,6 +49,7 @@ export class EditViewComponent implements OnInit {
     this.document$.subscribe(list => this.documents = list);
     this.editReferenceCodeset = new Codeset("", "");
     this.editReferenceCodeValue = "";
+    this.isEditing = false;
   }
 
   addDocumentIntoCollection(collection, documentName:string, data){
@@ -65,19 +70,96 @@ export class EditViewComponent implements OnInit {
     }
   } 
 
+  onEditClick(evt) {
+    this.isEditing = true;
+    this.addedCodes = [];
+    this.addedCodesets = [];
+    this.codeToBeAdded = new Code("","",null,null,null,null,null,null);
+    this.codesetToBeAdded = new Codeset("", "");
+
+    if(this.isCodeSelected) {
+      //copy the code into a new var which can be edited
+      this.codeToBeEdited = new Code(this.myCode.value, this.myCode.label, this.myCode.description, 
+        this.myCode.status, this.myCode.use_age, this.myCode.use_date, this.myCode.test_age, this.myCode.concept_type);
+
+      this.myCode.references.forEach(reference => {
+        this.codeToBeEdited.addReference(reference);
+      });
+      this.codeToBeEdited = this.codeToBeEdited.copy();
+    }
+  }
+
+  onCodeClick(evt, code) {
+    this.openCodeset(evt, code);
+  }
+
   openCodeset(evt, objCode) {
     this.isEditing = false;
-
     this.myCode = objCode;
-    
-    //copy the code into a new var which can be edited
-    this.codeToBeEdited = new Code(objCode.value, objCode.label, objCode.description, objCode.status, objCode.use_age, objCode.use_date, objCode.test_age, objCode.concept_type);
-    objCode.references.forEach(reference => {
-      this.codeToBeEdited.addReference(reference);
-    });
-    this.codeToBeEdited = this.codeToBeEdited.copy();
-
     this.isCodeSelected = true;
+  }
+
+  addNewCode(evt) {
+    if(this.codeToBeAdded.label != "" && this.codeToBeAdded.value != "") {
+      var uniqueValue: boolean = 
+        !(this.myCodeset.code.some(c => {
+          return c.value==this.codeToBeAdded.value;
+        }));
+
+      if(uniqueValue) {
+        uniqueValue = 
+          !(this.addedCodes.some(c => {
+            return c.value==this.codeToBeAdded.value;
+          }));
+      }
+
+      if(uniqueValue) {
+        this.codeToBeAdded.removeUndifinedAttributes();
+        this.addedCodes.push(this.codeToBeAdded);
+        this.codeToBeAdded = new Code("","",null,null,null,null,null,null);
+
+      } else {
+        alert("The value is already used by an other code.");
+      }
+    }    
+  }
+
+  addNewCodeset(evt) {
+    if(this.codesetToBeAdded.label != "" && this.codesetToBeAdded.type != "") {
+      var uniqueValue: boolean = 
+        !(this.documents.some(docu => {
+          return docu.type==this.codesetToBeAdded.type;
+        }));
+
+      if(uniqueValue) {
+        uniqueValue = 
+          !(this.addedCodesets.some(docu => {
+            return docu.type==this.codesetToBeAdded.type;
+          }));
+      }
+
+      if(uniqueValue) {
+        uniqueValue = 
+          !(this.addedCodesets.some(docu => {
+            return docu.label==this.codesetToBeAdded.label;
+          }));
+      }
+
+      if(uniqueValue) {
+        uniqueValue = 
+          !(this.addedCodesets.some(docu => {
+            return docu.label==this.codesetToBeAdded.label;
+          }));
+      }
+
+      if(uniqueValue) {
+        this.addedCodesets.push(this.codesetToBeAdded);
+        this.codesetToBeAdded = new Codeset("","");
+
+      } else {
+        alert("The codeset already exists.");
+      }
+    }
   }
 
   //For the reference select form
@@ -126,21 +208,16 @@ export class EditViewComponent implements OnInit {
 
         {
           if(value.length>0){
+
             this.codesetDocument = this.xmlCollection.doc(value[0].label);
             this.codeset = this.codesetDocument.valueChanges();
             this.myCodeset = new Codeset("", "");
+            
             this.codeset.subscribe(value => { 
               this.myCodeset = value;
               for(let code of this.myCodeset.code) {
                 if(code.value == codeValue) {
                   this.myCode = code;
-                  //copy the code into a new var which can be edited
-                  this.codeToBeEdited = new Code(code.value, code.label, code.description, code.status, code.use_age, code.use_date, code.test_age, code.concept_type);
-                  code.references.forEach(reference => {
-                    this.codeToBeEdited.addReference(reference);
-                  });
-                  this.codeToBeEdited = this.codeToBeEdited.copy();
-
                   this.isCodeSelected = true;
                 }
               }
@@ -153,39 +230,92 @@ export class EditViewComponent implements OnInit {
   }
 
   save(){
-    // TODO check if the values are correct
     this.isEditing = false;
-    console.log(this.codeToBeEdited);
-    console.log(this.myCode);
-    let commentaire = new commentaryWorker(this.myCode,this.myCodeset.label,this.codeToBeEdited,this.db);
-    console.log(commentaire)
-    commentaire.addData()
-    this.codeToBeEdited.removeUndifinedAttributes();
-    
-    
-    var codesetDoc: AngularFirestoreDocument<CodesetUpdate>;
-    codesetDoc = this.xmlCollection.doc(this.myCodeset.label);
-    var thisComponent = this;
-    //We remove the old version of the edited Code
-    codesetDoc.update({
-      code: firestore.FieldValue.arrayRemove(this.myCode)
+    // If we added a new codeset
+    if(this.addedCodesets.length>0) {
+      this.addedCodesets.forEach(codeset => {
+        var jsonDoc;
 
-    }).then(function() {
-      //if it has been removed, we add the new version of the edited Code
+        jsonDoc = JSON.stringify(codeset); // Create a json string from the codeset
+        jsonDoc = JSON.parse(jsonDoc); // Convert Json String into Json Object
+
+        this.xmlCollection.doc(codeset.label).set(jsonDoc) // Add a document to a collection
+        .then(function() {
+          console.log("Document successfully added");
+          
+        }).catch(function(error) {
+          console.log("Error while adding new codeset : ", error);
+        });
+      });
+    }
+
+    // If we edited the code details
+    if(this.isCodeSelected && this.codeToBeEdited.equals(this.myCode)==false) {
+      // TODO check if the values are correct
+      let commentaire = new commentaryWorker(this.myCode,this.myCodeset.label,this.codeToBeEdited,this.db);
+      console.log(commentaire)
+      commentaire.addData()
+
+      this.codeToBeEdited.removeUndifinedAttributes();
+           
+      var codesetDoc: AngularFirestoreDocument<CodesetUpdate>;
+      codesetDoc = this.xmlCollection.doc(this.myCodeset.label);
+      var thisComponent = this;
+      //We remove the old version of the edited Code
       codesetDoc.update({
-        code: firestore.FieldValue.arrayUnion(Object.assign({}, thisComponent.codeToBeEdited))
+        code: firestore.FieldValue.arrayRemove(this.myCode)
 
       }).then(function() {
-        console.log("Document successfully updated");
-        thisComponent.goToReference(thisComponent.myCodeset.type,thisComponent.codeToBeEdited.value);
-        
-      }).catch(function(error) {
-        console.error("Error updating document (Code removed but not edited): ", error)
+        //if it has been removed, we add the new version of the edited Code
+        codesetDoc.update({
+          code: firestore.FieldValue.arrayUnion(Object.assign({}, thisComponent.codeToBeEdited))
+
+        }).then(function() {
+          console.log("Document successfully updated");
+          thisComponent.saveAddedCodes();
+          thisComponent.goToReference(thisComponent.myCodeset.type,thisComponent.codeToBeEdited.value);
+          
+        }).catch(function(error) {
+          console.error("Error updating document (Code removed but not edited): ", error)
+        });
+      })
+      .catch(function(error) {
+          console.error("Error updating document: ", error);
       });
-    })
-    .catch(function(error) {
-        console.error("Error updating document: ", error);
-    });
+    }
+    else {
+      this.saveAddedCodes();
+    }
+  }
+
+  saveAddedCodes() {
+    // if we added a new code to the codeset
+    if(this.addedCodes.length>0) {
+      //save the codeset code list into the db
+      //open the codeset
+      var codesetDoc: AngularFirestoreDocument<CodesetUpdate>;
+      codesetDoc = this.xmlCollection.doc(this.myCodeset.label);
+      var thisComponent = this;
+
+      //add the codes into the db
+      this.addedCodes.forEach(code => {
+        codesetDoc.update({
+          code: firestore.FieldValue.arrayUnion(Object.assign({}, code))
+
+        }).then(function() {
+          console.log("Code successfully added");
+  
+          if(thisComponent.isCodeSelected)
+            thisComponent.goToReference(thisComponent.myCodeset.type,thisComponent.codeToBeEdited.value);
+          else
+            thisComponent.openDocu(null, thisComponent.myCodeset.label);
+          
+        }).catch(function(error) {
+          thisComponent.addedCodes = [];
+          console.error("Error adding new code into the db: ", error)
+        });
+      });
+    }
   }
 
   archive(){

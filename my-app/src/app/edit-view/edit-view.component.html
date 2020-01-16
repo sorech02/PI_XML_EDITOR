@@ -6,17 +6,32 @@
     <button (click)="archive()">Create archive</button>
 
     <!-- Button 2: edit the code/save the changes -->
-    <div *ngIf="isCodeSelected===true">
-      <div *ngIf="isEditing===false; else elseBlock">
-        <button (click)="this.isEditing=true;"> Edit </button>
+    <div *ngIf="isEditing===false; else elseBlock">
+      <button (click)="onEditClick($event);"> Edit </button>
+    </div>
+    
+    <ng-template #elseBlock>
+      <div *ngIf="isDocumentDefined===true; else noDocumentSelected">
+        <!-- If we edit a code -->
+        <div *ngIf="isCodeSelected===true; else codeNotSelectedBlock">
+          <button (click)="goToReference(myCodeset.type,myCode.value);"> Go Back </button>
+          <br>
+        </div>
+        <!-- If we only edit a codeset -->
+        <ng-template #codeNotSelectedBlock>
+          <button (click)="openDocu(event, myCodeset.label);"> Go Back </button>
+          <br>
+        </ng-template>
       </div>
 
-      <ng-template #elseBlock>
-        <button (click)="goToReference(myCodeset.type,myCode.value);"> Go Back </button>
-        <br>
-        <button (click)="save()"> Save changes </button>
+      <!-- If we only add a codeset -->
+      <ng-template #noDocumentSelected>
+          <button (click)="ngOnInit();"> Go Back </button>
+          <br>
       </ng-template>
-    </div>
+
+      <button (click)="save()"> Save changes </button>
+    </ng-template>
 
   </div>
 
@@ -28,6 +43,34 @@
     <!-- Display all the codesets available -->
     <table class="table table-striped table-hover">
       <tbody>
+
+        <!-- If we're editing, we add rows to be able to add a new codeset -->
+        <tr *ngIf="isEditing===true;">
+          <td>
+            Label : 
+            <input [(ngModel)]="codesetToBeAdded.label"/>
+          </td>
+        </tr>
+
+        <tr *ngIf="isEditing===true;">
+          <td>
+            Type : 
+            <input [(ngModel)]="codesetToBeAdded.type"/>
+          </td>
+        </tr>
+
+        <tr *ngIf="isEditing===true;">
+          <td>
+            <button title="add a new codeset" (click)="addNewCodeset($event)">add</button>
+          </td>
+        </tr>
+
+        <ng-container *ngIf="isEditing===true;">
+          <tr title="Added codeset" *ngFor="let codeset of addedCodesets">
+            <td>{{ codeset.label }}</td>
+          </tr>
+        </ng-container>
+
         <tr title="Show codes" *ngFor="let docu of documents" (click)="openDocu(event, docu.label)">
           <div *ngIf="isDocumentDefined===true; then thenBlock else elseBlock"></div>
           <ng-template #thenBlock>
@@ -51,22 +94,47 @@
       <table class="table table-striped table-hover">
         <thead>
           <tr>
+            <th *ngIf="isEditing===true;" scope="col"> </th>
             <th scope="col">Value</th>
             <th scope="col">Label</th>
           </tr>
         </thead>
         <tbody>
-          <tr title="Show details" *ngFor="let code of myCodeset.code" (click)="openCodeset(event, code)">
+          <!-- If we're editing, we add a row to be able to add a new code -->
+          <tr *ngIf="isEditing===true;">
+            <td>
+              <button title="add a new code" (click)="addNewCode($event)">add</button>
+            </td>
+            <td>
+              <input [(ngModel)]="codeToBeAdded.value"/>
+            </td>
+            <td>
+              <input [(ngModel)]="codeToBeAdded.label"/>
+            </td>
+          </tr>
+
+          <ng-container *ngIf="isEditing===true;">
+            <tr title="Added code" *ngFor="let code of addedCodes">
+              <td> </td>
+              <td>{{ code.value }}</td>
+              <td>{{ code.label }}</td>
+            </tr>
+          </ng-container>
+
+          <tr title="Show details" *ngFor="let code of myCodeset.code" (click)="onCodeClick($event, code)">            
             <div *ngIf="isCodeSelected===true; then thenBlock else elseBlock"></div>
             <ng-template #thenBlock>
+              <td *ngIf="isEditing===true;" [ngClass]="{'row-selected': code.value===myCode.value}"> </td>
               <td [ngClass]="{'row-selected': code.value===myCode.value}">{{ code.value }}</td>
               <td [ngClass]="{'row-selected': code.value===myCode.value}">{{ code.label }}</td>
             </ng-template>
             <ng-template #elseBlock>
+                <td *ngIf="isEditing===true;"> </td>
                 <td>{{ code.value }}</td>
                 <td>{{ code.label }}</td>
             </ng-template>
           </tr>
+
         </tbody>
       </table>
     </div>
@@ -89,9 +157,7 @@
             <input [(ngModel)]="codeToBeEdited.label"/>
           </p>
           
-          <p>Code value:  
-            <input [(ngModel)]="codeToBeEdited.value"/>  
-          </p>
+          <p>Code value: {{codeToBeEdited.value}}</p>
 
           <p>Description: 
             <input [(ngModel)]="codeToBeEdited.description"/>
@@ -183,16 +249,17 @@
             <p>Code value: {{myCode.value}}</p>
             <p>Description: {{myCode.description}}</p>
             
-            <div *ngIf="myCode.status==true; else elseBlock">
-              <p>
-                Status: Valid
-              </p>
-            </div>
-            <ng-template #elseBlock>
-              <p>
-                Status: Invalid
-              </p>
-            </ng-template>
+            <p>
+              Status: 
+              <ng-container *ngIf="myCode.status==true; else elseBlock">
+                Valid
+              </ng-container>
+              <ng-template #elseBlock>
+                <ng-container *ngIf="myCode.status==false">
+                  Invalid
+                </ng-container>
+              </ng-template>
+            </p>
     
             <p>
               Use age:

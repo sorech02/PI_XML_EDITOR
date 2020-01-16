@@ -1,5 +1,4 @@
-export class Reference {
-  
+export class Reference {  
     type: string; 
     codeValue: string;
   
@@ -10,5 +9,9 @@ export class Reference {
   
     toString() {
       return "- Type: " + this.type + " - Code: " + this.codeValue ;
+    }
+
+    equals(ref: Reference): boolean {
+      return this.type==ref.type && this.codeValue==ref.codeValue;
     }
   }
