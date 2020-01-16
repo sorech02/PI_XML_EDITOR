@@ -243,41 +243,40 @@
         </div>
 
         <!-- ELSE just display details -->
-        <!-- TODO do not display details which do not have a value -->
         <ng-template #elseBlock>
             <p>Code label: {{myCode.label}}</p>
             <p>Code value: {{myCode.value}}</p>
-            <p>Description: {{myCode.description}}</p>
+            <p *ngIf="myCode.description">Description: {{myCode.description}}</p>
             
-            <p>
+            <p *ngIf="myCode.status">
               Status: {{myCode.status}}
             </p>
     
-            <p>
+            <p *ngIf="myCode.use_age.not_before_month || myCode.use_age.not_after_month">
               Use age:
               <br>
-              <span>Not before month: {{myCode.use_age.not_before_month}}</span>
-              <br>
-              <span>Not after month: {{myCode.use_age.not_after_month}}</span>
+              <span *ngIf="myCode.use_age.not_before_month">Not before month: {{myCode.use_age.not_before_month}}</span>
+              <br *ngIf="myCode.use_age.not_before_month">
+              <span *ngIf="myCode.use_age.not_after_month">Not after month: {{myCode.use_age.not_after_month}}</span>
             </p>
     
-            <p>
+            <p *ngIf="myCode.use_date.not_before || myCode.use_date.not_expected_before || myCode.use_date.not_after || myCode.use_date.not_expected_after">
               Use date:
               <br>
-              <span>Not before: {{myCode.use_date.not_before}}</span>
-              <br>
-              <span>Not expected before: {{myCode.use_date.not_expected_before}}</span>
-              <br>
-              <span>Not after: {{myCode.use_date.not_after}}</span>
-              <br>
-              <span>Not expected after: {{myCode.use_date.not_expected_after}}</span>
+              <span *ngIf="myCode.use_date.not_before">Not before: {{myCode.use_date.not_before}}</span>
+              <br *ngIf="myCode.use_date.not_before">
+              <span *ngIf="myCode.use_date.not_expected_before">Not expected before: {{myCode.use_date.not_expected_before}}</span>
+              <br *ngIf="myCode.use_date.not_expected_before">
+              <span *ngIf="myCode.use_date.not_after">Not after: {{myCode.use_date.not_after}}</span>
+              <br *ngIf="myCode.use_date.not_after">
+              <span *ngIf="myCode.use_date.not_expected_after">Not expected after: {{myCode.use_date.not_expected_after}}</span>
             </p>
     
-            <p>Test age: {{myCode.test_age}}</p>
-            <p>Concept type: {{myCode.concept_type}}</p>
+            <p *ngIf="myCode.test_age">Test age: {{myCode.test_age}}</p>
+            <p *ngIf="myCode.concept_type">Concept type: {{myCode.concept_type}}</p>
     
-            <p>References:</p>
-            <ul class="superList">
+            <p *ngIf="myCode.reference.length > 0">References:</p>
+            <ul *ngIf="myCode.reference.length > 0" class="superList">
               <li *ngFor="let ref of myCode.reference">
                   <button type="button" class="btn btn-link btn-sm" (click)="goToReference(ref.type, ref.codeValue)">{{ref.type}} - {{ref.codeValue}}</button>
               </li>
