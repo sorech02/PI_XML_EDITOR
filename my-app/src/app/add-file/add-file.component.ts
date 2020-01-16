@@ -31,11 +31,16 @@ export class AddFileComponent implements OnInit {
   downloadFile(){
     this.json = this.xmlCollection.doc("Vaccination CVX Code").valueChanges();
     this.json.subscribe(value => {
-      var docJson = JSON.stringify(value);// create a json string from object codeset
-      docJson = JSON.parse(docJson); // create json objectz
-      var xml = "<codeset>\n";
+      var stringJson = JSON.stringify(value);// create a json string from object codeset
+      var docJson = JSON.parse(stringJson); // create json objectz
+      var xml = "<?xml version=\"1.0\" enco   ding=\"UTF-8\" standalone=\"yes\"?>\n" + "<codeset>\n" ;
+      xml += "  " + "<label>" + docJson["label"] + "</label>\n";
+      xml += "  " + "<type>" + docJson["type"] + "</type>\n";
+      delete docJson.label; 
+      delete docJson.type;
       xml +=  OBJtoXML(docJson, "  "); //JsonToXML.parse("codeset", docJson); // create xml object from json 
-      xml += "\n</codeset>";  
+      xml += "</codeset>";
+      xml = OrderCodeXML(xml);
       var file = new File([xml  ], value.label + ".xml", {type: "text/plain;charset=utf-8"} );
       saveAs(file);
     });
@@ -81,11 +86,76 @@ export class AddFileComponent implements OnInit {
   }
 }
 
+function getFieldInXml(str: String){
+  var i = 0;
+  while (i<str.length){
+    if (str[i] == '<'){
+      i++;
+      var field = ""
+      while (str[i] != '>'){
+        field += str[i];
+        i++;
+      }
+      return field;
+    }
+    i++;
+  }
+  return false;
+}
+
+function OrderCodeXML(xml: String){
+  var newXml = "";
+  var lines = xml.split('\n');
+  var done = false;
+  var index = 0;
+  var orderList = [["value"], ["label"], ["description"], ["code-status"], 
+                    ["reference"], ["use-date"], ["use-age"], 
+                    ["concept-type"], ["test-age"]]; 
+  while (index < 4){
+    newXml += lines[index];
+    index ++; 
+  }
+
+  while (done == false) {
+  
+    if (lines[index].includes("<code>")){
+      index ++;
+      while (lines[index].includes("</code>") == false){
+        var field = getFieldInXml(lines[index]);
+        
+        orderList.forEach(element => {
+          if (element[0] == field){
+            var fieldLines = lines[index];
+            while (lines[index].includes("</"+field+">") == false){
+              index ++; 
+              fieldLines += lines[index]; 
+            }
+            element.push(fieldLines);
+          }
+        });
+        index++;
+      }
+      newXml += "<code>\n";
+      orderList.forEach(element => {
+        if (element.length > 1){
+          newXml += element[1];
+        }
+      });
+      newXml += "</code>\n";
+    }
+
+    index ++; 
+    if (index >= lines.length)  done = true;
+    
+  }
+
+ return newXml; 
+}
+
 function OBJtoXML(obj, ident) {
   var xml = '';
   var re = /\_/gi;
   for (var prop in obj) {
-      
       if(obj[prop] instanceof Array) {
         if (prop == "references") {
           xml += ident + "<" + prop.replace(re, '-') + ">" + "\n";
@@ -102,8 +172,8 @@ function OBJtoXML(obj, ident) {
                 xml += ident + "</" + prop.replace(re, '-') + ">\n";
             }
         }
-        
       } else if (typeof obj[prop] == "object") {
+        
           if (prop == "use_age" || prop == "use_date"){
             var first_time = true;
             
@@ -119,8 +189,6 @@ function OBJtoXML(obj, ident) {
                 xml += object[o];
                 xml += "</" + o.replace(re, '-') + ">\n"; 
               }
-              
-            
             if (first_time == false) {
               xml += ident + "</" + prop.replace('_', '-') + ">" + "\n";
             }
@@ -131,13 +199,24 @@ function OBJtoXML(obj, ident) {
             xml += ident +  "</" + prop.replace(re, '-') + ">\n";
           }
       } else {
-        if (obj[prop] != '' && obj[prop] != null) {
+        if (prop == "status"){
+          xml += ident + "<code-status>\n"; 
+          xml += ident + "  "  + "<" + prop.replace(re, '-') + ">";
+          if (obj[prop] == true){
+            xml += "Valid"; 
+          }
+          else {
+            xml += "Deprecated";
+          }
+          xml += "</" + prop.replace(re, '-') + ">\n";
+          xml += ident + "</code-status>\n"; 
+        }
+        else if (obj[prop] != '' && obj[prop] != null) {
           xml += ident + "<" + prop.replace(re, '-') + ">";
           xml += obj[prop];
           xml += "</" + prop.replace(re, '-') + ">\n";
         }
       }
-      
   }
   var xml = xml.replace(/<\/?[0-9]{1,}>/g,'');
   return xml

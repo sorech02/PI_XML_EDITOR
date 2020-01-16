@@ -1,0 +1,8 @@
+.div-sign{
+    margin-top: 2rem;
+    /* border: 1px solid black; */
+    box-shadow:  0 0 0.125rem;
+    /*filter: drop-shadow(0 0 0.126rem rgb(214, 214, 214));*/
+    padding: 1rem;
+    background-color: #fffdeb;
+}
