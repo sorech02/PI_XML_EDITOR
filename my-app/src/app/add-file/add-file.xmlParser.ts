@@ -3,19 +3,32 @@ import { Code, UseAge, UseDate } from '../edit-view/edit-view.code';
 import { Reference } from '../edit-view/edit-view.reference'; 
 
 export class xmlParser {
-  url;
-
-  constructor(url) {
-    this.url = url;
+  constructor() {
+    
   }
 
-  getCodeset() {
-    return loadAndParseFromUrl(this.url);
+  getCodesetWithUrl(url) {
+    return loadAndParseFromUrl(url);
   }
+
+  getCodesetWithFile(file){
+    return loadAndParseFromFile(file)
+  }
+}
+
+function loadAndParseFromFile(file){
+  console.log("file" + file);
+  var parser = new DOMParser();
+  var xmlDoc1 = parser.parseFromString(file, "application/xml");
+
+  var xmlCodeset = xmlDoc1.getElementsByTagName("codeset")[0];
+  var codeset = createCodesetFromTree(xmlCodeset);
+  return codeset;
 }
 
 function loadAndParseFromUrl(url){
   var xmlDoc = httpGet(url);
+  console.log("url" + xmlDoc);
   var parser = new DOMParser();
   var xmlDoc1 = parser.parseFromString(xmlDoc, "application/xml");
 
@@ -56,7 +69,7 @@ function createCodeFromTree(xmlTree) {
     codeDescription = xmlTree.getElementsByTagName("description")[0].textContent.toString();
 
   if(xmlTree.getElementsByTagName("status").length > 0)
-    codeStatus = xmlTree.getElementsByTagName("status")[0].textContent.toString()=="Valid";
+    codeStatus = xmlTree.getElementsByTagName("status")[0].textContent.toString();
 
   if(xmlTree.getElementsByTagName("test-age").length > 0)
     codeTest_age = xmlTree.getElementsByTagName("test-age")[0].textContent.toString();
@@ -64,23 +77,23 @@ function createCodeFromTree(xmlTree) {
   if(xmlTree.getElementsByTagName("concept-type").length > 0)
     codeConcept_type = xmlTree.getElementsByTagName("concept-type")[0].textContent.toString();
 
-  if(xmlTree.getElementsByTagName("not-before").length > 0)
-    codeUse_date.setNotBefore(xmlTree.getElementsByTagName("not-before")[0].nodeValue);
-
+  if(xmlTree.getElementsByTagName("not-before").length > 0){
+    codeUse_date.setNotBefore(+xmlTree.getElementsByTagName("not-before")[0].textContent.toString());
+  }
   if(xmlTree.getElementsByTagName("not-after").length > 0)
-    codeUse_date.setNotAfter(xmlTree.getElementsByTagName("not-after")[0].nodeValue);
+    codeUse_date.setNotAfter(+xmlTree.getElementsByTagName("not-after")[0].textContent.toString());
 
   if(xmlTree.getElementsByTagName("not-expected-before").length > 0)
-    codeUse_date.setNotExpectedBefore(xmlTree.getElementsByTagName("not-expected-before")[0].nodeValue);
+    codeUse_date.setNotExpectedBefore(+xmlTree.getElementsByTagName("not-expected-before")[0].textContent.toString());
 
   if(xmlTree.getElementsByTagName("not-expected-after").length > 0)
-    codeUse_date.setNotExpectedAfter(xmlTree.getElementsByTagName("not-expected-after")[0].nodeValue);
+    codeUse_date.setNotExpectedAfter(+xmlTree.getElementsByTagName("not-expected-after")[0].textContent.toString());
 
   if(xmlTree.getElementsByTagName("not-before-month").length > 0)
-    codeUse_age.setNotBeforeMonth(xmlTree.getElementsByTagName("not-before-month")[0].nodeValue);
+    codeUse_age.setNotBeforeMonth(+xmlTree.getElementsByTagName("not-before-month")[0].textContent.toString());
 
   if(xmlTree.getElementsByTagName("not-after-month").length > 0)
-    codeUse_age.setNotBeforeMonth(xmlTree.getElementsByTagName("not-after-month")[0].nodeValue);
+    codeUse_age.setNotAfterMonth(+xmlTree.getElementsByTagName("not-after-month")[0].textContent.toString());
 
   var code = new Code( codeValue, codeLabel, codeDescription, codeStatus, codeUse_age, codeUse_date, codeTest_age, codeConcept_type);
   

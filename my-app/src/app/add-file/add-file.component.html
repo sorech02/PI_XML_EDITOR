@@ -1,5 +1,20 @@
-<form  (ngSubmit)="onSubmitForm(f)" #f="ngForm">
-    Link to the file to convert:<br>
-    <input class="form-control" type="text" id="url" name="url" ngModel required><br>
-    <input class="btn btn-primary" type="submit" value="Add Document">
-</form>
+
+<div  class="solo-form">
+    <div class="form-group">
+        <form  (ngSubmit)="onSubmitForm(f)" #f="ngForm">
+            Link to the file to convert:<br>
+            <input class="form-control" type="text" id="url" name="url" ngModel required>
+            <br>
+            <input class="btn btn-primary" type="submit" value="Add Document">
+            
+        </form>
+    </div>
+
+    <form class="form-group">
+        <div>
+            <br>
+            <label for="file-input">Choose File:</label>
+            <input type="file" class="form-control-file" id="file-input" (change)="readFile($event)" >
+        </div>
+    </form>
+</div>

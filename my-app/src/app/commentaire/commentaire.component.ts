@@ -10,7 +10,7 @@ import { formatDate } from '@angular/common';
 @Component({
   selector: 'app-commentaire',
   templateUrl: './commentaire.component.html',
-  styleUrls: ['./commentaire.component.scss']
+  styleUrls: ['./commentaire.component.css']
 })
 export class CommentaireComponent implements OnInit {
   protected CommentaireCollection:      AngularFirestoreCollection ;
@@ -40,7 +40,7 @@ export class CommentaireComponent implements OnInit {
       this.ListEditor =  new Array();
       this.CommentaireCollection = this.db.collection("Commentaire");
       this.document$ = this.CommentaireCollection.valueChanges();
-      this.document$.subscribe((list: commentary[]) => {this.commentaires = ((list))
+      this.document$.subscribe((list: commentary[]) => {this.commentaires = list.reverse()
         
         this.commentaires.forEach(
           (commentaire: commentary) => {

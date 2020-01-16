@@ -9,7 +9,7 @@ import { AngularFireAuth } from "@angular/fire/auth";
 @Component({
   selector: 'app-root',
   templateUrl: './app.component.html',
-  styleUrls: ['./app.component.scss']
+  styleUrls: ['./app.component.css']
 })
 
 

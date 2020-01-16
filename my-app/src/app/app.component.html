@@ -1,19 +1,18 @@
 <body> 
     <header></header>
     <article>
-            <ul>
-                    <li routerLinkActive="active" ><a routerLink="comments">Commentaire</a></li>
-                    <li *ngIf="isAuth" routerLinkActive="active" ><a routerLink="edition">EditPage</a></li>
-                    <li *ngIf="isAuth" routerLinkActive="active" ><a routerLink="addFile">Add Doc</a></li>
-                    <li routerLinkActive="active" ><a routerLink="comments">FeedActu</a></li>
-                    <li *ngIf="!isAuth" routerLinkActive="active" ><a routerLink="sign-up">Register</a></li>
-                    <li *ngIf="!isAuth" routerLinkActive="active" ><a routerLink="sign-in">Log In</a></li>
-                    <li *ngIf="isAuth" routerLinkActive="active" ><a routerLink="sign-out">Log Out</a></li>
-                  
-                    <!-- <button class="glyphicon glyphicon-off" onclick="onSignOut()" routerLinkActive="active"><a routerLink="login">clique</a></button>-->
-                </ul>
+        <div class="topnav">
+            <a routerLinkActive="active" routerLink="comments">Commentaire </a>
+            <a *ngIf="isAuth" routerLink="edition">EditPage</a>
+            <a routerLink="addFile">Add Doc</a>
+            <a routerLink="actu">FeedActu</a>
+            <a routerLink="sign-up">Register</a>
+            <a routerLink="sign-in">Log In</a>
+            <a routerLink="sign-out">Log Out</a>
+              
+        </div> 
     <div class="container">
-        <div class="row">
+        <div class="row justify-content-center">
             <router-outlet></router-outlet>
         </div>
     </div>
