@@ -69,7 +69,7 @@ function createCodeFromTree(xmlTree) {
     codeDescription = xmlTree.getElementsByTagName("description")[0].textContent.toString();
 
   if(xmlTree.getElementsByTagName("status").length > 0)
-    codeStatus = xmlTree.getElementsByTagName("status")[0].textContent.toString()=="Valid";
+    codeStatus = xmlTree.getElementsByTagName("status")[0].textContent.toString();
 
   if(xmlTree.getElementsByTagName("test-age").length > 0)
     codeTest_age = xmlTree.getElementsByTagName("test-age")[0].textContent.toString();
