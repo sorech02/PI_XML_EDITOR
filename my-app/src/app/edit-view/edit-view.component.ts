@@ -117,14 +117,16 @@ export class EditViewComponent implements OnInit {
   save(){
     // TODO check if the values are correct
     this.isEditing = false;
-    console.log(this.codeToBeEdited);
-    console.log(this.myCode);
+    //console.log(this.codeToBeEdited);
+    //console.log(this.myCode);
+
+  //Commentary section add of an editing commentary.
     let commentaire = new commentaryWorker(this.myCode,this.myCodeset.label,this.codeToBeEdited,this.db);
-    console.log(commentaire)
+   // console.log(commentaire
     commentaire.addData()
+
+    
     this.codeToBeEdited.removeUndifinedAttributes();
-    
-    
     var codesetDoc: AngularFirestoreDocument<CodesetUpdate>;
     codesetDoc = this.xmlCollection.doc(this.myCodeset.label);
     var thisComponent = this;
@@ -157,7 +159,6 @@ export class EditViewComponent implements OnInit {
     this.document$ = this.xmlCollection.valueChanges();
     var i=0;
     this.document$.forEach(doc => {
-      console.log(doc);
       doc.forEach(file => {
         var today = new Date();
         var dd = String(today.getDate()).padStart(2, '0');

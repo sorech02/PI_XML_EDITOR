@@ -7,14 +7,11 @@
     <div class="commentaires" *ngFor="let commentaire of commentaires">
       <div class="container">
         <img 
-          src='data:image/jpeg;base64,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'
+          src='TODO : Look at the dataSmart for upload Avatars Pictures ! #PINIST DataSmart => Store data on PINISY/datSmart JSON model and ElastiSearch (fire base core )'
           height="45px" width="45px">
-          modifications has been made by {{tmpPersonne.email}}
+          modifications has been made by 
           
-      
-        {{getUserName(commentaire.idUserPost)}}
-   
-
+           {{getUserName(commentaire.idUserPost).email}}
 
         In Xml : {{commentaire.xmlChange}}.
 
@@ -23,20 +20,26 @@
         had been change to 
 
         {{commentaire.codeAfter}}
-        <span class="time-right">11:00</span>
+        <span class="time-right">{{getDate(commentaire.editTime)}}</span>
         <div>
+      
     <button class= "glyphicon glyphicon-comment" type="submit" (click)="ShowMeComment(commentaire)"></button>
-  </div>
+ </div>
   </div>
   <div *ngIf='commentaire.showCom'>
-    <a *ngIf='commentaire.listCommentaires'>
+  <p>             
+            <input [(ngModel)]="tmpMessage"/>
+          </p>
+           <button type="button" (click)="addNewCom(commentaire)">Comment</button>
+    <a *ngIf='commentaire.listCommentaires != null'>
       <div *ngFor="let com of commentaire.listCommentaires">
         <div class="container darker">
           <img
-            src='https://img-s-msn-com.akamaized.net/tenant/amp/entityid/BBp4BGi.img?h=552&w=750&m=6&q=60&u=t&o=f&l=f&x=699&y=305'
+            src='TODO : Look at the dataSmart for upload Avatars Pictures ! #PINIST DataSmart => Store data on PINISY/datSmart JSON model and ElastiSearch (fire base core )'
             alt="Avatar" class="right">
-          <p> {{com}}</p>
-          <span class="time-left">11:01</span>
+          <p> {{com.message}}</p>
+          witred by           {{commentaire.idUserPost}}
+          <span class="time-left">{{commentaire.editTime.get}}</span>
         </div>
       </div>
     </a>
@@ -44,7 +47,6 @@
   <h3>
 
   </h3>
-
 
   </div>
 

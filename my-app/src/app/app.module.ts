@@ -5,7 +5,6 @@ import { HttpClientModule } from '@angular/common/http';
 import { FourOhFourComponent } from './four-oh-four/four-oh-four.component'
 import { AppRoutingModule } from './app-routing.module';
 import { AppComponent } from './app.component';
-import { FeedActuComponent } from './feed-actu/feed-actu.component';
 import { CommentaireComponent } from './commentaire/commentaire.component';
 import { FormsModule, ReactiveFormsModule }    from '@angular/forms';
 import { EditViewComponent } from './edit-view/edit-view.component';
@@ -36,9 +35,7 @@ const appRoutes: Routes =   [
   { path: 'verify-email-address', component: VerifyEmailComponent , canActivate: [SecureSignPage]},
   { path: 'comments', component: CommentaireComponent},
   { path: 'edition',canActivate: [AuthGuardService] ,  component: EditViewComponent },
-  { path: 'actu', component: FeedActuComponent},
   { path: 'addFile', component: AddFileComponent, canActivate: [AuthGuardService] },
-  { path: '', component: FeedActuComponent },
   { path: 'not-found', component: FourOhFourComponent },
   { path: '**', redirectTo: 'not-found' }
   
@@ -48,7 +45,6 @@ const appRoutes: Routes =   [
 @NgModule({
   declarations: [
     AppComponent,
-    FeedActuComponent,
     CommentaireComponent,
     EditViewComponent,
     EditPageComponent,

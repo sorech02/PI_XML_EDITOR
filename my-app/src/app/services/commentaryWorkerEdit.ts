@@ -99,7 +99,7 @@ addData(){
 
 // Add o document to a collection
 addDocumentIntoCollection(data){
-  this.db.collection(`Commentaire`).doc(`${this.commentary.editTime.concat(this.commentary.idUserPost).concat(this.commentary.xmlChange).concat(this.commentary.label)}`).set(data);
+  this.db.collection(`Commentaire`).doc(`${formatDate(this.commentary.editTime, 'dd-MM-yyyy hh:mm:ss a', 'en-US').concat(this.commentary.idUserPost).concat(this.commentary.xmlChange).concat(this.commentary.label)}`).set(data);
     console.log("Ajout fait à la bd");
 }
 }
