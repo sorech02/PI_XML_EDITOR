@@ -24,8 +24,8 @@ export class Code {
     this.reference = [];
   }
 
-  addReference(reference: Reference) {
-    this.reference.push(reference);
+  addReference(ref: Reference) {
+    this.reference.push(ref);
   }
 
   copy(): Code {
@@ -40,8 +40,8 @@ export class Code {
     use_date.setNotExpectedBefore(this.use_date.not_expected_before);
 
     var code:Code = new Code(this.value, this.label, this.description, this.status, use_age, use_date, this.test_age, this.concept_type);
-    this.reference.forEach(reference => {
-      code.addReference(reference);
+    this.reference.forEach(ref => {
+      code.addReference(ref);
     });
 
     return code;
@@ -73,7 +73,9 @@ export class Code {
       for (let i = 0; i < this.reference.length; i++) {
         var refA: Reference = this.reference[i];
         var sameRef: boolean = false;
-
+        
+        refA = Object.assign(new Reference("",""), refA);
+        
         sameRef = code.reference.some(refB => {
           return refA.equals(refB);
         });
