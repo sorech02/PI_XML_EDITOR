@@ -166,8 +166,8 @@
           <form class="form-inline">
             <label class="control-label">Status: </label>
             <select class="form-control" id="exampleFormControlSelect1" [(ngModel)]="codeToBeEdited.status" [ngModelOptions]="{standalone: true}">
-              <option [ngValue]="true">Valid</option>
-              <option [ngValue]="false">Invalid</option>
+              <option [ngValue]="'Valid'">Valid</option>
+              <option [ngValue]="'Invalid'">Invalid</option>
             </select>
           </form>
 
@@ -231,7 +231,7 @@
 
                 <button title="add a new reference" (click)="addReference($event)">add</button>
             </li>
-            <li *ngFor="let ref of codeToBeEdited.references">
+            <li *ngFor="let ref of codeToBeEdited.reference">
 
               <button title="remove refenrece" type="button" class="close" style="color:red" (click)="removeReference($event, ref)">
                 <span aria-hidden="true">&times;</span>
@@ -250,15 +250,7 @@
             <p>Description: {{myCode.description}}</p>
             
             <p>
-              Status: 
-              <ng-container *ngIf="myCode.status==true; else elseBlock">
-                Valid
-              </ng-container>
-              <ng-template #elseBlock>
-                <ng-container *ngIf="myCode.status==false">
-                  Invalid
-                </ng-container>
-              </ng-template>
+              Status: {{myCode.status}}
             </p>
     
             <p>
@@ -286,7 +278,7 @@
     
             <p>References:</p>
             <ul class="superList">
-              <li *ngFor="let ref of myCode.references">
+              <li *ngFor="let ref of myCode.reference">
                   <button type="button" class="btn btn-link btn-sm" (click)="goToReference(ref.type, ref.codeValue)">{{ref.type}} - {{ref.codeValue}}</button>
               </li>
             </ul>

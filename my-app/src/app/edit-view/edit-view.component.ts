@@ -251,7 +251,6 @@ export class EditViewComponent implements OnInit {
 
     // If we edited the code details
     if(this.isCodeSelected && this.codeToBeEdited.equals(this.myCode)==false) {
-      // TODO check if the values are correct
       let commentaire = new commentaryWorker(this.myCode,this.myCodeset.label,this.codeToBeEdited,this.db);
       console.log(commentaire)
       commentaire.addData()
