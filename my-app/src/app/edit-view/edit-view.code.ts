@@ -5,14 +5,14 @@ export class Code {
   label:string;
   value:string;
   description: string;
-  status: boolean;
+  status: string;
   use_age: UseAge;
   use_date: UseDate;
   test_age: string;
   concept_type: string;
-  references : Reference[];
+  reference : Reference[];
   
-  constructor(value: string, label: string, description: string, status: boolean, use_age: UseAge, use_date: UseDate, test_age: string, concept_type: string) {
+  constructor(value: string, label: string, description: string, status: string, use_age: UseAge, use_date: UseDate, test_age: string, concept_type: string) {
     this.label = label;
     this.value = value;
     this.description = description;
@@ -21,11 +21,11 @@ export class Code {
     this.use_date = use_date;
     this.test_age = test_age;
     this.concept_type = concept_type;
-    this.references = [];
+    this.reference = [];
   }
 
   addReference(reference: Reference) {
-    this.references.push(reference);
+    this.reference.push(reference);
   }
 
   copy(): Code {
@@ -40,7 +40,7 @@ export class Code {
     use_date.setNotExpectedBefore(this.use_date.not_expected_before);
 
     var code:Code = new Code(this.value, this.label, this.description, this.status, use_age, use_date, this.test_age, this.concept_type);
-    this.references.forEach(reference => {
+    this.reference.forEach(reference => {
       code.addReference(reference);
     });
 
@@ -70,11 +70,11 @@ export class Code {
     }
 
     if(isEqual) {
-      for (let i = 0; i < this.references.length; i++) {
-        var refA: Reference = this.references[i];
+      for (let i = 0; i < this.reference.length; i++) {
+        var refA: Reference = this.reference[i];
         var sameRef: boolean = false;
 
-        sameRef = code.references.some(refB => {
+        sameRef = code.reference.some(refB => {
           return refA.equals(refB);
         });
 
@@ -99,7 +99,6 @@ export class Code {
       this.description = null;
     }
     if(!this.status) {
-      if(this.status!=false)
         this.status = null;
     }
     if(!this.test_age) {
@@ -122,8 +121,8 @@ export class Code {
   }
 
   toString() {
-    var result = "Label: " + this.label  + "Value: " + this.value  + "Description: " + this.description  + "Status: " + this.status  + "References:" ;
-    this.references.forEach(function(element){
+    var result = "Label: " + this.label  + "Value: " + this.value  + "Description: " + this.description  + "Status: " + this.status  + "Reference:" ;
+    this.reference.forEach(function(element){
       result += element.toString();
     });
     return result;

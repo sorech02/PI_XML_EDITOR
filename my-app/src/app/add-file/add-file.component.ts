@@ -112,7 +112,7 @@ function OrderCodeXML(xml: String){
                     ["reference"], ["use-date"], ["use-age"], 
                     ["concept-type"], ["test-age"]]; 
   while (index < 4){
-    newXml += lines[index];
+    newXml += lines[index] + "\n";
     index ++; 
   }
 
@@ -125,15 +125,15 @@ function OrderCodeXML(xml: String){
         
         orderList.forEach(element => {
           if (element[0] == field){
-            var fieldLines = lines[index];
+            var fieldLines = lines[index]+"\n";
             while (lines[index].includes("</"+field+">") == false){
               index ++; 
-              fieldLines += lines[index]; 
+              fieldLines += lines[index]+"\n"; 
             }
             element.push(fieldLines);
           }
         });
-        index++;
+        index++;  
       }
       newXml += "<code>\n";
       orderList.forEach(element => {
@@ -157,7 +157,7 @@ function OBJtoXML(obj, ident) {
   var re = /\_/gi;
   for (var prop in obj) {
       if(obj[prop] instanceof Array) {
-        if (prop == "references") {
+        if (prop == "reference") {
           xml += ident + "<" + prop.replace(re, '-') + ">" + "\n";
           for (var array in obj[prop]){
             var object = new Object(obj[prop][array]);
@@ -201,13 +201,8 @@ function OBJtoXML(obj, ident) {
       } else {
         if (prop == "status"){
           xml += ident + "<code-status>\n"; 
-          xml += ident + "  "  + "<" + prop.replace(re, '-') + ">";
-          if (obj[prop] == true){
-            xml += "Valid"; 
-          }
-          else {
-            xml += "Deprecated";
-          }
+          xml += ident + "  "  + "<" + prop.replace(re, '-') + ">"
+          xml += obj[prop];
           xml += "</" + prop.replace(re, '-') + ">\n";
           xml += ident + "</code-status>\n"; 
         }

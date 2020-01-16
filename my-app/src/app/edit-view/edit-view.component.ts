@@ -82,7 +82,7 @@ export class EditViewComponent implements OnInit {
       this.codeToBeEdited = new Code(this.myCode.value, this.myCode.label, this.myCode.description, 
         this.myCode.status, this.myCode.use_age, this.myCode.use_date, this.myCode.test_age, this.myCode.concept_type);
 
-      this.myCode.references.forEach(reference => {
+      this.myCode.reference.forEach(reference => {
         this.codeToBeEdited.addReference(reference);
       });
       this.codeToBeEdited = this.codeToBeEdited.copy();
@@ -187,9 +187,9 @@ export class EditViewComponent implements OnInit {
   }
 
   removeReference(evt, ref) {
-    const index = this.codeToBeEdited.references.indexOf(ref, 0);
+    const index = this.codeToBeEdited.reference.indexOf(ref, 0);
     if (index > -1) {
-      this.codeToBeEdited.references.splice(index, 1);
+      this.codeToBeEdited.reference.splice(index, 1);
     }
   }
 
