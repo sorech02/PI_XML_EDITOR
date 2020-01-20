@@ -1,43 +1,35 @@
-<div class="container" fxLayout="row" fxLayoutAlign="start stretch">
+<div class="jumbotron"  data-toggle="tooltip" data-placement="top" title="" data-original-title="Tooltip on top" style="color:#fff">
   
-  <!-- Column 1: buttons bar-->
-  <div class="column">
-    <!-- Button 1: create a new archive -->
-    <button (click)="archive()">Create archive</button>
-
-    <!-- Button 2: edit the code/save the changes -->
-    <div *ngIf="isEditing===false; else elseBlock">
-      <button (click)="onEditClick($event);"> Edit </button>
-    </div>
-    
-    <ng-template #elseBlock>
+  <!-- Column 1: buttons bar fxLayout="row" fxLayoutAlign="start stretch"-->
+  <div class="btn-group btn-group-toggle" data-toggle="buttons">
+    <button (click)="archive()" class="btn btn-success">Create archive</button>
+ <div *ngIf="isEditing===false; else elseBlock">
+      <button (click)="onEditClick($event);" class="btn btn-primary"> Edit </button>
+    </div>  
+      <ng-template #elseBlock>
       <div *ngIf="isDocumentDefined===true; else noDocumentSelected">
         <!-- If we edit a code -->
         <div *ngIf="isCodeSelected===true; else codeNotSelectedBlock">
-          <button (click)="goToReference(myCodeset.type,myCode.value);"> Go Back </button>
+          <button (click)="goToReference(myCodeset.type,myCode.value);" class="btn btn-danger"> Go Back </button>
           <br>
         </div>
         <!-- If we only edit a codeset -->
         <ng-template #codeNotSelectedBlock>
-          <button (click)="openDocu(event, myCodeset.label);"> Go Back </button>
-          <br>
+          <button (click)="openDocu(event, myCodeset.label);"  class="btn btn-danger"> Go Back </button>
         </ng-template>
       </div>
-
       <!-- If we only add a codeset -->
       <ng-template #noDocumentSelected>
-          <button (click)="ngOnInit();"> Go Back </button>
-          <br>
+          <button (click)="ngOnInit();" class="btn btn-danger"> Go Back </button>
       </ng-template>
-
-      <button (click)="save()"> Save changes </button>
+      <button (click)="save()" class="btn btn-primary"> Save changes </button>
     </ng-template>
+</div>
 
-  </div>
 
-
+<div class="jumbotron" fxLayout="row" fxLayoutAlign="start stretch" >
   <!-- Column 2: codeset selection -->
-  <div class="column"  style="background-color:#fafafa;">
+  <div class="jumbotron" >
     <h3>Codesets</h3>
 
     <!-- Display all the codesets available -->
@@ -61,7 +53,7 @@
 
         <tr *ngIf="isEditing===true;">
           <td>
-            <button title="add a new codeset" (click)="addNewCodeset($event)">add</button>
+            <button title="add a new codeset" (click)="addNewCodeset($event)"  class="btn btn-success">add</button>
           </td>
         </tr>
 
@@ -86,7 +78,7 @@
 
 
   <!-- Column 3: code selection (display all the codes IF a codeset is selected -->
-  <div *ngIf="isDocumentDefined===true ">
+  <div *ngIf="isDocumentDefined===true " class = "jumbotron list-group">
     <div>
       <h3>Codes</h3>
 
@@ -103,7 +95,7 @@
           <!-- If we're editing, we add a row to be able to add a new code -->
           <tr *ngIf="isEditing===true;">
             <td>
-              <button title="add a new code" (click)="addNewCode($event)">add</button>
+              <button title="add a new code" class="btn btn-success" (click)="addNewCode($event)">add</button>
             </td>
             <td>
               <input [(ngModel)]="codeToBeAdded.value"/>
@@ -142,9 +134,9 @@
 
 
   <!-- Column 4: selected code details IF a code is selected -->
-  <div *ngIf="isDocumentDefined===true ">
+  <div *ngIf="isDocumentDefined===true " class="list-group">
 
-    <div class="column" style="background-color:#f1f1f1;">
+    <div class="jumbotron" >
       <h3>Details</h3>
       <h5>Codeset label: {{myCodeset.label}}</h5>
       <h5>Codeset type: {{myCodeset.type}}</h5>
@@ -152,7 +144,7 @@
       <div *ngIf="isCodeSelected===true ">
 
         <!-- display inputs IF the user wants to edit -->
-        <div *ngIf="isEditing===true; else elseBlock">
+        <div *ngIf="isEditing===true; else elseBlock" class="form-group">
           <p>Code label:
             <input [(ngModel)]="codeToBeEdited.label"/>
           </p>
@@ -229,11 +221,11 @@
                   <option *ngFor="let codes of editReferenceCodeset.code" value={{codes.value}}>{{codes.value}}</option>
                 </select>
 
-                <button title="add a new reference" (click)="addReference($event)">add</button>
+                <button title="add a new reference" class="btn btn-success" (click)="addReference($event)">add</button>
             </li>
             <li *ngFor="let ref of codeToBeEdited.reference">
 
-              <button title="remove refenrece" type="button" class="close" style="color:red" (click)="removeReference($event, ref)">
+              <button title="remove refenrece" type="button" class="btn btn-danger"  (click)="removeReference($event, ref)">
                 <span aria-hidden="true">&times;</span>
               </button>
 
@@ -278,7 +270,7 @@
             <p *ngIf="myCode.reference.length > 0">References:</p>
             <ul *ngIf="myCode.reference.length > 0" class="superList">
               <li *ngFor="let ref of myCode.reference">
-                  <button type="button" class="btn btn-link btn-sm" (click)="goToReference(ref.type, ref.codeValue)">{{ref.type}} - {{ref.codeValue}}</button>
+                  <button type="button" class="btn btn-link" (click)="goToReference(ref.type, ref.codeValue)">{{ref.type}} - {{ref.codeValue}}</button>
               </li>
             </ul>
         </ng-template>
@@ -286,5 +278,5 @@
       </div>
     </div>
   </div>
-
+  </div>
 </div>
