@@ -93,7 +93,7 @@ AuthLogin(provider) {
   return this.afAuth.auth.signInWithPopup(provider)
   .then((result) => {
      this.ngZone.run(() => {
-        this.router.navigate(['actu']);
+        this.router.navigate(['home']);
       })
     this.SetUserData(result.user);
   }).catch((error) => {

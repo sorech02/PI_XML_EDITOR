@@ -1,16 +1,40 @@
-<body> 
+<nav class="navbar navbar-expand navbar-dark bg-primary">
+  <a class="navbar-brand" href="#"></a>
+  <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarColor01" aria-controls="navbarColor01" aria-expanded="false" aria-label="Toggle navigation">
+    <span class="navbar-toggler-icon"></span>
+  </button>
+  <div class="collapse navbar-collapse" id="navbarColor01">
+    <ul class="navbar-nav mr-auto">
+      <li class="nav-item">
+        <a class="nav-link" routerLink="home">Home <span class="sr-only">(current)</span></a>
+      </li>
+      <li class="nav-item">
+        <a class="nav-link" routerLinkActive="active" routerLink="comments">Feed</a>
+      </li>
+        <li class="nav-item">
+        <a class="nav-link" routerLink="edition">Edit Data</a>
+      </li>
+      <li class="nav-item">
+        <a class="nav-link" routerLink="addFile">Add File</a>
+      </li>
+      <li class="nav-item">
+        <a class="nav-link" routerLink="sign-up">Register</a>
+      </li>
+        <li class="nav-item">
+        <a class="nav-link" routerLink="sign-in">Log in</a>
+      </li>
+        <li class="nav-item">
+        <a class="nav-link" routerLink="sign-out">Log out</a>
+      </li>
+    </ul>
+  </div>
+</nav>
+
+
+
     <header></header>
+   
     <article>
-        <div class="topnav">
-            <a routerLinkActive="active" routerLink="comments">Commentaire </a>
-            <a *ngIf="isAuth" routerLink="edition">EditPage</a>
-            <a routerLink="addFile">Add Doc</a>
-            <a routerLink="actu">FeedActu</a>
-            <a routerLink="sign-up">Register</a>
-            <a routerLink="sign-in">Log In</a>
-            <a routerLink="sign-out">Log Out</a>
-              
-        </div> 
     <div class="container">
         <div class="row justify-content-center">
             <router-outlet></router-outlet>
@@ -20,4 +44,3 @@
 
 </article>
 <footer></footer>
-</body>
