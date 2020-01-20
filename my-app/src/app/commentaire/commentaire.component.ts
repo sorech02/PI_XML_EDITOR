@@ -6,7 +6,6 @@ import {User} from '../services/user'
 import { subComment } from '../services/subComment';
 import { formatDate } from '@angular/common';
 
-
 @Component({
   selector: 'app-commentaire',
   templateUrl: './commentaire.component.html',
@@ -14,6 +13,8 @@ import { formatDate } from '@angular/common';
 })
 export class CommentaireComponent implements OnInit {
   protected CommentaireCollection:      AngularFirestoreCollection ;
+  protected SubComFire : AngularFirestoreCollection;
+  protected SubCom : subComment[]
   protected Commentaire:    AngularFirestoreDocument<commentary>;
   protected document$:          Observable<any[]>;
   protected commentaires:          commentary[];
@@ -25,6 +26,7 @@ export class CommentaireComponent implements OnInit {
   protected tmpPersonne:        User;
   protected tmpMessage: string;
   protected ListEditor : User[];
+  ListEditorSub: User[];
   
   constructor(db: AngularFirestore) {
     this.db = db
@@ -41,7 +43,6 @@ export class CommentaireComponent implements OnInit {
       this.CommentaireCollection = this.db.collection("Commentaire");
       this.document$ = this.CommentaireCollection.valueChanges();
       this.document$.subscribe((list: commentary[]) => {this.commentaires = list.reverse()
-        
         this.commentaires.forEach(
           (commentaire: commentary) => {
           let test  = this.db.doc('users/' + commentaire.idUserPost).valueChanges();
@@ -105,19 +106,52 @@ export class CommentaireComponent implements OnInit {
     }
     
     addNewCom(com:commentary){
+      console.log(this.tmpMessage)
+      let test = new subComment(com.idUserPost,this.tmpMessage)
+      console.log(test)
       let newSubCom = new subComment(JSON.parse(localStorage.getItem('user')).uid,this.tmpMessage);
-      com.listCommentaires.push(newSubCom);
-      const userRef: AngularFirestoreDocument<any> = this.db.doc(`users/${
-        formatDate(com.editTime, 'dd-MM-yyyy hh:mm:ss a', 'en-US').concat(com.idUserPost).concat(com.xmlChange).concat(com.label)}
-      }`);
-      userRef.set(com, {
-        merge: true
+      this.db.collection(`Commentaire/${formatDate(com.editTime, 'dd-MM-yyyy hh:mm:ss a', 'en-US').concat(com.idUserPost).concat(com.xmlChange).concat(com.label)}/subComList`).add(JSON.parse(JSON.stringify(newSubCom)));     
+    }
+  
+    
+  ShowMeComment(com:commentary){
+    this.ListEditorSub = new Array();
+  this.SubComFire =  this.db.collection(`Commentaire/${formatDate(com.editTime, 'dd-MM-yyyy hh:mm:ss a', 'en-US').concat(com.idUserPost).concat(com.xmlChange).concat(com.label)}/subComList`);     
+  let doc =   this.SubComFire.valueChanges();
+    doc.subscribe((list : subComment[])=>{this.SubCom=list;
+    console.log(this.SubCom)
+    com.showCom=!com.showCom;
+    this.SubCom.forEach(
+      (commentSub: subComment) => {
+      let test  = this.db.doc('users/' + commentSub.idUserPost).valueChanges();
+      test.subscribe(value => {
+        console.log(value)
+        this.ListEditorSub.push(<User> value)
       })
     }
-
-  ShowMeComment(com:commentary){
-   com.showCom=!com.showCom;
+    )
+  });
+   
   }
+  getUserNameSub(id:string):User{
+    console.log(id)
+    let  flagFind = false;
+    let n =0;
+    console.log(this.ListEditorSub )
+    if(this.ListEditorSub[n]!=undefined){
+       while(!flagFind){
+         console.log(this.ListEditorSub[n].uid == id)
+         if(this.ListEditorSub[n].uid == id){
+           return(this.ListEditorSub[n])
+         }
+         n++;
+       }
+     }
+     return new User
+
+  }
+  
+  
 
  //RECENT CHANGE  
 }

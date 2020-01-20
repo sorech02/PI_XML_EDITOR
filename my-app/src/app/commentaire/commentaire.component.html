@@ -31,18 +31,17 @@
             <input [(ngModel)]="tmpMessage"/>
           </p>
            <button type="button" (click)="addNewCom(commentaire)">Comment</button>
-    <a *ngIf='commentaire.listCommentaires != null'>
-      <div *ngFor="let com of commentaire.listCommentaires">
+  
+      <div *ngFor="let com of SubCom">
         <div class="container darker">
           <img
             src='TODO : Look at the dataSmart for upload Avatars Pictures ! #PINIST DataSmart => Store data on PINISY/datSmart JSON model and ElastiSearch (fire base core )'
             alt="Avatar" class="right">
           <p> {{com.message}}</p>
-          witred by           {{commentaire.idUserPost}}
-          <span class="time-left">{{commentaire.editTime.get}}</span>
+          witred by           {{getUserNameSub(com.idUserPost).email}}
+          <span class="time-left">{{com.editTime}}</span>
         </div>
       </div>
-    </a>
   </div>
   <h3>
 
