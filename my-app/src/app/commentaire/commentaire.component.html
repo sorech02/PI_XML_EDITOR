@@ -30,9 +30,8 @@
   <p>             
             <input [(ngModel)]="tmpMessage"/>
           </p>
-           <button type="button" (click)="addNewCom(commentaire)">Comment</button>
-  
-      <div *ngFor="let com of SubCom">
+           <button type="button" (click)="addNewCom(commentaire)">Comment</button>    
+      <div *ngFor="let com of commentaire.listCommentaires">
         <div class="container darker">
           <img
             src='TODO : Look at the dataSmart for upload Avatars Pictures ! #PINIST DataSmart => Store data on PINISY/datSmart JSON model and ElastiSearch (fire base core )'

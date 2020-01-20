@@ -5,6 +5,7 @@ export class commentary{
     xmlChange:string;
     codeSetChange:string;
     codeBefore: string;
+    listCommentaires : subComment[];
     showCom : boolean;
     editTime:Date;
     codeAfter:string;
@@ -21,6 +22,7 @@ export class commentary{
         this.codeBefore="";
         this.showCom=false;
         this.label=label;
+        this.listCommentaires=new Array();
     }
     
 }

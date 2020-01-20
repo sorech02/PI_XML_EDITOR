@@ -121,6 +121,7 @@ export class CommentaireComponent implements OnInit {
     doc.subscribe((list : subComment[])=>{this.SubCom=list;
     console.log(this.SubCom)
     com.showCom=!com.showCom;
+    com.listCommentaires = this.SubCom;
     this.SubCom.forEach(
       (commentSub: subComment) => {
       let test  = this.db.doc('users/' + commentSub.idUserPost).valueChanges();
@@ -131,7 +132,12 @@ export class CommentaireComponent implements OnInit {
     }
     )
   });
+
+ 
    
+  }
+  getMyList(){
+    return(this.ListEditorSub)
   }
   getUserNameSub(id:string):User{
     console.log(id)
