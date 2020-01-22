@@ -1,30 +1,30 @@
-<div class="div-sign">
-  <div class="display-table">
-      <div class="display-table-cell">
-    
-        <div class="authBlock">
-          <h3>Sign In</h3>
-          <div class="form-group">
+<div class="jumbotron" style="color:#fff">
+<div class="jumbotron">
+      <div >
+
+        <div>
+          <h1 style = "color:#fff">Sign In</h1>
+          <div class="form-group row">
             <input type="text" class="form-control" placeholder="Username" #userName required>
           </div>
     
-          <div class="formGroup">
+          <div class="form-group row">
             <input type="password" class="form-control" placeholder="Password" #userPassword required>
           </div>
     
           <!-- Calling SignIn Api from AuthService -->
-          <div class="form-group">
+          <div class="form-group row">
             <br>
-            <input type="button" class="btn btn-primary" value="Log in" (click)="authenticationService.SignIn(userName.value, userPassword.value)">
+            <input type="button" class="btn btn-primary btn-lg btn-block" value="Sign In" (click)="authenticationService.SignIn(userName.value, userPassword.value)">
           </div>
     
-          <div class="forgot-password">
-            <span routerLink="/forgot-password">Forgot Password?</span>
+          <div class="form-group row">
+            <span routerLink="/forgot-password" class="text-info">Forgot Password?</span>
           </div>
         </div>
     
-        <div class="redirect-to-login">
-          <span>Don't have an account?<span class="redirect" routerLink="/sign-up"> Sign Up</span></span>
+        <div class="form-group row">
+          <span>Don't have an account?<span class="text-info" routerLink="/sign-up"> Sign Up</span></span>
         </div>
     
       </div>

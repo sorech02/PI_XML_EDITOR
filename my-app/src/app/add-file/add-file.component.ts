@@ -19,7 +19,7 @@ export class AddFileComponent implements OnInit {
   constructor(db: AngularFirestore) { 
     this.xmlCollection = db.collection("XmlFile");
     this.xmlParser = new xmlParser();
-    this.downloadFile();
+    //this.downloadFile();
   }
  
   ngOnInit() {

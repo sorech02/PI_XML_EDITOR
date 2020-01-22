@@ -1,36 +1,5 @@
 @import url("https://fonts.googleapis.com/css?family=Lato:400,700,400italic");
 
-.superList {
-  list-style-type: none; 
-}
-
-.row-selected {
-  background-color: #5facff;
-}
-
-.button-selected {
-  background-color: #5facff;;
-  border-color: #5facff;
-}
-
-.table-hover tbody tr:hover td {
-  background: #adbed1;
-  cursor: pointer;
-}
-
-/*Hide arrows for numeric input*/
-
-/* Chrome, Safari, Edge, Opera */
-input::-webkit-outer-spin-button,
-input::-webkit-inner-spin-button {
-  -webkit-appearance: none;
-  margin: 0;
-}
-/* Firefox */
-input[type=number] {
-  -moz-appearance:textfield;
-}
-
 
 /*!
  * Bootswatch v4.4.1
@@ -45,7 +14,15 @@ input[type=number] {
  * Copyright 2011-2019 Twitter, Inc.
  * Licensed under MIT (https://github.com/twbs/bootstrap/blob/master/LICENSE)
  */
- 
+
+
+  body {
+    color:black;
+    background-color:white;
+    background-image:url('../../assets/ressourcesImageIcon/back.jpg!d');
+    }
+
+
  :root {
    --blue: #375a7f;
    --indigo: #6610f2;

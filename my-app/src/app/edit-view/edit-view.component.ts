@@ -251,7 +251,6 @@ export class EditViewComponent implements OnInit {
 
     // If we edited the code details
     if(this.isCodeSelected && this.codeToBeEdited.equals(this.myCode)==false) {
-      // TODO check if the values are correct
       let commentaire = new commentaryWorker(this.myCode,this.myCodeset.label,this.codeToBeEdited,this.db);
       console.log(commentaire)
       commentaire.addData()
@@ -323,7 +322,6 @@ export class EditViewComponent implements OnInit {
     this.document$ = this.xmlCollection.valueChanges();
     var i=0;
     this.document$.forEach(doc => {
-      console.log(doc);
       doc.forEach(file => {
         var today = new Date();
         var dd = String(today.getDate()).padStart(2, '0');
