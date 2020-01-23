@@ -7,8 +7,9 @@
 <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css">
 </head>
 <ul>
-    <div class="commentaires" *ngFor="let commentaire of commentaires">
-      <div class="container">
+    <div class="jumbotron" >
+    <div class="commentaires " *ngFor="let commentaire of commentaires">
+      <div class="alert alert-dismissible alert-primary">
         <img 
           src='TODO : Look at the dataSmart for upload Avatars Pictures ! #PINIST DataSmart => Store data on PINISY/datSmart JSON model and ElastiSearch (fire base core )'
           height="45px" width="45px">
@@ -24,32 +25,33 @@
 
         {{commentaire.codeAfter}}
         <span class="time-right">{{getDate(commentaire.editTime)}}</span>
-        <div>
+        <div >
       
     <button class= "glyphicon glyphicon-comment" type="submit" (click)="ShowMeComment(commentaire)"></button>
  </div>
-  </div>
-  <div *ngIf='commentaire.showCom'>
+
+  <div *ngIf='commentaire.showCom' >
   <p>             
             <input [(ngModel)]="tmpMessage"/>
           </p>
-           <button type="button" (click)="addNewCom(commentaire)">Comment</button>    
+           <button type="button" (click)="addNewCom(commentaire)" class="btn btn-secondary">Comment</button>    
       <div *ngFor="let com of commentaire.listCommentaires">
-        <div class="container darker">
+        <div class="alert alert-info">
           <img
             src='TODO : Look at the dataSmart for upload Avatars Pictures ! #PINIST DataSmart => Store data on PINISY/datSmart JSON model and ElastiSearch (fire base core )'
-            alt="Avatar" class="right">
-          <p> {{com.message}}</p>
+            alt="Avatar" class="left">
+          <p class="lead"> {{com.message}}</p>
           writed by           {{getUserNameSub(com.idUserPost).email}}
           <span class="time-left">{{getDate(com.editTime)}}</span>
         </div>
       </div>
+        </div>
+  </div>
   </div>
   <h3>
 
   </h3>
 
   </div>
-
 </ul>
 

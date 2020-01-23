@@ -3,7 +3,7 @@ import {formatDate } from '@angular/common';
 import { AngularFirestore } from '@angular/fire/firestore';
 import { commentary } from './commentary';
 
-export class commentaryWorker{
+export class commentaryWorkerEdit{
     //personne :Personne;
     commentary:commentary;
     db:AngularFirestore;
@@ -75,18 +75,18 @@ changement(codeBefore:Code,codeAfter:Code){
     this.objectBefore.push(codeBefore.test_age);
     this.objectAfter.push(codeAfter.test_age);
   }
-/*
+
   if(codeAfter.use_age != codeBefore.use_age && codeAfter.use_age != null){
     this.whereChangedMade.push("use_age")
-    this.objectBefore.push(codeBefore.use_age);
-    this.objectAfter.push(codeAfter.use_age);
+    this.objectBefore.push(codeBefore.use_age.toString());
+    this.objectAfter.push(codeAfter.use_age.toString());
   }
   if(codeAfter.use_date != codeBefore.use_date){
     this.whereChangedMade.push("use_date")
-    this.objectBefore.push(codeBefore.use_date.toString);
-    this.objectAfter.push(codeAfter.use_date.toString);
+    this.objectBefore.push(codeBefore.use_date.toString.toString());
+    this.objectAfter.push(codeAfter.use_date.toString());
   }
-  */ //Probleme avec les objets a check !
+  //Probleme avec les objets a check !
 }
 
 addData(){
