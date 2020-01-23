@@ -1,3 +1,5 @@
+@import url("https://fonts.googleapis.com/css?family=Lato:400,700,400italic");
+
 .div-sign{
     margin-top: 2rem;
     /* border: 1px solid black; */
@@ -19,7 +21,7 @@
  * Copyright 2011-2019 Twitter, Inc.
  * Licensed under MIT (https://github.com/twbs/bootstrap/blob/master/LICENSE)
  */
- @import url("https://fonts.googleapis.com/css?family=Lato:400,700,400italic");
+
  :root {
    --blue: #375a7f;
    --indigo: #6610f2;

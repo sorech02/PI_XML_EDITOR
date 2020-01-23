@@ -135,13 +135,18 @@ function OrderCodeXML(xml: String){
         });
         index++;  
       }
-      newXml += "<code>\n";
+      newXml += "  " + "<code>\n";
       orderList.forEach(element => {
+        /*if ((element[0] === "use-date") && (element.length === 1)){
+          element.push("<use-date/>\n");
+        }*/
         if (element.length > 1){
           newXml += element[1];
+          element.pop();
         }
+        
       });
-      newXml += "</code>\n";
+      newXml += "  " + "</code>\n";
     }
 
     index ++; 
@@ -149,7 +154,7 @@ function OrderCodeXML(xml: String){
     
   }
 
- return newXml; 
+ return newXml + "</codeset>"; 
 }
 
 function OBJtoXML(obj, ident) {
@@ -157,7 +162,7 @@ function OBJtoXML(obj, ident) {
   var re = /\_/gi;
   for (var prop in obj) {
       if(obj[prop] instanceof Array) {
-        if (prop == "reference") {
+        if (prop == "reference" && obj[prop].length > 0) {
           xml += ident + "<" + prop.replace(re, '-') + ">" + "\n";
           for (var array in obj[prop]){
             var object = new Object(obj[prop][array]);
@@ -174,9 +179,8 @@ function OBJtoXML(obj, ident) {
         }
       } else if (typeof obj[prop] == "object") {
         
-          if (prop == "use_age" || prop == "use_date"){
+          if (prop == "use_date"){
             var first_time = true;
-            
             
               var object = new Object(obj[prop]);
               for (var o in object){
@@ -193,6 +197,34 @@ function OBJtoXML(obj, ident) {
               xml += ident + "</" + prop.replace('_', '-') + ">" + "\n";
             }
           }
+          else if (prop == "use_age"){
+            var first_time = true;
+            
+            var object = new Object(obj[prop]);
+            var temp = ""; 
+            for (var o in object){
+              
+              if (first_time == true) {
+                xml += ident + "<" + prop.replace(re, '-') + ">" + "\n";
+                first_time = false;
+              }
+              temp += ident + "  " + "<" + o.replace(re, '-') + ">";
+              temp += object[o];
+              temp += "</" + o.replace(re, '-') + ">\n"; 
+            }
+            if (first_time == false) {
+              var tab = temp.split('\n');
+              if (tab.length > 1){
+                xml += tab[1] + "\n";
+                xml += tab[0] + "\n";
+              }
+              else if (tab.length>0){
+                xml += tab[0] + "\n";
+              }
+              xml += ident + "</" + prop.replace('_', '-') + ">" + "\n";
+            }
+          }
+
           else {
             xml += ident + "<" + prop.replace(re, '-') + ">" + "\n";
             xml += OBJtoXML(new Object(obj[prop]), ident + "  ");

@@ -1,3 +1,5 @@
+@import url("https://fonts.googleapis.com/css?family=Lato:400,700,400italic");
+
 .superList {
   list-style-type: none; 
 }
@@ -43,7 +45,7 @@ input[type=number] {
  * Copyright 2011-2019 Twitter, Inc.
  * Licensed under MIT (https://github.com/twbs/bootstrap/blob/master/LICENSE)
  */
- @import url("https://fonts.googleapis.com/css?family=Lato:400,700,400italic");
+ 
  :root {
    --blue: #375a7f;
    --indigo: #6610f2;
