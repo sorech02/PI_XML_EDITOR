@@ -6,7 +6,7 @@ import { AngularFirestore, AngularFirestoreCollection, AngularFirestoreDocument 
 import { Code } from './edit-view.code'; 
 import { Codeset } from './edit-view.codeset';
 import { CodesetUpdate} from './edit-view.codesetUpdate';
-import { commentaryWorker} from'../services/commentaryWorkerEdit'
+import { commentaryWorkerEdit} from'../services/commentaryWorkerEdit'
 import { Reference } from './edit-view.reference';
 
 
@@ -235,7 +235,6 @@ export class EditViewComponent implements OnInit {
     if(this.addedCodesets.length>0) {
       this.addedCodesets.forEach(codeset => {
         var jsonDoc;
-
         jsonDoc = JSON.stringify(codeset); // Create a json string from the codeset
         jsonDoc = JSON.parse(jsonDoc); // Convert Json String into Json Object
 
@@ -251,7 +250,7 @@ export class EditViewComponent implements OnInit {
 
     // If we edited the code details
     if(this.isCodeSelected && this.codeToBeEdited.equals(this.myCode)==false) {
-      let commentaire = new commentaryWorker(this.myCode,this.myCodeset.label,this.codeToBeEdited,this.db);
+      let commentaire = new commentaryWorkerEdit(this.myCode,this.myCodeset.label,this.codeToBeEdited,this.db);
       console.log(commentaire)
       commentaire.addData()
 
