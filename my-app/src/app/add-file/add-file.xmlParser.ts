@@ -17,7 +17,6 @@ export class xmlParser {
 }
 
 function loadAndParseFromFile(file){
-  console.log("file" + file);
   var parser = new DOMParser();
   var xmlDoc1 = parser.parseFromString(file, "application/xml");
 
@@ -28,7 +27,6 @@ function loadAndParseFromFile(file){
 
 function loadAndParseFromUrl(url){
   var xmlDoc = httpGet(url);
-  console.log("url" + xmlDoc);
   var parser = new DOMParser();
   var xmlDoc1 = parser.parseFromString(xmlDoc, "application/xml");
 
