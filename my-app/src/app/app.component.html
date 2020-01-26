@@ -12,9 +12,10 @@
           <a class="nav-link" routerLinkActive="active" routerLink="comments">Feed</a>
         </li>
           <li class="nav-item">
-          <a *ngIf="isAuth" class="nav-link" routerLink="edition">Edit Data</a>
+          <a class="nav-link" routerLink="edition">Edit Data</a>
         </li>
         <li class="nav-item">
+
           <a *ngIf="isAuth" class="nav-link" routerLink="addFile">Add File</a>
         </li>
         <li class="nav-item">
@@ -38,11 +39,9 @@
       <header></header>
      
       <article>
-      <div class="container">
-          <div class="row justify-content-center">
-              <router-outlet></router-outlet>
-          </div>
-      </div>
+      <div class="row justify-content-center">
+            <router-outlet></router-outlet>
+        </div>
       
   
   </article>

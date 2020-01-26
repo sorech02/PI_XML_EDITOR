@@ -4,17 +4,7 @@
   list-style-type: none; 
 }
 
-.row-selected {
-  background-color: #5facff;
-}
-
-.button-selected {
-  background-color: #5facff;;
-  border-color: #5facff;
-}
-
 .table-hover tbody tr:hover td {
-  background: #adbed1;
   cursor: pointer;
 }
 

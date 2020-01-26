@@ -40,7 +40,7 @@ const appRoutes: Routes =   [
   { path: 'verify-email-address', component: VerifyEmailComponent , canActivate: [SecureSignPage]},
   { path: 'comments', component: CommentaireComponent,  canActivate: [AuthGuardService]},
   { path: 'home', component: HomeComponent, canActivate: [AuthGuardService]  },
-  { path: 'edition',canActivate: [AuthGuardService] ,  component: EditViewComponent },
+  { path: 'edition', component: EditViewComponent },
   { path: 'addFile', component: AddFileComponent, canActivate: [AuthGuardService] },
   { path: 'userData', component: UserDataComponent, canActivate: [AuthGuardService]},
   { path: 'not-found', component: FourOhFourComponent },

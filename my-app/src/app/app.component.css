@@ -10782,7 +10782,7 @@ a.text-dark:hover, a.text-dark:focus {
   }
 }
 
-..navbar-nav .active > .nav-link {
+.navbar-nav .active > .nav-link {
   color: #00bc8c !important;
 }
 

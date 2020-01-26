@@ -10,11 +10,7 @@ For now the project is in LocaHost, so you need to learn basic TypeScrypt (= Jav
 
 You need to set-up your environement 
 
-Starting with CLI
-
-```
-Give examples
-```
+Starting with CLI. 
 
 ### Installing
 
@@ -33,7 +29,11 @@ We strongly advise you to use Visual Studio Code to navigate in the APP.
 ## Running the APP
 
 If you want to try to lauch the app you have to be in the directory "my-app" and do : 
-
+First
+```
+cd my-app
+```
+Second
 ```
 ng serve --open
 ```
