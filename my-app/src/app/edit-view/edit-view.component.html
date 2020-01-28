@@ -1,13 +1,16 @@
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
+
 <div class="jumbotron"  data-toggle="tooltip" data-placement="top" title="" data-original-title="Tooltip on top" style="color:#fff">
   
   <!-- Column 1: buttons bar fxLayout="row" fxLayoutAlign="start stretch"-->
   <!-- Display the buttons only if the user is logged in -->
   <div *ngIf="isAuth" class="btn-group btn-group-toggle" data-toggle="buttons">
-    <button (click)="archive()" class="btn btn-success">Create archive</button>
-  <div *ngIf="isEditing===false; else elseBlock">
+    <div *ngIf="isEditing===false; else elseBlock">
+      <button (click)="archive()" class="btn btn-success">Create archive</button>
       <button (click)="onEditClick($event);" class="btn btn-primary"> Edit </button>
     </div>  
-      <ng-template #elseBlock>
+
+    <ng-template #elseBlock>
       <div *ngIf="isDocumentDefined===true; else noDocumentSelected">
         <!-- If we edit a code -->
         <div *ngIf="isCodeSelected===true; else codeNotSelectedBlock">
@@ -26,7 +29,7 @@
 
       <button (click)="save()" class="btn btn-primary"> Save changes </button>
     </ng-template>
-</div>
+  </div>
 
 
 <div class="jumbotron" fxLayout="row" fxLayoutAlign="start stretch" >
@@ -65,13 +68,19 @@
           </tr>
         </ng-container>
 
-        <tr title="Show codes" *ngFor="let docu of documents" (click)="openDocu(event, docu.label)">
+        <tr title="Display codes" *ngFor="let docu of documents" (click)="openDocu(event, docu.label)">
           <div *ngIf="isDocumentDefined===true; then thenBlock else elseBlock"></div>
           <ng-template #thenBlock>
-            <td [ngClass]="{'table-primary': docu.label===myCodeset.label}">{{ docu.label }}</td>
+            <td [ngClass]="{'table-primary': docu.label===myCodeset.label}">
+              <button *ngIf="isEditing===false" class="btn" title="Download set as XML" (click)="$event.stopPropagation();downloadXML(docu.label)"><i class="fa fa-download"></i></button>
+              {{ docu.label }}
+            </td>
           </ng-template>
           <ng-template #elseBlock>
-              <td>{{ docu.label }}</td>
+            <td>
+              <button *ngIf="isEditing===false" class="btn" title="Download set as XML" (click)="$event.stopPropagation();downloadXML(docu.label)"><i class="fa fa-download"></i></button>
+              {{ docu.label }}
+            </td>
           </ng-template>
         </tr>
       </tbody>
@@ -136,9 +145,9 @@
 
 
   <!-- Column 4: selected code details IF a code is selected -->
-  <div *ngIf="isDocumentDefined===true " class="list-group">
+  <div *ngIf="isDocumentDefined===true " class="jumbotron list-group">
 
-    <div class="jumbotron" >
+    <div>
       <h3>Details</h3>
       <table class="table">
         <tbody>
@@ -166,93 +175,141 @@
 
         <!-- display inputs IF the user wants to edit -->
         <div *ngIf="isEditing===true; else elseBlock" class="form-group">
-          <p>Code label:
-            <input [(ngModel)]="codeToBeEdited.label"/>
-          </p>
-          
-          <p>Code value: {{codeToBeEdited.value}}</p>
-
-          <p>Description: 
-            <input [(ngModel)]="codeToBeEdited.description"/>
-          </p>
-          
-          <form class="form-inline">
-            <label class="control-label">Status: </label>
-            <select class="custom-select" id="exampleFormControlSelect1" [(ngModel)]="codeToBeEdited.status" [ngModelOptions]="{standalone: true}">
-              <option [ngValue]="'Valid'">Valid</option>
-              <option [ngValue]="'Invalid'">Invalid</option>
-            </select>
-          </form>
-
-          <p>
-            Use age:
-            <br>
-            <span>Not before month:  
-              <input type="number" min="0" max="{{codeToBeEdited.use_age.not_after_month}}" [(ngModel)]="codeToBeEdited.use_age.not_before_month"/>
-            </span>
-
-            <br>
-            <span>Not after month: 
-              <input type="number" min="{{codeToBeEdited.use_age.not_before_month}}" [(ngModel)]="codeToBeEdited.use_age.not_after_month"/>          
-            </span>
-          </p>
-
-          <p>
-            Use date:
-            <br>
-            <span>Not before: 
-              <input type="number" min="10000000" max="99999999" [(ngModel)]="codeToBeEdited.use_date.not_before"/> 
-            </span>
-
-            <br>
-            <span>Not expected before: 
-              <input type="number" min="10000000" max="99999999" [(ngModel)]="codeToBeEdited.use_date.not_expected_before"/> 
-            </span>
-
-            <br>
-            <span>Not after: 
-              <input type="number" min="10000000" max="99999999" [(ngModel)]="codeToBeEdited.use_date.not_after"/> 
-            </span>
-
-            <br>
-            <span>Not expected after:
-              <input type="number" min="10000000" max="99999999" [(ngModel)]="codeToBeEdited.use_date.not_expected_after"/>
-            </span>
-          </p>
-
-          <p>Test age:              
-            <input [(ngModel)]="codeToBeEdited.test_age"/>
-          </p>
-
-          <p>Concept type:  
-            <input [(ngModel)]="codeToBeEdited.concept_type"/> 
-          </p>
-
+            <table class="table">
+              <tbody>
+                <tr>
+                  <td style="white-space: nowrap;">Code label:</td>
+                  <td> <input [(ngModel)]="codeToBeEdited.label"/> </td>
+                </tr>
+  
+                <tr>
+                  <td style="white-space: nowrap;">Code value:</td>
+                  <td>{{myCode.value}}</td>
+                </tr>
+  
+                <tr>
+                  <td>Description:</td>
+                  <td> <input [(ngModel)]="codeToBeEdited.description"/> </td>
+                </tr>
+  
+                <tr>
+                  <td>Status:</td>
+                  <td> 
+                    <select style="width: 125px;" class="custom-select" id="exampleFormControlSelect1" [(ngModel)]="codeToBeEdited.status" [ngModelOptions]="{standalone: true}">
+                      <option [ngValue]="'Valid'">Valid</option>
+                      <option [ngValue]="'Invalid'">Invalid</option>
+                      <option [ngValue]="'Deprecated'">Deprecated</option>
+                    </select> 
+                  </td>
+                </tr>
+  
+                <tr>
+                  <td>Use age:</td>
+                  <td> 
+                    <table class="table" style="border-top-style: hidden; white-space: nowrap;">
+                      <tbody>
+                          <tr>
+                            <td>Not before month:</td>
+                            <td> 
+                              <input style="width: 65px;" type="number" min="0" max="{{codeToBeEdited.use_age.not_after_month}}" [(ngModel)]="codeToBeEdited.use_age.not_before_month"/>  
+                            </td>
+                          </tr>
+                          <tr>
+                            <td>Not after month:</td>
+                            <td>
+                              <input style="width: 65px;" type="number" min="{{codeToBeEdited.use_age.not_before_month}}" [(ngModel)]="codeToBeEdited.use_age.not_after_month"/>          
+                            </td>
+                          </tr>
+                      </tbody>
+                    </table>
+                  </td>
+                </tr>
+  
+                <tr>
+                  <td>Use date:</td>
+                  <td> 
+                    <table class="table" style="border-top-style: hidden; white-space: nowrap;">
+                      <tbody>
+                          <tr>
+                            <td>Not before:</td>
+                            <td>
+                              <input style="width: 90px;" type="number" min="10000000" max="99999999" [(ngModel)]="codeToBeEdited.use_date.not_before"/> 
+                            </td>
+                          </tr>
+                          <tr>
+                            <td>Not expected before:</td>
+                            <td>
+                              <input style="width: 90px;" type="number" min="10000000" max="99999999" [(ngModel)]="codeToBeEdited.use_date.not_expected_before"/> 
+                            </td>
+                          </tr>
+                          <tr>
+                            <td>Not after:</td>
+                            <td>
+                              <input style="width: 90px;" type="number" min="10000000" max="99999999" [(ngModel)]="codeToBeEdited.use_date.not_after"/> 
+                            </td>
+                          </tr>
+                          <tr>
+                            <td>Not expected after:</td>
+                            <td>
+                              <input style="width: 90px;" type="number" min="10000000" max="99999999" [(ngModel)]="codeToBeEdited.use_date.not_expected_after"/>
+                            </td>
+                          </tr>
+                      </tbody>
+                    </table>
+                  </td>
+                </tr>
+  
+                <tr>
+                  <td>Test age:</td>
+                  <td> <input [(ngModel)]="codeToBeEdited.test_age"/> </td>
+                </tr>
+  
+                <tr>
+                  <td>Concept type:</td>
+                  <td>{{myCode.concept_type}}</td>
+                </tr>
+  
+                <tr *ngIf="myCode.reference.length > 0">
+                  <td>References:</td>
+                  <td> <input [(ngModel)]="codeToBeEdited.concept_type"/> </td>
+                </tr>
+  
+              </tbody>
+            </table>
+            
           <p>References:</p>
           
           <ul class="superList">
             <li>
-                <select class="custom-select" #selectCodeset (change)="selectedCodesetUpdate($event, selectCodeset.value)">
+                <select style="width: 280px;" class="custom-select" #selectCodeset (change)="selectedCodesetUpdate($event, selectCodeset.value)">
                   <option value="" selected></option>
                   <option *ngFor="let docu of documents" value={{docu.label}}>{{docu.label}}</option>
                 </select>
 
-                <select class="custom-select" [(ngModel)]="editReferenceCodeValue">
+                <select style="width: 280px;" class="custom-select" [(ngModel)]="editReferenceCodeValue">
                   <option value="" selected></option>
                   <option *ngFor="let codes of editReferenceCodeset.code" value={{codes.value}}>{{codes.value}}</option>
                 </select>
 
-                <button title="add a new reference" class="btn btn-success" (click)="addReference($event)">add</button>
-            </li>
-            <li *ngFor="let ref of codeToBeEdited.reference">
-
-              <button title="remove refenrece" type="button" class="btn btn-danger"  (click)="removeReference($event, ref)">
-                <span aria-hidden="true">&times;</span>
-              </button>
-
-              <label>{{ref.type}} - {{ref.codeValue}}</label>
+                <button style="margin-left: 3px;" title="add a new reference" class="btn btn-success" (click)="addReference($event)">add</button>
             </li>
           </ul>
+
+          <table class="table">
+            <tbody>
+              <tr *ngFor="let ref of codeToBeEdited.reference">
+                <td>
+                  <button title="remove refenrece" type="button" class="close" style="color:red; opacity: 0.85;" (click)="removeReference($event, ref)">
+                    <span aria-hidden="true">&times;</span>
+                  </button>
+                </td>
+                <td>
+                  {{ref.type}} - {{ref.codeValue}}
+                </td>
+              </tr>
+            </tbody>
+          </table>
+          
         </div>
 
         <!-- ELSE just display details -->

@@ -9,7 +9,7 @@ import { CodesetUpdate} from './edit-view.codesetUpdate';
 import { commentaryWorkerEdit} from'../services/commentaryWorkerEdit'
 import { Reference } from './edit-view.reference';
 import { AngularFireAuth } from "@angular/fire/auth";
-
+import * as saveAs from 'file-saver';
 
 @Component({
   selector: 'app-edit-view',
@@ -342,5 +342,186 @@ export class EditViewComponent implements OnInit {
         i += 1;
       });
     });
+  }
+
+  downloadXML(docuLabel) {
+    var json = this.xmlCollection.doc(docuLabel).valueChanges();
+    json.subscribe(value => {
+      var stringJson = JSON.stringify(value);// create a json string from object codeset
+      var docJson = JSON.parse(stringJson); // create json objectz
+      var xml = "<?xml version=\"1.0\" enco   ding=\"UTF-8\" standalone=\"yes\"?>\n" + "<codeset>\n" ;
+      xml += "  " + "<label>" + docJson["label"] + "</label>\n";
+      xml += "  " + "<type>" + docJson["type"] + "</type>\n";
+      delete docJson.label; 
+      delete docJson.type;
+      xml += this.OBJtoXML(docJson, "  "); //JsonToXML.parse("codeset", docJson); // create xml object from json 
+      xml += "</codeset>";
+      xml = this.OrderCodeXML(xml);
+      var file = new File([xml  ], docuLabel + ".xml", {type: "text/plain;charset=utf-8"} );
+      saveAs(file);
+    });
+  }
+
+  OBJtoXML(obj, ident) {
+    var xml = '';
+    var re = /\_/gi;
+    for (var prop in obj) {
+        if(obj[prop] instanceof Array) {
+          if (prop == "reference" && obj[prop].length > 0) {
+            xml += ident + "<" + prop.replace(re, '-') + ">" + "\n";
+            for (var array in obj[prop]){
+              var object = new Object(obj[prop][array]);
+              xml += ident + "  "+ "<link-to codeset=" + object["type"] + ">" + object["codeValue"] + "</link-to>\n"; 
+            }
+            xml += ident + "</" + prop.replace(re, '-') + ">" + "\n";
+          }
+          else {  
+            for (var array in obj[prop]) {
+                  xml += ident + "<" + prop.replace(re, '-') + ">" + "\n"; 
+                  xml += this.OBJtoXML(new Object(obj[prop][array]), ident + "  ");
+                  xml += ident + "</" + prop.replace(re, '-') + ">\n";
+              }
+          }
+        } else if (typeof obj[prop] == "object") {
+          
+            if (prop == "use_date"){
+              var first_time = true;
+              
+                var object = new Object(obj[prop]);
+                for (var o in object){
+                  
+                  if (first_time == true) {
+                    xml += ident + "<" + prop.replace(re, '-') + ">" + "\n";
+                    first_time = false;
+                  }
+                  xml += ident + "  " + "<" + o.replace(re, '-') + ">";
+                  xml += object[o];
+                  xml += "</" + o.replace(re, '-') + ">\n"; 
+                }
+              if (first_time == false) {
+                xml += ident + "</" + prop.replace('_', '-') + ">" + "\n";
+              }
+            }
+            else if (prop == "use_age"){
+              var first_time = true;
+              
+              var object = new Object(obj[prop]);
+              var temp = ""; 
+              for (var o in object){
+                
+                if (first_time == true) {
+                  xml += ident + "<" + prop.replace(re, '-') + ">" + "\n";
+                  first_time = false;
+                }
+                temp += ident + "  " + "<" + o.replace(re, '-') + ">";
+                temp += object[o];
+                temp += "</" + o.replace(re, '-') + ">\n"; 
+              }
+              if (first_time == false) {
+                var tab = temp.split('\n');
+                if (tab.length > 1){
+                  xml += tab[1] + "\n";
+                  xml += tab[0] + "\n";
+                }
+                else if (tab.length>0){
+                  xml += tab[0] + "\n";
+                }
+                xml += ident + "</" + prop.replace('_', '-') + ">" + "\n";
+              }
+            }
+  
+            else {
+              xml += ident + "<" + prop.replace(re, '-') + ">" + "\n";
+              xml += this.OBJtoXML(new Object(obj[prop]), ident + "  ");
+              xml += ident +  "</" + prop.replace(re, '-') + ">\n";
+            }
+        } else {
+          if (prop == "status"){
+            xml += ident + "<code-status>\n"; 
+            xml += ident + "  "  + "<" + prop.replace(re, '-') + ">"
+            xml += obj[prop];
+            xml += "</" + prop.replace(re, '-') + ">\n";
+            xml += ident + "</code-status>\n"; 
+          }
+          else if (obj[prop] != '' && obj[prop] != null) {
+            xml += ident + "<" + prop.replace(re, '-') + ">";
+            xml += obj[prop];
+            xml += "</" + prop.replace(re, '-') + ">\n";
+          }
+        }
+    }
+    var xml = xml.replace(/<\/?[0-9]{1,}>/g,'');
+    return xml
+  }
+
+  OrderCodeXML(xml: String){
+    var newXml = "";
+    var lines = xml.split('\n');
+    var done = false;
+    var index = 0;
+    var orderList = [["value"], ["label"], ["description"], ["code-status"], 
+                      ["reference"], ["use-date"], ["use-age"], 
+                      ["concept-type"], ["test-age"]]; 
+    while (index < 4){
+      newXml += lines[index] + "\n";
+      index ++; 
+    }
+  
+    while (done == false) {
+    
+      if (lines[index].includes("<code>")){
+        index ++;
+        while (lines[index].includes("</code>") == false){
+          var field = this.getFieldInXml(lines[index]);
+          
+          orderList.forEach(element => {
+            if (element[0] == field){
+              var fieldLines = lines[index]+"\n";
+              while (lines[index].includes("</"+field+">") == false){
+                index ++; 
+                fieldLines += lines[index]+"\n"; 
+              }
+              element.push(fieldLines);
+            }
+          });
+          index++;  
+        }
+        newXml += "  " + "<code>\n";
+        orderList.forEach(element => {
+          /*if ((element[0] === "use-date") && (element.length === 1)){
+            element.push("<use-date/>\n");
+          }*/
+          if (element.length > 1){
+            newXml += element[1];
+            element.pop();
+          }
+          
+        });
+        newXml += "  " + "</code>\n";
+      }
+  
+      index ++; 
+      if (index >= lines.length)  done = true;
+      
+    }
+  
+   return newXml + "</codeset>"; 
+  }
+
+  getFieldInXml(str: String){
+    var i = 0;
+    while (i<str.length){
+      if (str[i] == '<'){
+        i++;
+        var field = ""
+        while (str[i] != '>'){
+          field += str[i];
+          i++;
+        }
+        return field;
+      }
+      i++;
+    }
+    return false;
   }
 }
