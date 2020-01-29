@@ -230,6 +230,7 @@ export class EditViewComponent implements OnInit {
                 if(code.value == codeValue) {
                   this.myCode = code;
                   this.isCodeSelected = true;
+                  break;
                 }
               }
             });
@@ -265,32 +266,71 @@ export class EditViewComponent implements OnInit {
       console.log(commentaire)
       commentaire.addData()
 
-      this.codeToBeEdited.removeUndifinedAttributes();
-           
-      var codesetDoc: AngularFirestoreDocument<CodesetUpdate>;
-      codesetDoc = this.xmlCollection.doc(this.myCodeset.label);
-      var thisComponent = this;
-      //We remove the old version of the edited Code
-      codesetDoc.update({
-        code: firestore.FieldValue.arrayRemove(this.myCode)
+      //we update the code from the DB to merge with eventual changes
+      var doneOnce: boolean = false;
+      this.db.collection<Codeset>('XmlFile', ref => ref.where('type', '==', this.myCodeset.type).limit(1))
+      .valueChanges()
+      .subscribe( value => 
+        {
+          if(value.length>0){
 
-      }).then(function() {
-        //if it has been removed, we add the new version of the edited Code
-        codesetDoc.update({
-          code: firestore.FieldValue.arrayUnion(Object.assign({}, thisComponent.codeToBeEdited))
+            this.codesetDocument = this.xmlCollection.doc(value[0].label);
+            this.codeset = this.codesetDocument.valueChanges();
+            var tmpCodeset = new Codeset("", "");
+            
+            this.codeset.subscribe(value => { 
+              if(!doneOnce) {
+                doneOnce = true;
+                var differentFromRemote:boolean = true;
 
-        }).then(function() {
-          console.log("Document successfully updated");
-          thisComponent.saveAddedCodes();
-          thisComponent.goToReference(thisComponent.myCodeset.type,thisComponent.codeToBeEdited.value);
-          
-        }).catch(function(error) {
-          console.error("Error updating document (Code removed but not edited): ", error)
-        });
-      })
-      .catch(function(error) {
-          console.error("Error updating document: ", error);
-      });
+                tmpCodeset = value;
+                for(let code of tmpCodeset.code) {
+                  if(code.value == this.myCode.value) {
+                    //we merge the codes if they are different
+                    if(this.codeToBeEdited.equals(code)) {
+                      differentFromRemote = false;
+                      break;
+                    }
+                    this.codeToBeEdited.merge(this.myCode,code);
+                    this.myCode = code;
+                    break;
+                  }
+                }
+                
+                if(differentFromRemote) {
+                  this.codeToBeEdited.removeUndifinedAttributes();
+
+                  var codesetDoc: AngularFirestoreDocument<CodesetUpdate>;
+                  codesetDoc = this.xmlCollection.doc(this.myCodeset.label);
+                  var thisComponent = this;
+
+                  //We add the new version of the edited Code
+                  codesetDoc.update({
+                    code: firestore.FieldValue.arrayUnion(Object.assign({}, thisComponent.codeToBeEdited))
+
+                  }).then(function() {
+                    //if it has been added, we remove the old version of the edited Code
+                    codesetDoc.update({
+                      code: firestore.FieldValue.arrayRemove(thisComponent.myCode)
+
+                    }).then(function() {
+                      console.log("Document successfully updated");
+                      thisComponent.saveAddedCodes();
+                      thisComponent.goToReference(thisComponent.myCodeset.type,thisComponent.codeToBeEdited.value);
+                      
+                    }).catch(function(error) {
+                      console.error("Error updating document (code might have been duplicated): ", error)
+                    });
+                  })
+                  .catch(function(error) {
+                      console.error("Error updating document: ", error);
+                  });
+                }
+              }
+            });
+          }
+        }
+      );
     }
     else {
       this.saveAddedCodes();

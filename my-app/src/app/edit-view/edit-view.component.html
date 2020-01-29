@@ -44,15 +44,15 @@
         <!-- If we're editing, we add rows to be able to add a new codeset -->
         <tr *ngIf="isEditing===true;">
           <td>
-            Label : 
-            <input [(ngModel)]="codesetToBeAdded.label"/>
+            Label: 
+            <input style="width: 180px;" [(ngModel)]="codesetToBeAdded.label"/>
           </td>
         </tr>
 
         <tr *ngIf="isEditing===true;">
           <td>
-            Type : 
-            <input [(ngModel)]="codesetToBeAdded.type"/>
+            Type:  
+            <input style="margin-left: 5px; width: 180px;" [(ngModel)]="codesetToBeAdded.type"/>
           </td>
         </tr>
 
@@ -109,10 +109,10 @@
               <button title="add a new code" class="btn btn-success" (click)="addNewCode($event)">add</button>
             </td>
             <td>
-              <input [(ngModel)]="codeToBeAdded.value"/>
+              <input style="width: 140px;" [(ngModel)]="codeToBeAdded.value"/>
             </td>
             <td>
-              <input [(ngModel)]="codeToBeAdded.label"/>
+              <input style="width: 180px;" [(ngModel)]="codeToBeAdded.label"/>
             </td>
           </tr>
 
@@ -265,12 +265,7 @@
                 </tr>
   
                 <tr>
-                  <td>Concept type:</td>
-                  <td>{{myCode.concept_type}}</td>
-                </tr>
-  
-                <tr *ngIf="myCode.reference.length > 0">
-                  <td>References:</td>
+                  <td style="white-space: nowrap;">Concept type:</td>
                   <td> <input [(ngModel)]="codeToBeEdited.concept_type"/> </td>
                 </tr>
   
