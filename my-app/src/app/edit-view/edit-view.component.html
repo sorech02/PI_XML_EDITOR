@@ -4,7 +4,7 @@
   
   <!-- Column 1: buttons bar fxLayout="row" fxLayoutAlign="start stretch"-->
   <!-- Display the buttons only if the user is logged in -->
-  <div *ngIf="isAuth" class="btn-group btn-group-toggle" data-toggle="buttons">
+  <div *ngIf="canEdit" class="btn-group btn-group-toggle" data-toggle="buttons">
     <div *ngIf="isEditing===false; else elseBlock">
       <button (click)="archive()" class="btn btn-success">Create archive</button>
       <button (click)="onEditClick($event);" class="btn btn-primary"> Edit </button>

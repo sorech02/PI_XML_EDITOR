@@ -39,7 +39,7 @@ SignIn(email, password) {
   return this.afAuth.auth.signInWithEmailAndPassword(email, password)
     .then((result) => {
       this.ngZone.run(() => {
-        this.router.navigate(['actu']);
+        this.router.navigate(['comments']);
       });
       this.SetUserData(result.user);
     }).catch((error) => {
@@ -105,17 +105,47 @@ AuthLogin(provider) {
 sign up with username/password and sign in with social auth  
 provider in Firestore database using AngularFirestore + AngularFirestoreDocument service */
 SetUserData(user) {
+  if(user.emailVerified) {  //do it only if the email has not been verified, else the date is reset at every login
+    //if the mail has been verified
+    this.afAuth.authState.subscribe(res => {
+      //check if it is already written in the DB
+      if (res && res.uid) {
+        var userDocument = this.afs.collection("users").doc(res.uid);
+        var userB: any = userDocument.valueChanges();
+        var thisComponent = this;
+        var once:boolean = false;
+        userB.subscribe(value => {
+          if(!once) {
+            once = true;
+            console.log("email already verified: "+value.emailVerified);
+            if(!value.emailVerified) {//only update if it wasn't already written
+              thisComponent.updateUserData(user);
+            }
+          }
+        });
+      }
+    });
+  } else {
+    this.updateUserData(user);
+  }
+}
+
+updateUserData(user) {
+  if(!user.userRank) {
+    user.userRank = 0;
+  }
   const userRef: AngularFirestoreDocument<any> = this.afs.doc(`users/${user.uid}`);
   const userData: User = {
     uid: user.uid,
     email: user.email,
     displayName: user.displayName,
     photoURL: user.photoURL,
-    emailVerified: user.emailVerified
+    emailVerified: user.emailVerified,
+    userRank: user.userRank
   }
   return userRef.set(userData, {
     merge: true
-  })
+  });
 }
 
 // Sign out 

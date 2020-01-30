@@ -11,6 +11,7 @@ export class SignInComponent implements OnInit {
   constructor(public authenticationService: AuthenticationService) { }
 
   ngOnInit() {
+    this.authenticationService.SignOut()
   }
 
 }

@@ -1,3 +1,4 @@
+@import url("https://fonts.googleapis.com/css?family=Lato:400,700,400italic");
  /* Chat containers */
  .container {
     border: 2px solid #dedede;
@@ -58,7 +59,7 @@
     color: #999;
   } 
 
-  @import url("https://fonts.googleapis.com/css?family=Lato:400,700,400italic");
+  
  :root {
    --blue: #375a7f;
    --indigo: #6610f2;

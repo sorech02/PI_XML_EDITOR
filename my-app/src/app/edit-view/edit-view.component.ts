@@ -10,6 +10,7 @@ import { commentaryWorkerEdit} from'../services/commentaryWorkerEdit'
 import { Reference } from './edit-view.reference';
 import { AngularFireAuth } from "@angular/fire/auth";
 import * as saveAs from 'file-saver';
+import { User } from '../services/user';
 
 @Component({
   selector: 'app-edit-view',
@@ -36,22 +37,26 @@ export class EditViewComponent implements OnInit {
   protected addedCodes:             Code[];
   protected codesetToBeAdded:       Codeset;
   protected addedCodesets:          Codeset[];
-  protected isAuth:                 boolean;
+  protected canEdit:                 boolean;
 
   constructor(db: AngularFirestore, protected afAuth: AngularFireAuth) {
     this.db = db;
     this.isDocumentDefined = false;
     this.isCodeSelected = false;
     this.isEditing = false;
-    this.isAuth = false;
+    this.canEdit = false;
   }
   
   ngOnInit() {
     this.afAuth.authState.subscribe(res => {
       if (res && res.uid) {
-        this.isAuth = true;
+        var userDocument = this.db.collection("users").doc(res.uid);
+        var user: any = userDocument.valueChanges();
+        user.subscribe(value => {
+          this.canEdit = !!value.userRank && value.userRank>0;
+        });
       } else {
-        this.isAuth = false;
+        this.canEdit = false;
       }
     });
     
