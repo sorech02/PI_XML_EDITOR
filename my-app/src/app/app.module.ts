@@ -30,6 +30,7 @@ import { HomeComponent } from './home/home.component';
 import { UserDataComponent } from './user-data/user-data.component';
 import { DropZoneDirective } from './drop-zone.directive';
 import { FileSizePipe } from './file-size.pipe';
+import { EditorGuardService } from './services/editor-guard.service';
 
 const appRoutes: Routes =   [
   { path: '', redirectTo: 'home', pathMatch: 'full' },
@@ -41,7 +42,7 @@ const appRoutes: Routes =   [
   { path: 'comments', component: CommentaireComponent,  canActivate: [AuthGuardService]},
   { path: 'home', component: HomeComponent, canActivate: [AuthGuardService]  },
   { path: 'edition', component: EditViewComponent },
-  { path: 'addFile', component: AddFileComponent, canActivate: [AuthGuardService] },
+  { path: 'addFile', component: AddFileComponent, canActivate: [AuthGuardService,EditorGuardService] },
   { path: 'userData', component: UserDataComponent, canActivate: [AuthGuardService]},
   { path: 'not-found', component: FourOhFourComponent },
   { path: '**', redirectTo: 'not-found' }

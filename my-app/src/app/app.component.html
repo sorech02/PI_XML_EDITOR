@@ -15,8 +15,7 @@
           <a class="nav-link" routerLink="edition">Edit Data</a>
         </li>
         <li class="nav-item">
-
-          <a *ngIf="isAuth" class="nav-link" routerLink="addFile">Add File</a>
+          <a *ngIf="isEditor" class="nav-link" routerLink="addFile">Add File</a>
         </li>
         <li class="nav-item">
           <a *ngIf="!isAuth" class="nav-link" routerLink="sign-up">Register</a>
