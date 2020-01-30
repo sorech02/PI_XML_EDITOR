@@ -31,6 +31,8 @@ import { UserDataComponent } from './user-data/user-data.component';
 import { DropZoneDirective } from './drop-zone.directive';
 import { FileSizePipe } from './file-size.pipe';
 import { EditorGuardService } from './services/editor-guard.service';
+import { AdminComponent } from './admin-view/admin.component';
+import { AdminGuardService } from './services/admin-guard.service';
 
 const appRoutes: Routes =   [
   { path: '', redirectTo: 'home', pathMatch: 'full' },
@@ -44,6 +46,7 @@ const appRoutes: Routes =   [
   { path: 'edition', component: EditViewComponent },
   { path: 'addFile', component: AddFileComponent, canActivate: [AuthGuardService,EditorGuardService] },
   { path: 'userData', component: UserDataComponent, canActivate: [AuthGuardService]},
+  { path: 'admin', component: AdminComponent, canActivate: [AuthGuardService,AdminGuardService] },
   { path: 'not-found', component: FourOhFourComponent },
   { path: '**', redirectTo: 'not-found' }
   
@@ -65,6 +68,7 @@ const appRoutes: Routes =   [
     AddFileComponent,
     HomeComponent,
     UserDataComponent,
+    AdminComponent,
     DropZoneDirective,
     FileSizePipe
   ],

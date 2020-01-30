@@ -9,7 +9,7 @@ import { AngularFireAuth } from '@angular/fire/auth';
   providedIn: 'root'
 })
 
-export class EditorGuardService implements CanActivate {
+export class AdminGuardService implements CanActivate {
 
   constructor(
     public authenticationService: AuthenticationService,
@@ -21,7 +21,7 @@ export class EditorGuardService implements CanActivate {
   canActivate(
     next: ActivatedRouteSnapshot,
     state: RouterStateSnapshot): Observable<boolean> | Promise<boolean> | boolean {
-    var isEditor: boolean = false;
+    var isAdmin: boolean = false;
 
     this.afAuth.authState.subscribe(res => {
       if (res && res.uid) {
@@ -29,27 +29,27 @@ export class EditorGuardService implements CanActivate {
         var user: any = userDocument.valueChanges();
         user.subscribe(value => {
           if(!!value.userRank) {
-            isEditor = value.userRank>0;
+            isAdmin = value.userRank==2;
           }
 
-          if(!isEditor) {
+          if(!isAdmin) {
             window.alert("You are not allowed to access this URL!");
             this.router.navigate(['home'])
             return false;
           }
 
-          return true
+          return true;
         });
-
-      } else {
+      }
+      else {
         window.alert("You are not allowed to access this URL!");
         this.router.navigate(['home'])
         return false;
       }
-      
+
       return true;
     });
-    
+
     return true;
   }
 }
