@@ -62,7 +62,10 @@ export class EditViewComponent implements OnInit {
     
     this.xmlCollection = this.db.collection("XmlFile");
     this.document$ = this.xmlCollection.valueChanges();
-    this.document$.subscribe(list => this.documents = list);
+    this.document$.subscribe(list => {
+      this.documents = list;
+      this.sortDocuments();
+    });
     this.editReferenceCodeset = new Codeset("", "");
     this.editReferenceCodeValue = "";
     this.isEditing = false;
@@ -72,12 +75,27 @@ export class EditViewComponent implements OnInit {
     collection.doc(documentName).set(data);
   }
 
+  sortDocuments() {
+    this.documents.sort((doc1,doc2) => {
+      if(doc1.label.toLowerCase() > doc2.label.toLowerCase()) {
+        return 1;
+      } else if(doc1.label.toLowerCase() < doc2.label.toLowerCase()) {
+        return -1;
+      } else {
+        return 0
+      }
+    });
+  }
+
   openDocu(evt, codeName) {
     if (codeName != ""){
       this.codesetDocument = this.xmlCollection.doc(codeName);
       this.codeset = this.codesetDocument.valueChanges();
       this.myCodeset = new Codeset("", "");
-      this.codeset.subscribe(value => { this.myCodeset = value;
+      this.codeset.subscribe(value => { 
+        this.myCodeset = value;
+        this.myCodeset = Object.assign(new Codeset("",""), this.myCodeset);
+        this.myCodeset.sortCodes();
         //console.log("value" ,value.label, value.type, value.code);
       });
       this.isDocumentDefined = true;
@@ -231,6 +249,8 @@ export class EditViewComponent implements OnInit {
             
             this.codeset.subscribe(value => { 
               this.myCodeset = value;
+              this.myCodeset = Object.assign(new Codeset("",""), this.myCodeset);
+              this.myCodeset.sortCodes();
               for(let code of this.myCodeset.code) {
                 if(code.value == codeValue) {
                   this.myCode = code;

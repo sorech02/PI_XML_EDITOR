@@ -4,7 +4,6 @@ export class Codeset {
     label: string;
     type: string;
     code: Code[];
-
   
     constructor(label, type) {
       this.label = label;
@@ -28,6 +27,18 @@ export class Codeset {
             this.code[n]=code}
           n++;
       }
+    }
+
+    sortCodes() {
+      this.code.sort((c1,c2) => {
+        if(c1.label.toLowerCase() > c2.label.toLowerCase()) {
+          return 1;
+        } else if(c1.label.toLowerCase() < c2.label.toLowerCase()) {
+          return -1;
+        } else {
+          return 0
+        }
+      });
     }
 
     toString() {
