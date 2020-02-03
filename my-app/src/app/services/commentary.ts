@@ -3,23 +3,26 @@ import { subComment } from './subComment';
 
 export class commentary{
     xmlChange:string;
-    codeSetChange:string;
-    codeBefore: string;
+    whereChanged:string[]
+    codeBefore: string[];
     listCommentaires : subComment[];
     showCom : boolean;
     editTime:Date;
-    codeAfter:string;
+    codeAfter:string[];
     idUserPost:string;
     label:string;
+    typeCom:String;
 
-    constructor(xml,uid,label){
+    constructor(xml,uid,label,typeCom){
         let today = new Date();
         this.editTime = today;
+        this.typeCom=typeCom;
         // formatDate(today, 'dd-MM-yyyy hh:mm:ss a', 'en-US');
         this.xmlChange=xml;
         this.idUserPost=uid;
-        this.codeAfter="";
-        this.codeBefore="";
+        this.whereChanged= new Array();
+        this.codeAfter=new Array();
+        this.codeBefore=new Array();
         this.showCom=false;
         this.label=label;
         this.listCommentaires=new Array();

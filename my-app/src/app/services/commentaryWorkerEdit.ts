@@ -11,12 +11,13 @@ export class commentaryWorkerEdit{
     objectBefore: Array<string>
     objectAfter: Array<string>
 
+
     //monTuple: [string[],any[],any[]];
 
 
 
 constructor(codeBefore:Code,xml,codeAfter:Code, db: AngularFirestore){
-this.commentary = new commentary(xml,JSON.parse(localStorage.getItem('user')).uid,codeAfter.label)
+this.commentary = new commentary(xml,JSON.parse(localStorage.getItem('user')).uid,codeAfter.label,"Edit")
 this.db=db;
 this.whereChangedMade = new Array();
 this.objectBefore = new Array();
@@ -27,10 +28,11 @@ this.changement(codeBefore,codeAfter);
 
 
 setAllChangement(){
-  for(let i=0; i< this.whereChangedMade.length; i++){
-    this.commentary.codeBefore = this.commentary.codeBefore + " " + this.whereChangedMade+ " " + this.objectBefore;
-    this.commentary.codeAfter =  this.commentary.codeAfter +  " " + this.whereChangedMade + " " +  this.objectAfter
-  }
+
+    this.commentary.codeBefore =  this.objectBefore;
+    this.commentary.codeAfter =  this.objectAfter;
+    this.commentary.whereChanged = this.whereChangedMade;
+  
 }
 
 changement(codeBefore:Code,codeAfter:Code){
@@ -76,12 +78,12 @@ changement(codeBefore:Code,codeAfter:Code){
     this.objectAfter.push(codeAfter.test_age);
   }
 
-  if(codeAfter.use_age != codeBefore.use_age && codeAfter.use_age != null){
+  if(!codeAfter.use_age.equals(codeBefore.use_age) && codeAfter.use_age != null){
     this.whereChangedMade.push("use_age")
     this.objectBefore.push(codeBefore.use_age.toString());
     this.objectAfter.push(codeAfter.use_age.toString());
   }
-  if(codeAfter.use_date != codeBefore.use_date){
+  if(!codeAfter.use_date.equals(codeBefore.use_date)){
     this.whereChangedMade.push("use_date")
     this.objectBefore.push(codeBefore.use_date.toString.toString());
     this.objectAfter.push(codeAfter.use_date.toString());

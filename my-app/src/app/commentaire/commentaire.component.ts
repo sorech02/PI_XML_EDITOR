@@ -58,6 +58,10 @@ export class CommentaireComponent implements OnInit {
     }
   /*sortMyList(arg0: commentary[]): commentary[] {
         }*/
+
+  arrayOne(n: number): any[] {
+    return Array(n);
+  }
   getAllEditors() {
       this.commentaires.forEach(
           (commentaire: commentary) => {

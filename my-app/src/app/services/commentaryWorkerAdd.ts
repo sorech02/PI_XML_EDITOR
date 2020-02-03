@@ -2,91 +2,51 @@ import { Code } from "../edit-view/edit-view.code";
 import {formatDate } from '@angular/common';
 import { AngularFirestore } from '@angular/fire/firestore';
 import { commentary } from './commentary';
+import { type } from 'os';
 
-export class commentaryWorker{
+export class commentaryWorkerAdd{
     //personne :Personne;
     commentary:commentary;
     db:AngularFirestore;
     whereChangedMade: Array<string>;
-    objectBefore: Array<string>
     objectAfter: Array<string>
 
     //monTuple: [string[],any[],any[]];
 
 
 
-constructor(codeBefore:Code,xml,codeAfter:Code, db: AngularFirestore){
-this.commentary = new commentary(xml,JSON.parse(localStorage.getItem('user')).uid,codeAfter.label)
+constructor(xml,codeAfter:Code, db: AngularFirestore){
+  console.log(codeAfter)
+this.commentary = new commentary(xml,JSON.parse(localStorage.getItem('user')).uid,codeAfter.label,"Add")
 this.db=db;
 this.whereChangedMade = new Array();
-this.objectBefore = new Array();
 this.objectAfter = new Array();
-this.changement(codeBefore,codeAfter);
+this.changement(codeAfter);
   this.setAllChangement();
 }
 
 
 setAllChangement(){
-  for(let i=0; i< this.whereChangedMade.length; i++){
-    this.commentary.codeBefore = this.commentary.codeBefore + " " + this.whereChangedMade+ " " + this.objectBefore;
-    this.commentary.codeAfter =  this.commentary.codeAfter +  " " + this.whereChangedMade + " " +  this.objectAfter
-  }
+
+    this.commentary.codeAfter = this.objectAfter;
+    this.commentary.whereChanged=this.whereChangedMade
+    if(this.commentary.codeAfter.length!=2){
+      this.commentary.codeAfter.push("not definited")
+    }
+ 
 }
 
-changement(codeBefore:Code,codeAfter:Code){
+changement(codeAfter:Code){
   //Label codeBefore codeAfter
-  if(codeAfter.value != codeBefore.value ){
+  if(codeAfter.value != null ){
     this.whereChangedMade.push("value")
-    this.objectBefore.push(codeBefore.value);
     this.objectAfter.push(codeAfter.value)
   }
-  if(codeAfter.concept_type != codeBefore.concept_type){
- 
-    this.whereChangedMade.push("concept_type")
-    this.objectBefore.push(codeBefore.concept_type);
-    this.objectAfter.push(codeAfter.concept_type)
-  }
-  if(codeAfter.description != codeBefore.description){
   
-    this.whereChangedMade.push("description")
-    this.objectBefore.push(codeBefore.description);
-    this.objectAfter.push(codeAfter.description)
-  }
-  if(codeAfter.label != codeBefore.label){
-  
+  if(codeAfter.label != null){
     this.whereChangedMade.push("label")
-    this.objectBefore.push(codeBefore.label);
     this.objectAfter.push(codeAfter.label)
   }
-  if(codeAfter.status != codeBefore.status){
-    this.whereChangedMade.push("status")
-    if(codeBefore.status){
-      this.objectBefore.push("Valid");
-      this.objectAfter.push("Unvalid");
-    }
-    else{
-      this.objectAfter.push("Valid");
-      this.objectBefore.push("Unvalid");
-    }
-   
-  }
-  if(codeAfter.test_age != codeBefore.test_age){
-    this.whereChangedMade.push("test_age")
-    this.objectBefore.push(codeBefore.test_age);
-    this.objectAfter.push(codeAfter.test_age);
-  }
-
-  if(codeAfter.use_age != codeBefore.use_age && codeAfter.use_age != null){
-    this.whereChangedMade.push("use_age")
-    this.objectBefore.push(codeBefore.use_age.toString());
-    this.objectAfter.push(codeAfter.use_age.toString());
-  }
-  if(codeAfter.use_date != codeBefore.use_date){
-    this.whereChangedMade.push("use_date")
-    this.objectBefore.push(codeBefore.use_date.toString.toString());
-    this.objectAfter.push(codeAfter.use_date.toString());
-  }
-  //Probleme avec les objets a check !
 }
 
 addData(){

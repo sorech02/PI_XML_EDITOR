@@ -7,24 +7,59 @@
 <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css">
 </head>
 <ul>
-    <div class="jumbotron" >
-    <div class="commentaires " *ngFor="let commentaire of commentaires">
-      <div class="alert alert-dismissible alert-primary">
-        <img 
-          src='TODO : Look at the dataSmart for upload Avatars Pictures ! #PINIST DataSmart => Store data on PINISY/datSmart JSON model and ElastiSearch (fire base core )'
-          height="45px" width="45px">
-          modifications has been made by 
-          
-           {{getUserName(commentaire.idUserPost).email}}
+    <div class="jumbotron " >
+    <div class=" jumbotron" *ngFor="let commentaire of commentaires">
+      <div class="alert alert-dismissible alert-primary commentaire " >
+   
+    <div *ngIf="commentaire.typeCom=='Edit'">
+     
 
-        In Xml : {{commentaire.xmlChange}}.
 
-        {{commentaire.codeBefore}}
+ <p > modifications has been made by  <a  class="text-success"> {{getUserName(commentaire.idUserPost).email}} </a> </p>
+  <br />
+   
+  <p> In Xml : <a class="text-danger"> {{commentaire.xmlChange}}. </a> </p>
+  <table class="table table-hover">
+  <span *ngFor="let item of arrayOne(8); let i = index;">{{i}} </span>
 
-        had been change to 
+    <thead>
+    <tr *ngFor="">
+      <th scope="col"> <p> Value </p> </th>
+      <th scope="col"> <p> </p>  </th>
+    
+    </tr>  
+      </thead>
 
-        {{commentaire.codeAfter}}
+    </table>
+       
+      </div>
+      <div *ngIf="commentaire.typeCom=='Add'">
+     
+      
+   <p > modifications has been made by  <a  class="text-success"> {{getUserName(commentaire.idUserPost).email}} </a> </p>
+  <br />
+   
+  <p> In Xml : <a class="text-danger"> {{commentaire.xmlChange}}. </a> </p>
+ <br />
+    <table class="table table-hover">
+    <thead>
+    <tr>
+      <th scope="col"> <p> Value </p> </th>
+      <th scope="col"> <p>  {{commentaire.codeAfter[0]}} </p>  </th>
+     
+  
+    </tr>  
+
+    <tr>
+     <th scope="col"> <p>  Label </p> </th>
+      <th scope="col"> <p> {{commentaire.codeAfter[1]}} </p> </th> 
+    </tr>
+      </thead>
+
+    </table>
+    </div>
         <span class="time-right">{{getDate(commentaire.editTime)}}</span>
+  
         <div >
       
     <button class= "glyphicon glyphicon-comment" type="submit" (click)="ShowMeComment(commentaire)"></button>

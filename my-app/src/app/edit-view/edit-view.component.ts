@@ -8,6 +8,7 @@ import { Codeset } from './edit-view.codeset';
 import { CodesetUpdate} from './edit-view.codesetUpdate';
 import { commentaryWorkerEdit} from'../services/commentaryWorkerEdit'
 import { Reference } from './edit-view.reference';
+import { commentaryWorkerAdd } from '../services/commentaryWorkerAdd';
 
 
 @Component({
@@ -89,6 +90,7 @@ export class EditViewComponent implements OnInit {
     }
   }
 
+
   onCodeClick(evt, code) {
     this.openCodeset(evt, code);
   }
@@ -100,6 +102,9 @@ export class EditViewComponent implements OnInit {
   }
 
   addNewCode(evt) {
+    let commentaire = new commentaryWorkerAdd(this.myCodeset.label, this.codeToBeAdded,this.db);
+        console.log(commentaire)
+        commentaire.addData()
     if(this.codeToBeAdded.label != "" && this.codeToBeAdded.value != "") {
       var uniqueValue: boolean = 
         !(this.myCodeset.code.some(c => {
@@ -117,7 +122,7 @@ export class EditViewComponent implements OnInit {
         this.codeToBeAdded.removeUndifinedAttributes();
         this.addedCodes.push(this.codeToBeAdded);
         this.codeToBeAdded = new Code("","",null,null,null,null,null,null);
-
+      
       } else {
         alert("The value is already used by an other code.");
       }

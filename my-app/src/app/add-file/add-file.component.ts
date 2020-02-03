@@ -16,17 +16,31 @@ export class AddFileComponent implements OnInit {
   xmlParser;
   document$;
   json;
+  local:Boolean;
+ Url:Boolean;
   constructor(db: AngularFirestore) { 
     this.xmlCollection = db.collection("XmlFile");
     this.xmlParser = new xmlParser();
     //this.downloadFile();
   }
- 
+  
   ngOnInit() {
-    
+    this.local=false;
+    this.Url=false;
   }
 
+  URL(){
 
+    this.Url=!this.Url
+    this.local=false;
+  }
+
+  Local(){
+
+    this.local= !this.local;
+    this.Url=false;
+   
+  }
 
   downloadFile(){
     this.json = this.xmlCollection.doc("Vaccination CVX Code").valueChanges();
@@ -248,3 +262,4 @@ function OBJtoXML(obj, ident) {
   var xml = xml.replace(/<\/?[0-9]{1,}>/g,'');
   return xml
 }
+

@@ -1,20 +1,23 @@
+<div  class="jumbotron" style="color=#fff">
 
-<div  class="solo-form">
-    <div class="form-group">
-        <form  (ngSubmit)="onSubmitForm(f)" #f="ngForm">
-            Link to the file to convert:<br>
+<div class="jumbotron" fxLayout="row" fxLayoutAlign="start stretch" >
+        <button (click)="Local()" class="btn btn-danger  #inputbc">FROM LOCAL</button>
+         <button (click)="URL()" class="btn btn-danger   #inputbc">FROM   URL</button>
+</div>
+
+    <div class="form-group" style="color=#fff" *ngIf ="Url===true || local==true">
+        <form  (ngSubmit)="onSubmitForm(f)" #f="ngForm" class="control-label" style="color:#fff" *ngIf="Url===true">
+           Link to the file to convert:  <br>
+           <br>
             <input class="form-control" type="text" id="url" name="url" ngModel required>
-            <br>
             <input class="btn btn-primary" type="submit" value="Add Document">
-            
         </form>
     </div>
-
-    <form class="form-group">
+    <form class="form-group" class="control-label" style="color:#fff" *ngIf="local===true">
         <div>
             <br>
             <label for="file-input">Choose File:</label>
-            <input type="file" class="form-control-file" id="file-input" (change)="readFile($event)" >
+            <input type="file" class="form-control-file " id="file-input" (change)="readFile($event)" >
         </div>
     </form>
 </div>
