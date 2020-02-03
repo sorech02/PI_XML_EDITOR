@@ -17,6 +17,7 @@ import { FlexLayoutModule } from '@angular/flex-layout';
 //Firebase imports
 import { environment } from '../environments/environment';
 import { AngularFireModule } from '@angular/fire';
+import { AngularFireStorage } from '@angular/fire/storage';
 import { AngularFirestore } from '@angular/fire/firestore'; 
 import { AngularFireAuth } from '@angular/fire/auth';
 import { SignUpComponent } from './sign-up/sign-up.component';
@@ -26,6 +27,12 @@ import { ForgotPasswordComponent } from './forgot-password/forgot-password.compo
 import { VerifyEmailComponent } from './verify-email/verify-email.component';
 import { AddFileComponent } from './add-file/add-file.component';
 import { HomeComponent } from './home/home.component';
+import { UserDataComponent } from './user-data/user-data.component';
+import { DropZoneDirective } from './drop-zone.directive';
+import { FileSizePipe } from './file-size.pipe';
+import { EditorGuardService } from './services/editor-guard.service';
+import { AdminComponent } from './admin-view/admin.component';
+import { AdminGuardService } from './services/admin-guard.service';
 
 const appRoutes: Routes =   [
   { path: '', redirectTo: 'home', pathMatch: 'full' },
@@ -36,8 +43,10 @@ const appRoutes: Routes =   [
   { path: 'verify-email-address', component: VerifyEmailComponent , canActivate: [SecureSignPage]},
   { path: 'comments', component: CommentaireComponent,  canActivate: [AuthGuardService]},
   { path: 'home', component: HomeComponent, canActivate: [AuthGuardService]  },
-  { path: 'edition',canActivate: [AuthGuardService] ,  component: EditViewComponent },
-  { path: 'addFile', component: AddFileComponent, canActivate: [AuthGuardService] },
+  { path: 'edition', component: EditViewComponent },
+  { path: 'addFile', component: AddFileComponent, canActivate: [AuthGuardService,EditorGuardService] },
+  { path: 'userData', component: UserDataComponent, canActivate: [AuthGuardService]},
+  { path: 'admin', component: AdminComponent, canActivate: [AuthGuardService,AdminGuardService] },
   { path: 'not-found', component: FourOhFourComponent },
   { path: '**', redirectTo: 'not-found' }
   
@@ -57,7 +66,11 @@ const appRoutes: Routes =   [
     ForgotPasswordComponent,
     VerifyEmailComponent,
     AddFileComponent,
-    HomeComponent
+    HomeComponent,
+    UserDataComponent,
+    AdminComponent,
+    DropZoneDirective,
+    FileSizePipe
   ],
   imports: [
     BrowserModule,
@@ -72,7 +85,7 @@ const appRoutes: Routes =   [
   ],
   providers: [
 
-    AuthenticationService, AngularFirestore, AngularFireAuth
+    AuthenticationService, AngularFirestore, AngularFireAuth, AngularFireStorage
   ],
   bootstrap: [AppComponent]
 })

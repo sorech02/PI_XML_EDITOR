@@ -4,6 +4,7 @@ export class User {
     displayName: string;
     photoURL: string;
     emailVerified: boolean;
+    userRank: number;
 
     constructor(){
         
