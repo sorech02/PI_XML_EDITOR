@@ -94,16 +94,18 @@ export class CommentaireComponent implements OnInit {
     getUserName(id:string):User{
      let     flagFind = false;
      let n =0;
-     if(this.ListEditor[n]!=undefined){
-        while(!flagFind){
+        while(!flagFind && n<this.ListEditor.length){
+          if(this.ListEditor[n]!=undefined){
           if(this.ListEditor[n].uid == id){
+            console.log(this.ListEditor[n], id)
             return(this.ListEditor[n])
           }
           n++;
         }
-      }
+ 
       return new User
     }
+  }
 
     getDate(date:Date){
       return(formatDate(date, 'dd-MM-yyyy hh:mm:ss a', 'en-US'))

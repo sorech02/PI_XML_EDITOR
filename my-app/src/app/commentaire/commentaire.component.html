@@ -7,71 +7,57 @@
 <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css">
 </head>
 <ul>
-    <div class="jumbotron " >
-    <div class=" jumbotron" *ngFor="let commentaire of commentaires">
-      <div class="alert alert-dismissible alert-primary commentaire " >
-   
-    <div *ngIf="commentaire.typeCom=='Edit'">
-     
-
-
- <p > modifications has been made by  <a  class="text-success"> {{getUserName(commentaire.idUserPost).email}} </a> </p>
-  <br />
-   
-  <p> In Xml : <a class="text-danger"> {{commentaire.xmlChange}}. </a> </p>
-  <table class="table table-hover">
-  <span *ngFor="let item of arrayOne(8); let i = index;">{{i}} </span>
-
-    <thead>
-    <tr *ngFor="">
-      <th scope="col"> <p> Value </p> </th>
-      <th scope="col"> <p> </p>  </th>
-    
-    </tr>  
-      </thead>
-
-    </table>
-       
-      </div>
-      <div *ngIf="commentaire.typeCom=='Add'">
-     
-      
-   <p > modifications has been made by  <a  class="text-success"> {{getUserName(commentaire.idUserPost).email}} </a> </p>
-  <br />
-   
-  <p> In Xml : <a class="text-danger"> {{commentaire.xmlChange}}. </a> </p>
- <br />
-    <table class="table table-hover">
-    <thead>
-    <tr>
-      <th scope="col"> <p> Value </p> </th>
-      <th scope="col"> <p>  {{commentaire.codeAfter[0]}} </p>  </th>
-     
-  
-    </tr>  
-
-    <tr>
-     <th scope="col"> <p>  Label </p> </th>
-      <th scope="col"> <p> {{commentaire.codeAfter[1]}} </p> </th> 
-    </tr>
-      </thead>
-
-    </table>
+    <div class="jumbotron" >
+      <div class="" *ngFor="let commentaire of commentaires">
+       <div class="alert alert-dismissible alert-primary commentaire" >
+        <div *ngIf="commentaire.typeCom=='Edit'">
+           <p > modifications has been made by  <a  class="text-success"> {{getUserName(commentaire.idUserPost).email}} </a> </p>
+           <br />
+           <p> In Xml : <a class="text-danger"> {{commentaire.xmlChange}} </a> </p>
+           <table class="table table-hover">
+               <thead>
+                <tr >
+                      <th scope="col"> <h2> Where  </h2> </th>
+                      <th scope="col"> <h2> Before </h2> </th>
+                      <th scope="col"> <h2> After</h2>   </th>
+                  </tr>  
+                  <tr *ngFor="let code of commentaire.codeAfter; let i = index">
+                      <th scope="col"> <p>  {{commentaire.whereChanged[i]}} </p> </th>
+                      <th scope="col"> <p> {{commentaire.codeBefore[i]}}  </p> </th>
+                      <th scope="col"> <p> {{commentaire.codeAfter[i]}}</p>   </th>
+                  </tr>  
+                </thead>
+          </table>
+       </div>
+        <div *ngIf="commentaire.typeCom=='Add'">
+        <p > modifications has been made by <a  class="text-success"> {{getUserName(commentaire.idUserPost).email}} </a> </p>
+        <br /> 
+        <p> In Xml : <a class="text-danger"> {{commentaire.xmlChange}}. </a> </p>
+        <br />
+        <table class="table table-hover">
+        <thead>
+        <tr>
+          <th scope="col"> <p> Value </p> </th>
+          <th scope="col"> <p>  {{commentaire.codeAfter[0]}} </p>  </th>
+        </tr>  
+        <tr>
+           <th scope="col"> <p>  Label </p> </th>
+          <th scope="col"> <p> {{commentaire.codeAfter[1]}} </p> </th> 
+        </tr>
+        </thead>
+      </table>
     </div>
-        <span class="time-right">{{getDate(commentaire.editTime)}}</span>
-  
-        <div >
-      
-    <button class= "glyphicon glyphicon-comment" type="submit" (click)="ShowMeComment(commentaire)"></button>
- </div>
-
-  <div *ngIf='commentaire.showCom' >
-  <p>             
+     <span class="time-right">{{getDate(commentaire.editTime)}}</span>
+     <div>
+      <button class= "glyphicon glyphicon-comment" type="submit" (click)="ShowMeComment(commentaire)"></button>
+     </div>
+     <div *ngIf='commentaire.showCom' >
+         <p>             
             <input [(ngModel)]="tmpMessage"/>
           </p>
            <button type="button" (click)="addNewCom(commentaire)" class="btn btn-secondary">Comment</button>    
-      <div *ngFor="let com of commentaire.listCommentaires">
-        <div class="alert alert-info">
+          <div *ngFor="let com of commentaire.listCommentaires">
+            <div class="alert alert-info">
           <img
             src='TODO : Look at the dataSmart for upload Avatars Pictures ! #PINIST DataSmart => Store data on PINISY/datSmart JSON model and ElastiSearch (fire base core )'
             alt="Avatar" class="left">
@@ -80,8 +66,8 @@
           <span class="time-left">{{getDate(com.editTime)}}</span>
         </div>
       </div>
-        </div>
-  </div>
+     </div>
+    </div>
   </div>
   <h3>
 
