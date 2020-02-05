@@ -47,7 +47,7 @@ export class AddFileComponent implements OnInit {
     this.json.subscribe(value => {
       var stringJson = JSON.stringify(value);// create a json string from object codeset
       var docJson = JSON.parse(stringJson); // create json objectz
-      var xml = "<?xml version=\"1.0\" enco   ding=\"UTF-8\" standalone=\"yes\"?>\n" + "<codeset>\n" ;
+      var xml = "<?xml version=\"1.0\" encoding=\"UTF-8\" standalone=\"yes\"?>\n" + "<codeset>\n" ;
       xml += "  " + "<label>" + docJson["label"] + "</label>\n";
       xml += "  " + "<type>" + docJson["type"] + "</type>\n";
       delete docJson.label; 
