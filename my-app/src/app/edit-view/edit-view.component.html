@@ -31,6 +31,10 @@
 
       <button (click)="save()" class="btn btn-primary"> Save changes </button>
     </ng-template>
+
+    <div>
+      <input type="text" style="margin-left: 10px;" placeholder="Search" (input)="onSearch();" [(ngModel)]="searchString" [ngModelOptions]="{standalone: true}"/>
+    </div>
   </div>
 
 
@@ -126,7 +130,7 @@
             </tr>
           </ng-container>
 
-          <tr title="Show details" *ngFor="let code of myCodeset.code" (click)="onCodeClick($event, code)">            
+          <tr title="Show details" *ngFor="let code of displayedCodes" (click)="onCodeClick($event, code)">            
             <div *ngIf="isCodeSelected===true; then thenBlock else elseBlock"></div>
             <ng-template #thenBlock>
               <td *ngIf="isEditing===true;" [ngClass]="{'table-primary': code.value===myCode.value}"> </td>
