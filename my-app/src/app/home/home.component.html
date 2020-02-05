@@ -3,11 +3,18 @@
 </style>
 <div class="jumbotron">
   <h1 class="display-3">Welcome</h1>
-  <p class="lead">This Web application will give you the possibility to edit and see data from blabla</p>
+  <p class="lead">This Web application will give you the possibility to edit data</p>
   <hr class="my-4">
   <p></p>
   <p class="lead">
-    <a class="btn btn-primary btn-lg" href="#" role="button">Learn more</a>
+    <button *ngIf="showMore===false" class="btn btn-primary btn-lg"  role="button" (click)="show()">Learn more</button>
+    <button *ngIf="showMore===true" class="btn btn-primary btn-lg"  role="button" (click)="show()">close</button>
+
   </p>
+  <div *ngIf="showMore===true">
+  This App was produce by students from Telecom Nancy (France) by an Industrial Project lauched by Nathan.B (Aira) and Michael.D (NIST)
+  <br />
+  <span class="badge badge-info">Version 1.0.1</span>
+  </div>
 </div>
 </body>

@@ -13,6 +13,7 @@ import { commentaryWorkerAdd } from '../services/commentaryWorkerAdd';
 import { AngularFireAuth } from "@angular/fire/auth";
 import * as saveAs from 'file-saver';
 import { User } from '../services/user';
+import { AlertService } from '../services/alert.service';
 
 @Component({
   selector: 'app-edit-view',
@@ -420,7 +421,7 @@ export class EditViewComponent implements OnInit {
     json.subscribe(value => {
       var stringJson = JSON.stringify(value);// create a json string from object codeset
       var docJson = JSON.parse(stringJson); // create json objectz
-      var xml = "<?xml version=\"1.0\" enco   ding=\"UTF-8\" standalone=\"yes\"?>\n" + "<codeset>\n" ;
+      var xml = "<?xml version=\"1.0\" encoding=\"UTF-8\" standalone=\"yes\"?>\n" + "<codeset>\n" ;
       xml += "  " + "<label>" + docJson["label"] + "</label>\n";
       xml += "  " + "<type>" + docJson["type"] + "</type>\n";
       delete docJson.label; 
@@ -430,6 +431,7 @@ export class EditViewComponent implements OnInit {
       xml = this.OrderCodeXML(xml);
       var file = new File([xml  ], docuLabel + ".xml", {type: "text/plain;charset=utf-8"} );
       saveAs(file);
+
     });
   }
 

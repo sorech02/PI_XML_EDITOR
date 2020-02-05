@@ -33,6 +33,7 @@ import { FileSizePipe } from './file-size.pipe';
 import { EditorGuardService } from './services/editor-guard.service';
 import { AdminComponent } from './admin-view/admin.component';
 import { AdminGuardService } from './services/admin-guard.service';
+import { AlertComponent } from './alert/alert.component';
 
 const appRoutes: Routes =   [
   { path: '', redirectTo: 'home', pathMatch: 'full' },
@@ -70,7 +71,8 @@ const appRoutes: Routes =   [
     UserDataComponent,
     AdminComponent,
     DropZoneDirective,
-    FileSizePipe
+    FileSizePipe,
+    AlertComponent
   ],
   imports: [
     BrowserModule,

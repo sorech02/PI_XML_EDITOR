@@ -5,6 +5,8 @@ import { NgForm } from '@angular/forms';
 import { Codeset} from '../edit-view/edit-view.codeset' ;
 import * as JsonToXML from "js2xmlparser";
 import * as saveAs from 'file-saver';
+import { AlertService } from '../services/alert.service';
+import { catchError } from 'rxjs/operators';
 @Component({
   selector: 'app-add-file',
   templateUrl: './add-file.component.html',
@@ -18,7 +20,8 @@ export class AddFileComponent implements OnInit {
   json;
   local:Boolean;
  Url:Boolean;
-  constructor(db: AngularFirestore) { 
+
+  constructor(db: AngularFirestore,private alertService: AlertService) { 
     this.xmlCollection = db.collection("XmlFile");
     this.xmlParser = new xmlParser();
     //this.downloadFile();
@@ -42,25 +45,6 @@ export class AddFileComponent implements OnInit {
    
   }
 
-  downloadFile(){
-    this.json = this.xmlCollection.doc("Vaccination CVX Code").valueChanges();
-    this.json.subscribe(value => {
-      var stringJson = JSON.stringify(value);// create a json string from object codeset
-      var docJson = JSON.parse(stringJson); // create json objectz
-      var xml = "<?xml version=\"1.0\" enco   ding=\"UTF-8\" standalone=\"yes\"?>\n" + "<codeset>\n" ;
-      xml += "  " + "<label>" + docJson["label"] + "</label>\n";
-      xml += "  " + "<type>" + docJson["type"] + "</type>\n";
-      delete docJson.label; 
-      delete docJson.type;
-      xml +=  OBJtoXML(docJson, "  "); //JsonToXML.parse("codeset", docJson); // create xml object from json 
-      xml += "</codeset>";
-      xml = OrderCodeXML(xml);
-      var file = new File([xml  ], value.label + ".xml", {type: "text/plain;charset=utf-8"} );
-      saveAs(file);
-    });
-    
-
-  }
 
   // Add document from url
   onSubmitForm(form: NgForm){
@@ -84,10 +68,14 @@ export class AddFileComponent implements OnInit {
 }
 
   convertXmlIntoJsonAndSendItToCollection(codeset){
+    try{
     this.jsonDoc = JSON.stringify(codeset); // Create a json string from the codeset
     this.jsonDoc = JSON.parse(this.jsonDoc); // Convert Json String into Json Object
     // Then add the json object into data base: 
     this.addDocumentIntoCollection(this.xmlCollection, codeset.label, this.jsonDoc);
+    }catch(e){
+      this.alertService.error("Impossible to add your file");
+    }
   }
 
   getDocument(){
@@ -96,11 +84,17 @@ export class AddFileComponent implements OnInit {
 
   // Add o document to a collection
   addDocumentIntoCollection(collection, documentName:string, data){
+    try{
     collection.doc(documentName).set(data);
+    this.alertService.success("The document has been added successfully");
+  }catch(e){
+    this.alertService.error("Impossible to add your file");
   }
+}
 }
 
 function getFieldInXml(str: String){
+  try{
   var i = 0;
   while (i<str.length){
     if (str[i] == '<'){
@@ -115,6 +109,9 @@ function getFieldInXml(str: String){
     i++;
   }
   return false;
+}catch(e){
+  this.alertService.error("Impossible to add your file");
+
 }
 
 function OrderCodeXML(xml: String){
@@ -259,7 +256,10 @@ function OBJtoXML(obj, ident) {
         }
       }
   }
-  var xml = xml.replace(/<\/?[0-9]{1,}>/g,'');
+  var xml = xml.replace(/<\/?[0-9]{1,}>/g,'')
   return xml
+}
+
+
 }
 
