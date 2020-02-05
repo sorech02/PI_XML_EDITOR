@@ -39,7 +39,9 @@ export class EditViewComponent implements OnInit {
   protected addedCodes:             Code[];
   protected codesetToBeAdded:       Codeset;
   protected addedCodesets:          Codeset[];
-  protected canEdit:                 boolean;
+  protected canEdit:                boolean;
+  protected searchString:           string;
+  protected displayedCodes:         Code[];
 
   constructor(db: AngularFirestore, protected afAuth: AngularFireAuth) {
     this.db = db;
@@ -47,6 +49,7 @@ export class EditViewComponent implements OnInit {
     this.isCodeSelected = false;
     this.isEditing = false;
     this.canEdit = false;
+    this.searchString = "";
   }
   
   ngOnInit() {
@@ -98,6 +101,8 @@ export class EditViewComponent implements OnInit {
         this.myCodeset = value;
         this.myCodeset = Object.assign(new Codeset("",""), this.myCodeset);
         this.myCodeset.sortCodes();
+        this.displayedCodes = this.myCodeset.code;
+        this.searchString = "";
         //console.log("value" ,value.label, value.type, value.code);
       });
       this.isDocumentDefined = true;
@@ -105,6 +110,25 @@ export class EditViewComponent implements OnInit {
       this.isEditing = false;
     }
   } 
+
+  onSearch() {
+    //console.log(this.searchString);
+    
+    if(this.isDocumentDefined) {
+      if(!this.searchString || this.searchString == null || this.searchString == "") {
+        this.displayedCodes = this.myCodeset.code;
+  
+      } else {
+        this.displayedCodes = this.myCodeset.code.filter(code => 
+          code.label.toLowerCase().includes(this.searchString.toLowerCase()) ||
+          code.value.toLowerCase().includes(this.searchString.toLowerCase())
+        );
+      }
+    }
+    else  {
+      this.displayedCodes = [];
+    }
+  }
 
   onEditClick(evt) {
     this.isEditing = true;
@@ -257,6 +281,8 @@ export class EditViewComponent implements OnInit {
               this.myCodeset = value;
               this.myCodeset = Object.assign(new Codeset("",""), this.myCodeset);
               this.myCodeset.sortCodes();
+              this.displayedCodes = this.myCodeset.code;
+              this.searchString = "";
               for(let code of this.myCodeset.code) {
                 if(code.value == codeValue) {
                   this.myCode = code;
