@@ -39,7 +39,7 @@ const appRoutes: Routes =   [
   { path: '', redirectTo: 'home', pathMatch: 'full' },
   { path: 'sign-up', component: SignUpComponent, canActivate: [SecureSignPage]},
   { path: 'sign-in', component: SignInComponent , canActivate: [SecureSignPage]},
-  { path: 'sign-out', component: SignOutComponent , canActivate: [AuthGuardService]},
+  { path: 'sign-out', component: SignOutComponent},
   { path: 'forgot-password', component: ForgotPasswordComponent , canActivate: [SecureSignPage]},
   { path: 'verify-email-address', component: VerifyEmailComponent , canActivate: [SecureSignPage]},
   { path: 'comments', component: CommentaireComponent,  canActivate: [AuthGuardService]},
