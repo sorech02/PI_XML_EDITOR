@@ -33,7 +33,7 @@
     </ng-template>
 
     <div>
-      <input type="text" style="margin-left: 10px;" placeholder="Search" (input)="onSearch();" [(ngModel)]="searchString" [ngModelOptions]="{standalone: true}"/>
+      <input type="text" style="margin-left: 10px; margin-top: 2px" placeholder="Search" (input)="onSearch();" [(ngModel)]="searchString" [ngModelOptions]="{standalone: true}"/>
     </div>
   </div>
 
@@ -48,27 +48,27 @@
       <tbody>
 
         <!-- If we're editing, we add rows to be able to add a new codeset -->
-        <tr *ngIf="isEditing===true;">
+        <tr *ngIf="isEditing===true && isAdmin===true;">
           <td>
             Label: 
             <input style="width: 180px;" [(ngModel)]="codesetToBeAdded.label"/>
           </td>
         </tr>
 
-        <tr *ngIf="isEditing===true;">
+        <tr *ngIf="isEditing===true && isAdmin===true;">
           <td>
             Type:  
             <input style="margin-left: 5px; width: 180px;" [(ngModel)]="codesetToBeAdded.type"/>
           </td>
         </tr>
 
-        <tr *ngIf="isEditing===true;">
+        <tr *ngIf="isEditing===true && isAdmin===true;">
           <td>
             <button title="add a new codeset" (click)="addNewCodeset($event)"  class="btn btn-success">add</button>
           </td>
         </tr>
 
-        <ng-container *ngIf="isEditing===true;">
+        <ng-container *ngIf="isEditing===true && isAdmin===true;">
           <tr title="Added codeset" *ngFor="let codeset of addedCodesets">
             <td>{{ codeset.label }}</td>
           </tr>
