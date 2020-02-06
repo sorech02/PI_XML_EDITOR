@@ -9,30 +9,29 @@
           <a class="nav-link" routerLink="home">Home <span class="sr-only">(current)</span></a>
         </li>
         <li class="nav-item">
-          <a class="nav-link" routerLinkActive="active" routerLink="comments">Feed</a>
-        </li>
-          <li class="nav-item">
-          <a class="nav-link" routerLink="edition">Edit Data</a>
+          <a class="nav-link" routerLink="edition">Codes</a>
         </li>
         <li class="nav-item">
-          <a *ngIf="isAdmin" class="nav-link" routerLink="addFile">Add File</a>
+          <a *ngIf="isAuth" class="nav-link" routerLinkActive="active" routerLink="comments">Changes</a>
         </li>
-
         <li class="nav-item">
-          <a *ngIf="isAuth" class="nav-link" routerLink="userData">User Settings</a>
+          <a *ngIf="isAuth" class="nav-link" routerLink="userData">Settings</a>
         </li>
         <li class="nav-item">
           <a *ngIf="isAdmin" class="nav-link" routerLink="admin">Admin</a>
         </li>
-
+        <li class="nav-item">
+          <a *ngIf="isAdmin" class="nav-link" routerLink="addFile">Upload</a>
+        </li>
+        
         <li class="nav-item">
           <a *ngIf="!isAuth" class="nav-link" routerLink="sign-up">Register</a>
         </li>
           <li class="nav-item">
-          <a *ngIf="!isAuth" class="nav-link" routerLink="sign-in">Log in</a>
+          <a *ngIf="!isAuth" class="nav-link" routerLink="sign-in">Log In</a>
         </li>
           <li class="nav-item">
-          <a *ngIf="isAuth" class="nav-link" routerLink="sign-out">Log out</a>
+          <a *ngIf="isAuth" class="nav-link" routerLink="sign-out">Log Out</a>
         </li>
       </ul>
     </div>
