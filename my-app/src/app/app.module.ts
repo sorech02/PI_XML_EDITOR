@@ -45,7 +45,7 @@ const appRoutes: Routes =   [
   { path: 'comments', component: CommentaireComponent,  canActivate: [AuthGuardService]},
   { path: 'home', component: HomeComponent, canActivate: [AuthGuardService]  },
   { path: 'edition', component: EditViewComponent },
-  { path: 'addFile', component: AddFileComponent, canActivate: [AuthGuardService,EditorGuardService] },
+  { path: 'addFile', component: AddFileComponent, canActivate: [AuthGuardService,AdminGuardService] },
   { path: 'userData', component: UserDataComponent, canActivate: [AuthGuardService]},
   { path: 'admin', component: AdminComponent, canActivate: [AuthGuardService,AdminGuardService] },
   { path: 'not-found', component: FourOhFourComponent },
