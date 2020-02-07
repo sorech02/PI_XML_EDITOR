@@ -5,6 +5,7 @@ import { Observable } from 'rxjs';
 import {User} from '../services/user'
 import { subComment } from '../services/subComment';
 import { formatDate } from '@angular/common';
+import { createInjectable } from '@angular/compiler/src/core';
 
 @Component({
   selector: 'app-commentaire',
@@ -24,7 +25,7 @@ export class CommentaireComponent implements OnInit {
   protected isCodeSelected:     boolean;
   protected isEditing:          boolean;
   protected tmpPersonne:        User;
-  protected tmpMessage: string;
+  protected tmpMessage: String[];
   protected ListEditor : User[];
   ListEditorSub: User[];
   
@@ -36,6 +37,8 @@ export class CommentaireComponent implements OnInit {
     this.tmpPersonne = new User;
     this.commentaires = new Array()
     this.ListEditor =  new Array();
+    this.tmpMessage = new Array();
+
   }
   
     ngOnInit() {
@@ -45,17 +48,19 @@ export class CommentaireComponent implements OnInit {
       this.document$.subscribe((list: commentary[]) => {this.commentaires = list.reverse()
         this.commentaires.forEach(
           (commentaire: commentary) => {
+            this.tmpMessage.push("Write your comment")
           let test  = this.db.doc('users/' + commentaire.idUserPost).valueChanges();
           test.subscribe(value => {
             this.ListEditor.push(<User> value)
           }).unsubscribe;
         }
-        
       )
       }
         ).unsubscribe;
-       this.tmpMessage="writre your comment"
+
+       
     }
+  
   /*sortMyList(arg0: commentary[]): commentary[] {
         }*/
 
@@ -111,12 +116,12 @@ export class CommentaireComponent implements OnInit {
       return(formatDate(date, 'dd-MM-yyyy hh:mm:ss a', 'en-US'))
     }
     
-    addNewCom(com:commentary){
-      console.log(this.tmpMessage)
-      let test = new subComment(com.idUserPost,this.tmpMessage)
-      console.log(test)
-      let newSubCom = new subComment(JSON.parse(localStorage.getItem('user')).uid,this.tmpMessage);
+    addNewCom(com:commentary,j){
+      
+      let newSubCom = new subComment(JSON.parse(localStorage.getItem('user')).uid,this.tmpMessage[j]);
+      this.tmpMessage[j]="Write your comment"
       this.db.collection(`Commentaire/${formatDate(com.editTime, 'dd-MM-yyyy hh:mm:ss a', 'en-US').concat(com.idUserPost).concat(com.xmlChange).concat(com.label)}/subComList`).add(JSON.parse(JSON.stringify(newSubCom)));     
+      com.showCom=true;
     }
   
     
