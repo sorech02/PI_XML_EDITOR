@@ -448,11 +448,11 @@ export class EditViewComponent implements OnInit {
       var stringJson = JSON.stringify(value);// create a json string from object codeset
       var docJson = JSON.parse(stringJson); // create json objectz
       var xml = "<?xml version=\"1.0\" encoding=\"UTF-8\" standalone=\"yes\"?>\n" + "<codeset>\n" ;
-      xml += "  " + "<label>" + docJson["label"] + "</label>\n";
-      xml += "  " + "<type>" + docJson["type"] + "</type>\n";
+      xml += "    " + "<label>" + docJson["label"] + "</label>\n";
+      xml += "    " + "<type>" + docJson["type"] + "</type>\n";
       delete docJson.label; 
       delete docJson.type;
-      xml += this.OBJtoXML(docJson, "  "); //JsonToXML.parse("codeset", docJson); // create xml object from json 
+      xml += this.OBJtoXML(docJson, "    "); //JsonToXML.parse("codeset", docJson); // create xml object from json 
       xml += "</codeset>";
       xml = this.OrderCodeXML(xml);
       var file = new File([xml  ], docuLabel + ".xml", {type: "text/plain;charset=utf-8"} );
@@ -470,14 +470,14 @@ export class EditViewComponent implements OnInit {
             xml += ident + "<" + prop.replace(re, '-') + ">" + "\n";
             for (var array in obj[prop]){
               var object = new Object(obj[prop][array]);
-              xml += ident + "  "+ "<link-to codeset=" + object["type"] + ">" + object["codeValue"] + "</link-to>\n"; 
+              xml += ident + "    "+ "<link-to codeset=" + "\"" + object["type"] + "\"" + ">" + object["codeValue"] + "</link-to>\n"; 
             }
             xml += ident + "</" + prop.replace(re, '-') + ">" + "\n";
           }
           else {  
             for (var array in obj[prop]) {
                   xml += ident + "<" + prop.replace(re, '-') + ">" + "\n"; 
-                  xml += this.OBJtoXML(new Object(obj[prop][array]), ident + "  ");
+                  xml += this.OBJtoXML(new Object(obj[prop][array]), ident + "    ");
                   xml += ident + "</" + prop.replace(re, '-') + ">\n";
               }
           }
@@ -493,7 +493,7 @@ export class EditViewComponent implements OnInit {
                     xml += ident + "<" + prop.replace(re, '-') + ">" + "\n";
                     first_time = false;
                   }
-                  xml += ident + "  " + "<" + o.replace(re, '-') + ">";
+                  xml += ident + "    " + "<" + o.replace(re, '-') + ">";
                   xml += object[o];
                   xml += "</" + o.replace(re, '-') + ">\n"; 
                 }
@@ -512,7 +512,7 @@ export class EditViewComponent implements OnInit {
                   xml += ident + "<" + prop.replace(re, '-') + ">" + "\n";
                   first_time = false;
                 }
-                temp += ident + "  " + "<" + o.replace(re, '-') + ">";
+                temp += ident + "    " + "<" + o.replace(re, '-') + ">";
                 temp += object[o];
                 temp += "</" + o.replace(re, '-') + ">\n"; 
               }
@@ -531,13 +531,13 @@ export class EditViewComponent implements OnInit {
   
             else {
               xml += ident + "<" + prop.replace(re, '-') + ">" + "\n";
-              xml += this.OBJtoXML(new Object(obj[prop]), ident + "  ");
+              xml += this.OBJtoXML(new Object(obj[prop]), ident + "    ");
               xml += ident +  "</" + prop.replace(re, '-') + ">\n";
             }
         } else {
           if (prop == "status"){
             xml += ident + "<code-status>\n"; 
-            xml += ident + "  "  + "<" + prop.replace(re, '-') + ">"
+            xml += ident + "    "  + "<" + prop.replace(re, '-') + ">"
             xml += obj[prop];
             xml += "</" + prop.replace(re, '-') + ">\n";
             xml += ident + "</code-status>\n"; 
@@ -555,26 +555,50 @@ export class EditViewComponent implements OnInit {
 
   OrderCodeXML(xml: String){
     var newXml = "";
-    var lines = xml.split('\n');
+    var lines = xml.split('\n'); // Get all the lines of the file
     var done = false;
     var index = 0;
+    // This set the order of the fields in the xml
     var orderList = [["value"], ["label"], ["description"], ["code-status"], 
                       ["reference"], ["use-date"], ["use-age"], 
                       ["concept-type"], ["test-age"]]; 
+    
+    var useDateOrderList = [["not-before"], ["not-expected-before"], ["not-expected-after"], ["not-after"]]
+    // First 4 lines are the same
     while (index < 4){
       newXml += lines[index] + "\n";
       index ++; 
     }
-  
+
     while (done == false) {
     
       if (lines[index].includes("<code>")){
         index ++;
-        while (lines[index].includes("</code>") == false){
+        while (lines[index].includes("</code>") == false){// going through a code section
           var field = this.getFieldInXml(lines[index]);
           
           orderList.forEach(element => {
-            if (element[0] == field){
+            if (element[0] == field && field == "use-date") {
+              var fieldLines = lines[index]+"\n";
+              while (lines[index].includes("</"+field+">") == false){
+                index ++;
+                var useDateField = this.getFieldInXml(lines[index]);
+                useDateOrderList.forEach(el => {
+                  if (useDateField == el[0]){
+                      el.push(lines[index]);
+                  }
+                }); 
+              }
+              useDateOrderList.forEach(el => {
+                if (el.length > 1 ) {
+                  fieldLines += el[1] + "\n";
+                  el.pop();
+                }
+              });
+              fieldLines += lines[index] + "\n";
+              element.push(fieldLines);
+            }
+            else if (element[0] == field){
               var fieldLines = lines[index]+"\n";
               while (lines[index].includes("</"+field+">") == false){
                 index ++; 
@@ -585,18 +609,15 @@ export class EditViewComponent implements OnInit {
           });
           index++;  
         }
-        newXml += "  " + "<code>\n";
+        newXml += "    " + "<code>\n";
         orderList.forEach(element => {
-          /*if ((element[0] === "use-date") && (element.length === 1)){
-            element.push("<use-date/>\n");
-          }*/
           if (element.length > 1){
             newXml += element[1];
             element.pop();
           }
           
         });
-        newXml += "  " + "</code>\n";
+        newXml += "    " + "</code>\n";
       }
   
       index ++; 
