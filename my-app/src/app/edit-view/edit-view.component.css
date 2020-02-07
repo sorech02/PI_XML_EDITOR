@@ -5618,22 +5618,23 @@ input[type=number] {
  }
  
  .jumbotron {
-   padding: 2rem 1rem;
-   margin-bottom: 2rem;
+   padding: 0rem 0rem;
+   margin-bottom: 0rem;
    background-color: #303030;
    border-radius: 0.3rem;
  }
  
  @media (min-width: 576px) {
    .jumbotron {
-     padding: 4rem 2rem;
+     padding: 2rem 2rem;
    }
  }
  
  .jumbotron-fluid {
-   padding-right: 0;
-   padding-left: 0;
-   border-radius: 0;
+   padding-right: 0rem!important;
+   padding-left: 0rem!important;
+   border-radius: 0.3rem;
+   width: 95vw;
  }
  
  .alert {
@@ -10743,6 +10744,7 @@ input[type=number] {
    }
    .container {
      min-width: 992px !important;
+     width: 100%;
    }
    .navbar {
      display: none;

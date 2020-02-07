@@ -10600,6 +10600,10 @@
  .text-info {
    color: #3498DB !important;
  }
+
+.text-info:hover {
+   cursor: pointer;
+ }
  
  a.text-info:hover, a.text-info:focus {
    color: #1d6fa5 !important;

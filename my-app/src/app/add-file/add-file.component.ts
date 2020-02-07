@@ -2,11 +2,9 @@ import { Component, OnInit } from '@angular/core';
 import { AngularFirestore, AngularFirestoreCollection, AngularFirestoreDocument } from '@angular/fire/firestore';
 import { xmlParser } from './add-file.xmlParser';
 import { NgForm } from '@angular/forms';
-import { Codeset} from '../edit-view/edit-view.codeset' ;
-import * as JsonToXML from "js2xmlparser";
-import * as saveAs from 'file-saver';
 import { AlertService } from '../services/alert.service';
-import { catchError } from 'rxjs/operators';
+import { AngularFireAuth } from '@angular/fire/auth';
+
 @Component({
   selector: 'app-add-file',
   templateUrl: './add-file.component.html',
@@ -20,8 +18,9 @@ export class AddFileComponent implements OnInit {
   json;
   local:Boolean;
  Url:Boolean;
+  isAdmin:Boolean;
 
-  constructor(db: AngularFirestore,private alertService: AlertService) { 
+  constructor(private db: AngularFirestore,private alertService: AlertService, private afAuth: AngularFireAuth) { 
     this.xmlCollection = db.collection("XmlFile");
     this.xmlParser = new xmlParser();
     //this.downloadFile();
@@ -30,6 +29,18 @@ export class AddFileComponent implements OnInit {
   ngOnInit() {
     this.local=false;
     this.Url=false;
+
+    this.afAuth.authState.subscribe(res => {
+      if (res && res.uid) {
+        var userDocument = this.db.collection("users").doc(res.uid);
+        var user: any = userDocument.valueChanges();
+        user.subscribe(value => {
+          this.isAdmin = !!value.userRank && value.userRank==2;
+        });
+      } else {
+        this.isAdmin = false;
+      }
+    });
   }
 
   URL(){
@@ -84,6 +95,10 @@ export class AddFileComponent implements OnInit {
 
   // Add o document to a collection
   addDocumentIntoCollection(collection, documentName:string, data){
+    if(this.isAdmin == false) {
+      return;
+    }
+    
     try{
     collection.doc(documentName).set(data);
     this.alertService.success("The document has been added successfully");
@@ -115,6 +130,7 @@ function getFieldInXml(str: String){
 }
 
 function OrderCodeXML(xml: String){
+  
   var newXml = "";
   var lines = xml.split('\n');
   var done = false;

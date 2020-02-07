@@ -41,6 +41,7 @@ export class EditViewComponent implements OnInit {
   protected codesetToBeAdded:       Codeset;
   protected addedCodesets:          Codeset[];
   protected canEdit:                boolean;
+  protected isAdmin:                boolean;
   protected searchString:           string;
   protected displayedCodes:         Code[];
 
@@ -50,6 +51,7 @@ export class EditViewComponent implements OnInit {
     this.isCodeSelected = false;
     this.isEditing = false;
     this.canEdit = false;
+    this.isAdmin = false;
     this.searchString = "";
   }
   
@@ -60,9 +62,11 @@ export class EditViewComponent implements OnInit {
         var user: any = userDocument.valueChanges();
         user.subscribe(value => {
           this.canEdit = !!value.userRank && value.userRank>0;
+          this.isAdmin = !!value.userRank && value.userRank==2;
         });
       } else {
         this.canEdit = false;
+        this.isAdmin = false;
       }
     });
     
@@ -149,7 +153,6 @@ export class EditViewComponent implements OnInit {
       this.codeToBeEdited = this.codeToBeEdited.copy();
     }
   }
-
 
   onCodeClick(evt, code) {
     this.openCodeset(evt, code);
@@ -300,6 +303,11 @@ export class EditViewComponent implements OnInit {
   }
 
   save(){
+    // Security check
+    if(this.canEdit == false) {
+      return;
+    }
+
     this.isEditing = false;
     // If we added a new codeset
     if(this.addedCodesets.length>0) {
