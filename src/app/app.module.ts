@@ -83,7 +83,6 @@ const appRoutes: Routes =   [
     HttpClientModule,
     ReactiveFormsModule,
     AngularFireModule.initializeApp(environment.firebase)
-
   ],
   providers: [
 

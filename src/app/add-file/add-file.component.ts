@@ -16,9 +16,9 @@ export class AddFileComponent implements OnInit {
   xmlParser;
   document$;
   json;
-  local:Boolean;
- Url:Boolean;
-  isAdmin:Boolean;
+  local: Boolean;
+  Url: Boolean;
+  isAdmin: Boolean;
 
   constructor(private db: AngularFirestore,private alertService: AlertService, private afAuth: AngularFireAuth) { 
     this.xmlCollection = db.collection("XmlFile");

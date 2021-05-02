@@ -1,10 +1,9 @@
 import { Component } from '@angular/core';
-//import * as firebase from 'firebase';
 import { AuthenticationService } from './services/authentication.service';
 import { Router } from '@angular/router';
 import { ResourceLoader } from '@angular/compiler';
-import {environment} from '../environments/environment';
-import { AngularFireAuth } from "@angular/fire/auth";
+import { environment } from '../environments/environment';
+import { AngularFireAuth } from '@angular/fire/auth';
 import { AngularFirestore } from '@angular/fire/firestore';
 
 @Component({
@@ -16,13 +15,14 @@ import { AngularFirestore } from '@angular/fire/firestore';
 
 
 export class AppComponent {
-  
+
   isAuth: boolean;
   isEditor: boolean;
   isAdmin: boolean;
-  
+  title = 'MQE Knowledge Base';
+
   constructor(private authenticationService: AuthenticationService,
-    private router: Router,public afAuth: AngularFireAuth,private db: AngularFirestore) {
+    private router: Router, public afAuth: AngularFireAuth, private db: AngularFirestore) {
       this.isAuth = false;
       this.isEditor = false;
       this.isAdmin = false;

@@ -8,19 +8,15 @@ import { Router } from '@angular/router';
 })
 export class EditPageComponent implements OnInit {
 
-  @Input() label: string; 
+  @Input() label: string;
   @Input() type: string;
   @Input() codeset: any[];
 
-  constructor(private router: Router){
-    
-   }
-  
+  constructor(private router: Router) {}
+
   ngOnInit() {
   }
-  
-  onLinksOfSelectedData(){
-    
-  }
+
+  onLinksOfSelectedData() {}
 
 }
