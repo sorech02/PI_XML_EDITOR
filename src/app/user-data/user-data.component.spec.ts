@@ -4,7 +4,9 @@ import { RouterTestingModule } from '@angular/router/testing';
 import { AngularFireAuth } from '@angular/fire/auth';
 import { AngularFireModule } from '@angular/fire';
 import { AngularFirestore } from '@angular/fire/firestore';
+import { AngularFireStorage } from '@angular/fire/storage';
 import { environment } from '../../environments/environment';
+import { User } from '../services/user';
 
 import { UserDataComponent } from './user-data.component';
 
@@ -19,15 +21,35 @@ describe('UserDataComponent', () => {
         RouterTestingModule,
         AngularFireModule.initializeApp(environment.firebase)
       ],
-      providers: [ AngularFireAuth, AngularFirestore ],
+      providers: [ AngularFireAuth, AngularFirestore, AngularFireStorage ],
       declarations: [ UserDataComponent ]
     })
     .compileComponents();
-    fixture = TestBed.createComponent(UserDataComponent);
-    component = fixture.componentInstance;
   }));
 
   beforeEach(() => {
+    //mock local storage
+    let store = {};
+    const mockLocalStorage = {
+      getItem: (key: string): string => {
+        return key in store ? store[key] : '{"uid": "fake"}';
+      },
+      setItem: (key: string, value: string) => {
+        store[key] = `${value}`;
+      },
+      removeItem: (key: string) => {
+        delete store[key];
+      },
+      clear: () => {
+        store = {};
+      }
+    };
+    spyOn(localStorage, 'getItem').and.callFake(mockLocalStorage.getItem);
+    spyOn(localStorage, 'setItem').and.callFake(mockLocalStorage.setItem);
+    spyOn(localStorage, 'removeItem').and.callFake(mockLocalStorage.removeItem);
+    spyOn(localStorage, 'clear').and.callFake(mockLocalStorage.clear);
+    fixture = TestBed.createComponent(UserDataComponent);
+    component = fixture.componentInstance;
     fixture.detectChanges();
   });
 

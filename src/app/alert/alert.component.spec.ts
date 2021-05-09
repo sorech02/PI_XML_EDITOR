@@ -23,6 +23,7 @@ describe('AlertComponent', () => {
     .compileComponents();
     fixture = TestBed.createComponent(AlertComponent);
     component = fixture.componentInstance;
+    fixture.detectChanges();
   }));
 
   it('should create', () => {

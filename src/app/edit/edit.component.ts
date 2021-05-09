@@ -4,6 +4,7 @@ import { Router } from '@angular/router';
 @Component({
   selector: 'app-edit',
   templateUrl: './edit.component.html',
+//  template: '<div></div>',
   styleUrls: ['./edit.component.css']
 })
 export class EditPageComponent implements OnInit {
