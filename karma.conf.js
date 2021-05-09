@@ -26,7 +26,8 @@ module.exports = function (config) {
     logLevel: config.LOG_INFO,
     autoWatch: false,
     browsers: ['ChromeHeadless'],
-    singleRun: false,
+    singleRun: true,
+    browserNoActivityTimeout: 40000,
     restartOnFileChange: true
   });
 };
